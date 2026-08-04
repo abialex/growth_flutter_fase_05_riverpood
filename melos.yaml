@@ -1,0 +1,18 @@
+name: growth_flutter_fase_05_monorepo
+
+packages:
+  - apps/*
+  - packages/*
+
+scripts:
+  analyze:
+    run: melos exec -- "flutter analyze ."
+    description: Run `flutter analyze` in all packages.
+
+  test:
+    run: melos exec --dir-exists="test" -- "flutter test"
+    description: Run `flutter test` for all packages.
+
+  format:
+    run: melos exec -- "dart format ."
+    description: Run `dart format` in all packages.

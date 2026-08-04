@@ -1,0 +1,10 @@
+name: growth_flutter_fase_05_workspace
+description: Monorepo workspace for the Pragma phase 5 events app and its local packages.
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dev_dependencies:
+  melos: ^6.0.0
+  flutter_lints: ^5.0.0

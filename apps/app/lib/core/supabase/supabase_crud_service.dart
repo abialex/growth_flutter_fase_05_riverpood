@@ -1,0 +1,116 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../errors/app_failure.dart';
+import '../result/result.dart';
+
+/// Generic CRUD wrapper around a single Supabase table.
+///
+/// Feature services compose this instead of talking to [SupabaseClient]
+/// directly, so every table's error handling stays in one place.
+class SupabaseCrudService<ModelType> {
+  SupabaseCrudService({
+    required SupabaseClient supabaseClient,
+    required String tableName,
+    required ModelType Function(Map<String, dynamic> jsonRow) fromJson,
+  })  : _supabaseClient = supabaseClient,
+        _tableName = tableName,
+        _fromJson = fromJson;
+
+  final SupabaseClient _supabaseClient;
+  final String _tableName;
+  final ModelType Function(Map<String, dynamic> jsonRow) _fromJson;
+
+  Future<Result<List<ModelType>, AppFailure>> fetchAll({
+    String orderByColumn = 'created_at',
+    bool ascending = false,
+    int? limitCount,
+  }) {
+    return _run(() async {
+      var query = _supabaseClient
+          .from(_tableName)
+          .select()
+          .order(orderByColumn, ascending: ascending);
+      final rows = limitCount == null ? await query : await query.limit(limitCount);
+      return rows.map(_fromJson).toList();
+    });
+  }
+
+  Future<Result<ModelType, AppFailure>> fetchById(
+    String recordId, {
+    String idColumn = 'id',
+  }) {
+    return _run(() async {
+      final row = await _supabaseClient
+          .from(_tableName)
+          .select()
+          .eq(idColumn, recordId)
+          .maybeSingle();
+      if (row == null) {
+        throw PostgrestException(
+          message: 'No row found in $_tableName for $idColumn=$recordId',
+          code: 'PGRST116',
+        );
+      }
+      return _fromJson(row);
+    });
+  }
+
+  Future<Result<List<ModelType>, AppFailure>> fetchWhere(
+    String columnName,
+    Object columnValue,
+  ) {
+    return _run(() async {
+      final rows =
+          await _supabaseClient.from(_tableName).select().eq(columnName, columnValue);
+      return rows.map(_fromJson).toList();
+    });
+  }
+
+  Future<Result<ModelType, AppFailure>> insertRecord(
+    Map<String, dynamic> payload,
+  ) {
+    return _run(() async {
+      final row =
+          await _supabaseClient.from(_tableName).insert(payload).select().single();
+      return _fromJson(row);
+    });
+  }
+
+  Future<Result<ModelType, AppFailure>> updateRecord(
+    String recordId,
+    Map<String, dynamic> payload, {
+    String idColumn = 'id',
+  }) {
+    return _run(() async {
+      final row = await _supabaseClient
+          .from(_tableName)
+          .update(payload)
+          .eq(idColumn, recordId)
+          .select()
+          .single();
+      return _fromJson(row);
+    });
+  }
+
+  Future<Result<void, AppFailure>> deleteRecord(
+    String recordId, {
+    String idColumn = 'id',
+  }) {
+    return _run(() async {
+      await _supabaseClient.from(_tableName).delete().eq(idColumn, recordId);
+    });
+  }
+
+  Future<Result<ResultType, AppFailure>> _run<ResultType>(
+    Future<ResultType> Function() action,
+  ) async {
+    try {
+      final value = await action();
+      return Success(value);
+    } on PostgrestException catch (exception) {
+      return Failure(AppFailure.fromPostgrestException(exception));
+    } catch (exception) {
+      return Failure(AppFailure.unknown(exception));
+    }
+  }
+}

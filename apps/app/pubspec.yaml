@@ -1,0 +1,36 @@
+name: growth_flutter_fase_05_riverpood
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  router_core:
+    path: ../../packages/router_core
+  design_system:
+    git:
+      url: https://github.com/abialex/growth_flutter_fase_04_riverpood.git
+      path: packages/design_system
+      ref: master
+  supabase_flutter: ^2.16.0
+  flutter_dotenv: ^6.0.1
+  flutter_riverpod: ">=3.3.2 <3.4.0"
+  freezed_annotation: ^3.1.0
+  json_annotation: ">=4.9.0 <4.10.0"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.13
+  freezed: ^3.0.0
+  json_serializable: ^6.9.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
