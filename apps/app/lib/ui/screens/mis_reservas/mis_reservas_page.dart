@@ -5,10 +5,15 @@ import 'package:router_core/router_core.dart';
 
 import '../../../domain/entities/evento.dart';
 import '../../../domain/entities/reserva.dart';
+import '../../../domain/entities/ticket.dart';
 import '../../../domain/enums/reserva_estado.dart';
 import '../../notifiers/mis_reservas/states/mis_reservas_error_state.dart';
 import '../../notifiers/mis_reservas/states/mis_reservas_loaded_state.dart';
 import '../../notifiers/mis_reservas/states/mis_reservas_loading_state.dart';
+import '../../notifiers/reservas/confirmar_compra_state.dart';
+import '../../notifiers/reservas/states/confirmar_compra_error_state.dart';
+import '../../notifiers/reservas/states/confirmar_compra_loading_state.dart';
+import '../../notifiers/reservas/states/confirmar_compra_success_state.dart';
 import '../../providers/reservas_providers.dart';
 
 class MisReservasPage extends ConsumerWidget {
@@ -16,6 +21,12 @@ class MisReservasPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<ConfirmarCompraState>(confirmarCompraNotifierProvider, (previous, next) {
+      if (next is ConfirmarCompraSuccessState) {
+        ref.read(misReservasNotifierProvider.notifier).loadMisReservas();
+      }
+    });
+
     final misReservasState = ref.watch(misReservasNotifierProvider);
 
     return Scaffold(
@@ -61,10 +72,14 @@ class MisReservasPage extends ConsumerWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         itemCount: misReservasState.reservas.length,
         separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.md),
-        itemBuilder: (context, index) => _ReservaCard(
-          reserva: misReservasState.reservas[index],
-          evento: misReservasState.eventosPorId[misReservasState.reservas[index].eventoId],
-        ),
+        itemBuilder: (context, index) {
+          final reserva = misReservasState.reservas[index];
+          return _ReservaCard(
+            reserva: reserva,
+            evento: misReservasState.eventosPorId[reserva.eventoId],
+            ticket: misReservasState.ticketsPorReservaId[reserva.id],
+          );
+        },
       );
     }
 
@@ -72,11 +87,12 @@ class MisReservasPage extends ConsumerWidget {
   }
 }
 
-class _ReservaCard extends StatelessWidget {
-  const _ReservaCard({required this.reserva, required this.evento});
+class _ReservaCard extends ConsumerWidget {
+  const _ReservaCard({required this.reserva, required this.evento, required this.ticket});
 
   final Reserva reserva;
   final Evento? evento;
+  final Ticket? ticket;
 
   String _fechaFormatted(DateTime fecha) {
     final day = fecha.day.toString().padLeft(2, '0');
@@ -84,9 +100,22 @@ class _ReservaCard extends StatelessWidget {
     return '$day/$month/${fecha.year}';
   }
 
+  void _onConfirmarCompra(WidgetRef ref) {
+    ref.read(confirmarCompraNotifierProvider.notifier).confirmarCompra(reserva.id);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final evento = this.evento;
+    final ticket = this.ticket;
+    final confirmarCompraState = ref.watch(confirmarCompraNotifierProvider);
+
+    final isConfirmandoEstaReserva = confirmarCompraState is ConfirmarCompraLoadingState &&
+        confirmarCompraState.reservaId == reserva.id;
+    final errorEstaReserva = confirmarCompraState is ConfirmarCompraErrorState &&
+            confirmarCompraState.reservaId == reserva.id
+        ? confirmarCompraState
+        : null;
 
     return AppCard(
       child: Column(
@@ -119,6 +148,27 @@ class _ReservaCard extends StatelessWidget {
           ],
           const SizedBox(height: AppSpacing.xs),
           Text('Cupos reservados: ${reserva.cantidadCupos}'),
+          if (errorEstaReserva != null) ...[
+            const SizedBox(height: AppSpacing.sm),
+            AppBanner(
+              message: errorEstaReserva.failure.message,
+              variant: AppBannerVariant.error,
+            ),
+          ],
+          if (ticket != null) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'Código de ticket: ${ticket.codigo}',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+          ] else if (reserva.estado != ReservaEstado.cancelada) ...[
+            const SizedBox(height: AppSpacing.sm),
+            AppButton(
+              label: 'Confirmar compra',
+              isLoading: isConfirmandoEstaReserva,
+              onPressed: isConfirmandoEstaReserva ? null : () => _onConfirmarCompra(ref),
+            ),
+          ],
         ],
       ),
     );

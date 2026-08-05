@@ -30,4 +30,10 @@ class ReservasService {
   Future<Result<List<Reserva>, AppFailure>> fetchMisReservas() {
     return _crudService.fetchAll(orderByColumn: 'fecha_reserva');
   }
+
+  Future<Result<Reserva, AppFailure>> confirmarReserva(String reservaId) {
+    return _crudService.updateRecord(reservaId, {
+      'estado': ReservaEstado.confirmada.name,
+    });
+  }
 }

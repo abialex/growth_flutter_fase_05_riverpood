@@ -185,6 +185,8 @@ class _ReservarSection extends ConsumerWidget {
         ],
         if (isLoading)
           const Center(child: AppLoader())
+        else if (reservarState is ReservarSuccessState)
+          const SizedBox.shrink()
         else if (isReservado)
           const AppBanner(
             message: 'Ya tienes una reserva para este evento.',
