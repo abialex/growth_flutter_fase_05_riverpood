@@ -7,7 +7,11 @@ import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/eventos_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/logout_providers.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/evento_card.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/eventos_filter_bar.dart';
 import 'package:router_core/router_core.dart';
@@ -23,6 +27,10 @@ class _EventosPageState extends ConsumerState<EventosPage> {
   final Set<String> _selectedDeportes = {};
   String? _selectedCiudad;
   DateTime? _selectedDesde;
+
+  void _onLogout() {
+    unawaited(ref.read(logoutNotifierProvider.notifier).logout());
+  }
 
   bool get _hasActiveFilters =>
       _selectedDeportes.isNotEmpty ||
@@ -87,6 +95,16 @@ class _EventosPageState extends ConsumerState<EventosPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<LogoutState>(logoutNotifierProvider, (previous, next) {
+      if (next case LogoutErrorState(:final failure)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message)),
+        );
+      }
+    });
+
+    final isLoggingOut =
+        ref.watch(logoutNotifierProvider) is LogoutLoadingState;
     final eventosState = ref.watch(eventosNotifierProvider);
 
     return Scaffold(
@@ -97,6 +115,11 @@ class _EventosPageState extends ConsumerState<EventosPage> {
             icon: const Icon(Icons.confirmation_number_outlined),
             tooltip: 'Mis reservas',
             onPressed: () => unawaited(context.pushNamed('mis-reservas')),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Cerrar sesión',
+            onPressed: isLoggingOut ? null : _onLogout,
           ),
         ],
       ),

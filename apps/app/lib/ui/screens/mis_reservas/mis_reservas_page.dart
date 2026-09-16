@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/confirmar_compra_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_success_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/logout_providers.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/mis_reservas/widgets/reserva_card.dart';
 import 'package:router_core/router_core.dart';
@@ -15,23 +19,46 @@ import 'package:router_core/router_core.dart';
 class MisReservasPage extends ConsumerWidget {
   const MisReservasPage({super.key});
 
+  void _onLogout(WidgetRef ref) {
+    unawaited(ref.read(logoutNotifierProvider.notifier).logout());
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<ConfirmarCompraState>(confirmarCompraNotifierProvider, (
-      previous,
-      next,
-    ) {
-      if (next is ConfirmarCompraSuccessState) {
-        unawaited(
-          ref.read(misReservasNotifierProvider.notifier).loadMisReservas(),
-        );
-      }
-    });
+    ref
+      ..listen<ConfirmarCompraState>(confirmarCompraNotifierProvider, (
+        previous,
+        next,
+      ) {
+        if (next is ConfirmarCompraSuccessState) {
+          unawaited(
+            ref.read(misReservasNotifierProvider.notifier).loadMisReservas(),
+          );
+        }
+      })
+      ..listen<LogoutState>(logoutNotifierProvider, (previous, next) {
+        if (next case LogoutErrorState(:final failure)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(failure.message)),
+          );
+        }
+      });
 
+    final isLoggingOut =
+        ref.watch(logoutNotifierProvider) is LogoutLoadingState;
     final misReservasState = ref.watch(misReservasNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis reservas')),
+      appBar: AppBar(
+        title: const Text('Mis reservas'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Cerrar sesión',
+            onPressed: isLoggingOut ? null : () => _onLogout(ref),
+          ),
+        ],
+      ),
       body: _buildBody(context, misReservasState),
     );
   }
