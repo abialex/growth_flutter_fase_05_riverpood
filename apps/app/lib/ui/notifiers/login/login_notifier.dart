@@ -5,7 +5,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_repository_providers.dart';
 
 class LoginNotifier extends Notifier<LoginState> {
   @override

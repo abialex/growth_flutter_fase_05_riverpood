@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/login_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
@@ -45,10 +44,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
-      if (next is LoginSuccessState) context.goNamed('eventos');
-    });
-
     final loginState = ref.watch(loginNotifierProvider);
     final isLoading = loginState is LoginLoadingState;
 

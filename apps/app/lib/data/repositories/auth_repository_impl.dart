@@ -1,8 +1,8 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/auth_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._authService);
@@ -38,8 +38,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Session? get currentSession => _authService.currentSession;
+  bool get isAuthenticated => _authService.isAuthenticated;
 
   @override
-  Stream<AuthState> get authStateChanges => _authService.authStateChanges;
+  Stream<AuthStatus> get authStatusChanges => _authService.authStatusChanges;
 }

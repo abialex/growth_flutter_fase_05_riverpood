@@ -5,7 +5,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/re
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_repository_providers.dart';
 
 class RegisterNotifier extends Notifier<RegisterState> {
   @override

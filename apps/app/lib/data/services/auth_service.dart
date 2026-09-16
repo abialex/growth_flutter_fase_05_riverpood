@@ -1,5 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
@@ -41,10 +42,14 @@ class AuthService {
     return _run(() => _supabaseClient.auth.signOut());
   }
 
-  Session? get currentSession => _supabaseClient.auth.currentSession;
+  bool get isAuthenticated => _supabaseClient.auth.currentSession != null;
 
-  Stream<AuthState> get authStateChanges =>
-      _supabaseClient.auth.onAuthStateChange;
+  Stream<AuthStatus> get authStatusChanges =>
+      _supabaseClient.auth.onAuthStateChange.map(
+        (authState) => authState.session == null
+            ? AuthStatus.unauthenticated
+            : AuthStatus.authenticated,
+      );
 
   Future<Result<void, AppFailure>> _run(
     Future<void> Function() action,

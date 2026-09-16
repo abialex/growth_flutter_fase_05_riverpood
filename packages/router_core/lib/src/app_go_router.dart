@@ -22,6 +22,7 @@ class AppGoRouter<T> {
     required this.getRouteEnumFromPath,
     required this.getPathFromRouteEnum,
     this.onRouteChange,
+    this.routeGuard,
   }) {
     final goRouterList =
         routeModules.expand((module) => module.rootRoutes).toList();
@@ -67,12 +68,7 @@ class AppGoRouter<T> {
         final routeEnum = _getRouteEnum(state);
         _updateCurrentRoute(routeEnum);
         updateCurrentRouteEvent(routeEnum);
-
-        if (!_validateUpdateRouteHistory()) {
-          return null;
-        }
-
-        return _handlePermissions();
+        return routeGuard?.call(context, state);
       },
     );
   }
@@ -108,18 +104,15 @@ class AppGoRouter<T> {
   /// Called after the active route name changes.
   final void Function(String? routeName)? onRouteChange;
 
+  /// Optionally redirects a route based on application state.
+  final GoRouterRedirect? routeGuard;
+
   /// Builds the persistent application shell.
   final Widget Function(StatefulNavigationShell navigationShell)
       mainWrapperBuilder;
 
   /// The configured GoRouter instance.
   GoRouter get router => _router;
-
-  bool _validateUpdateRouteHistory() {
-    return currentRoute != null &&
-        previousRoute != null &&
-        currentRoute == previousRoute;
-  }
 
   void _updateCurrentRoute(T route) {
     previousRoute = currentRoute;
@@ -130,9 +123,5 @@ class AppGoRouter<T> {
     final path = state.matchedLocation;
     final lastSegment = '/${path.split('/').last}';
     return getRouteEnumFromPath(lastSegment);
-  }
-
-  String? _handlePermissions() {
-    return null;
   }
 }

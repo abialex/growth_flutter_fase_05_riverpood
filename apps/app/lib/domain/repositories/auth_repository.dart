@@ -1,6 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 
 abstract class AuthRepository {
   Future<Result<void, AppFailure>> signUp({
@@ -17,7 +17,7 @@ abstract class AuthRepository {
 
   Future<Result<void, AppFailure>> signOut();
 
-  Session? get currentSession;
+  bool get isAuthenticated;
 
-  Stream<AuthState> get authStateChanges;
+  Stream<AuthStatus> get authStatusChanges;
 }
