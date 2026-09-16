@@ -9,6 +9,7 @@ final authServiceProvider = Provider<AuthService>(
   (ref) => AuthService(
     ref.watch(supabaseClientProvider),
     ref.watch(supabaseLoggerProvider),
+    ref.watch(supabaseFailureMapperProvider),
   ),
 );
 

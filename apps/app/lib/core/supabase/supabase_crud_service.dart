@@ -1,5 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,14 +12,17 @@ class SupabaseCrudService<ModelType> {
   SupabaseCrudService({
     required SupabaseClient supabaseClient,
     required SupabaseLogger logger,
+    required SupabaseFailureMapper failureMapper,
     required String tableName,
     required ModelType Function(Map<String, dynamic> jsonRow) fromJson,
   }) : _supabaseClient = supabaseClient,
+       _failureMapper = failureMapper,
        _logger = logger,
        _tableName = tableName,
        _fromJson = fromJson;
 
   final SupabaseClient _supabaseClient;
+  final SupabaseFailureMapper _failureMapper;
   final SupabaseLogger _logger;
   final String _tableName;
   final ModelType Function(Map<String, dynamic> jsonRow) _fromJson;
@@ -143,7 +147,7 @@ class SupabaseCrudService<ModelType> {
         exception: exception,
         stackTrace: stackTrace,
       );
-      return Failure(AppFailure.fromPostgrestException(exception));
+      return Failure(_failureMapper.fromPostgrestException(exception));
     } on Object catch (exception, stackTrace) {
       _logger.logUnexpectedError(
         operation: operation,
@@ -151,7 +155,7 @@ class SupabaseCrudService<ModelType> {
         error: exception,
         stackTrace: stackTrace,
       );
-      return Failure(AppFailure.unknown(exception));
+      return Failure(_failureMapper.fromUnexpectedError());
     }
   }
 }
