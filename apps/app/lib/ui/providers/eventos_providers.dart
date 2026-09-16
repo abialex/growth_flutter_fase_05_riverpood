@@ -10,7 +10,10 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/eventos_st
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/core_providers.dart';
 
 final eventosServiceProvider = Provider<EventosService>(
-  (ref) => EventosService(ref.watch(supabaseClientProvider)),
+  (ref) => EventosService(
+    ref.watch(supabaseClientProvider),
+    ref.watch(supabaseLoggerProvider),
+  ),
 );
 
 final eventosRepositoryProvider = Provider<EventosRepository>(

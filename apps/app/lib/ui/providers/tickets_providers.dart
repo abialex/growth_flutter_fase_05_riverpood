@@ -6,7 +6,10 @@ import 'package:growth_flutter_fase_05_riverpood/domain/repositories/tickets_rep
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/core_providers.dart';
 
 final ticketsServiceProvider = Provider<TicketsService>(
-  (ref) => TicketsService(ref.watch(supabaseClientProvider)),
+  (ref) => TicketsService(
+    ref.watch(supabaseClientProvider),
+    ref.watch(supabaseLoggerProvider),
+  ),
 );
 
 final ticketsRepositoryProvider = Provider<TicketsRepository>(

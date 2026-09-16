@@ -12,7 +12,10 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/reservar_
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/core_providers.dart';
 
 final reservasServiceProvider = Provider<ReservasService>(
-  (ref) => ReservasService(ref.watch(supabaseClientProvider)),
+  (ref) => ReservasService(
+    ref.watch(supabaseClientProvider),
+    ref.watch(supabaseLoggerProvider),
+  ),
 );
 
 final reservasRepositoryProvider = Provider<ReservasRepository>(

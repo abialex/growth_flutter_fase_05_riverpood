@@ -1,14 +1,16 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ReservasService {
-  ReservasService(SupabaseClient supabaseClient)
+  ReservasService(SupabaseClient supabaseClient, SupabaseLogger logger)
     : _crudService = SupabaseCrudService<Reserva>(
         supabaseClient: supabaseClient,
+        logger: logger,
         tableName: 'reservas',
         fromJson: Reserva.fromJson,
       );

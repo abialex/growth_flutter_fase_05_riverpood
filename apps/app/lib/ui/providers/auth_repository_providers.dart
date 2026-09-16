@@ -6,7 +6,10 @@ import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_reposi
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/core_providers.dart';
 
 final authServiceProvider = Provider<AuthService>(
-  (ref) => AuthService(ref.watch(supabaseClientProvider)),
+  (ref) => AuthService(
+    ref.watch(supabaseClientProvider),
+    ref.watch(supabaseLoggerProvider),
+  ),
 );
 
 final authRepositoryProvider = Provider<AuthRepository>(
