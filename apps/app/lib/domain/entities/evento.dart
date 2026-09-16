@@ -1,25 +1,63 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/evento_estado.dart';
+import 'package:meta/meta.dart';
 
-part 'evento.freezed.dart';
-part 'evento.g.dart';
+@immutable
+final class Evento {
+  const Evento({
+    required this.id,
+    required this.nombre,
+    required this.deporte,
+    required this.fecha,
+    required this.hora,
+    required this.ciudad,
+    required this.lugar,
+    required this.cuposTotales,
+    required this.cuposDisponibles,
+    required this.estado,
+    this.descripcion,
+  });
 
-@freezed
-abstract class Evento with _$Evento {
-  const factory Evento({
-    required String id,
-    required String nombre,
-    required String deporte,
-    required DateTime fecha,
-    required String hora,
-    required String ciudad,
-    required String lugar,
-    @JsonKey(name: 'cupos_totales') required int cuposTotales,
-    @JsonKey(name: 'cupos_disponibles') required int cuposDisponibles,
-    required EventoEstado estado,
-    String? descripcion,
-  }) = _Evento;
+  final String id;
+  final String nombre;
+  final String deporte;
+  final DateTime fecha;
+  final String hora;
+  final String ciudad;
+  final String lugar;
+  final int cuposTotales;
+  final int cuposDisponibles;
+  final EventoEstado estado;
+  final String? descripcion;
 
-  factory Evento.fromJson(Map<String, dynamic> json) => _$EventoFromJson(json);
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is Evento &&
+            other.id == id &&
+            other.nombre == nombre &&
+            other.deporte == deporte &&
+            other.fecha == fecha &&
+            other.hora == hora &&
+            other.ciudad == ciudad &&
+            other.lugar == lugar &&
+            other.cuposTotales == cuposTotales &&
+            other.cuposDisponibles == cuposDisponibles &&
+            other.estado == estado &&
+            other.descripcion == descripcion;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    nombre,
+    deporte,
+    fecha,
+    hora,
+    ciudad,
+    lugar,
+    cuposTotales,
+    cuposDisponibles,
+    estado,
+    descripcion,
+  );
 }

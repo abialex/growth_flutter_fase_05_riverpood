@@ -1,21 +1,43 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
+import 'package:meta/meta.dart';
 
-part 'reserva.freezed.dart';
-part 'reserva.g.dart';
+@immutable
+final class Reserva {
+  const Reserva({
+    required this.id,
+    required this.usuarioId,
+    required this.eventoId,
+    required this.cantidadCupos,
+    required this.estado,
+    required this.fechaReserva,
+  });
 
-@freezed
-abstract class Reserva with _$Reserva {
-  const factory Reserva({
-    required String id,
-    @JsonKey(name: 'usuario_id') required String usuarioId,
-    @JsonKey(name: 'evento_id') required String eventoId,
-    @JsonKey(name: 'cantidad_cupos') required int cantidadCupos,
-    required ReservaEstado estado,
-    @JsonKey(name: 'fecha_reserva') required DateTime fechaReserva,
-  }) = _Reserva;
+  final String id;
+  final String usuarioId;
+  final String eventoId;
+  final int cantidadCupos;
+  final ReservaEstado estado;
+  final DateTime fechaReserva;
 
-  factory Reserva.fromJson(Map<String, dynamic> json) =>
-      _$ReservaFromJson(json);
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is Reserva &&
+            other.id == id &&
+            other.usuarioId == usuarioId &&
+            other.eventoId == eventoId &&
+            other.cantidadCupos == cantidadCupos &&
+            other.estado == estado &&
+            other.fechaReserva == fechaReserva;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    usuarioId,
+    eventoId,
+    cantidadCupos,
+    estado,
+    fechaReserva,
+  );
 }
