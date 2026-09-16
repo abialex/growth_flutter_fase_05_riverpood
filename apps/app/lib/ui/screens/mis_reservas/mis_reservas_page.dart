@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:design_system/design_system.dart';
+import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_error_state.dart';

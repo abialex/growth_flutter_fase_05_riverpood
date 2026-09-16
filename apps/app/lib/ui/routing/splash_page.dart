@@ -1,4 +1,4 @@
-import 'package:design_system/design_system.dart';
+import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:router_core/router_core.dart';
 

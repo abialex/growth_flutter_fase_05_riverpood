@@ -7,11 +7,10 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
-  design_system:
+  app_ui_kit:
     git:
       url: https://github.com/abialex/growth_flutter_fase_04_riverpood.git
-      path: packages/design_system
-      ref: master
+      ref: v0.4.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.1
