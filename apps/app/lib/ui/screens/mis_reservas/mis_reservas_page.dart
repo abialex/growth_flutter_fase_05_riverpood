@@ -16,15 +16,26 @@ import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/mis_reservas/widgets/reserva_card.dart';
 import 'package:router_core/router_core.dart';
 
-class MisReservasPage extends ConsumerWidget {
+class MisReservasPage extends ConsumerStatefulWidget {
   const MisReservasPage({super.key});
 
-  void _onLogout(WidgetRef ref) {
+  @override
+  ConsumerState<MisReservasPage> createState() => _MisReservasPageState();
+}
+
+class _MisReservasPageState extends ConsumerState<MisReservasPage> {
+  @override
+  void initState() {
+    super.initState();
+    unawaited(ref.read(misReservasNotifierProvider.notifier).loadMisReservas());
+  }
+
+  void _onLogout() {
     unawaited(ref.read(logoutNotifierProvider.notifier).logout());
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     ref
       ..listen<ConfirmarCompraState>(confirmarCompraNotifierProvider, (
         previous,
@@ -55,7 +66,7 @@ class MisReservasPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Cerrar sesión',
-            onPressed: isLoggingOut ? null : () => _onLogout(ref),
+            onPressed: isLoggingOut ? null : _onLogout,
           ),
         ],
       ),

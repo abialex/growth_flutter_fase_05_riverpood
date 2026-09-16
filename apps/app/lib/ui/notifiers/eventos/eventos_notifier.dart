@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/eventos_state.dart';
@@ -12,10 +10,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers
 
 class EventosNotifier extends Notifier<EventosState> {
   @override
-  EventosState build() {
-    unawaited(Future<void>.microtask(loadEventos));
-    return const EventosInitialState();
-  }
+  EventosState build() => const EventosInitialState();
 
   Future<void> loadEventos() async {
     state = const EventosLoadingState();

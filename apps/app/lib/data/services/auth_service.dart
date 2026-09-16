@@ -1,6 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
-import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,14 +9,14 @@ class AuthService {
   AuthService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
-    SupabaseFailureMapper failureMapper,
+    FailureMapper failureMapper,
   ) : _supabaseClient = supabaseClient,
       _logger = logger,
       _failureMapper = failureMapper;
 
   final SupabaseClient _supabaseClient;
   final SupabaseLogger _logger;
-  final SupabaseFailureMapper _failureMapper;
+  final FailureMapper _failureMapper;
 
   Future<Result<void, AppFailure>> signUp({
     required String email,
@@ -83,14 +83,14 @@ class AuthService {
         exception: exception,
         stackTrace: stackTrace,
       );
-      return Failure(_failureMapper.fromAuthException(exception));
+      return Failure(_failureMapper.map(exception));
     } on Object catch (exception, stackTrace) {
       _logger.logUnexpectedError(
         operation: operation,
         error: exception,
         stackTrace: stackTrace,
       );
-      return Failure(_failureMapper.fromUnexpectedError());
+      return Failure(_failureMapper.map(exception));
     }
   }
 }

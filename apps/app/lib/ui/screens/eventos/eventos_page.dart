@@ -28,6 +28,12 @@ class _EventosPageState extends ConsumerState<EventosPage> {
   String? _selectedCiudad;
   DateTime? _selectedDesde;
 
+  @override
+  void initState() {
+    super.initState();
+    unawaited(ref.read(eventosNotifierProvider.notifier).loadEventos());
+  }
+
   void _onLogout() {
     unawaited(ref.read(logoutNotifierProvider.notifier).logout());
   }

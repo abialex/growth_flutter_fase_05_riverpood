@@ -1,22 +1,32 @@
 import 'package:growth_flutter_fase_05_riverpood/core/enums/app_failure_type.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Converts Supabase exceptions into safe application failures.
-final class SupabaseFailureMapper {
+final class SupabaseFailureMapper implements FailureMapper {
   /// Creates a Supabase failure mapper.
   const SupabaseFailureMapper();
 
-  /// Maps a PostgREST exception to an application failure.
-  AppFailure fromPostgrestException(PostgrestException exception) {
+  @override
+  AppFailure map(Object error) {
+    if (error is PostgrestException) {
+      return _fromPostgrestException(error);
+    }
+    if (error is AuthException) {
+      return _fromAuthException(error);
+    }
+    return _fromUnexpectedError();
+  }
+
+  AppFailure _fromPostgrestException(PostgrestException exception) {
     return AppFailure(
       failureType: _failureTypeFromPostgrestCode(exception.code),
       message: _messageFromPostgrestCode(exception.code),
     );
   }
 
-  /// Maps an authentication exception to an application failure.
-  AppFailure fromAuthException(AuthException exception) {
+  AppFailure _fromAuthException(AuthException exception) {
     return AppFailure(
       failureType: exception.statusCode == null
           ? AppFailureType.network
@@ -25,8 +35,7 @@ final class SupabaseFailureMapper {
     );
   }
 
-  /// Creates a safe failure for an unexpected transport error.
-  AppFailure fromUnexpectedError() {
+  AppFailure _fromUnexpectedError() {
     return const AppFailure(
       failureType: AppFailureType.unknown,
       message: 'No se pudo completar la operación. Inténtalo nuevamente.',

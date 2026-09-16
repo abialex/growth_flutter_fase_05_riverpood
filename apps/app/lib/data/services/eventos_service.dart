@@ -1,7 +1,7 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_service.dart';
-import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/models/event_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
@@ -11,7 +11,7 @@ class EventosService {
   EventosService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
-    SupabaseFailureMapper failureMapper,
+    FailureMapper failureMapper,
   ) : _crudService = SupabaseCrudService<EventModel>(
         supabaseClient: supabaseClient,
         logger: logger,

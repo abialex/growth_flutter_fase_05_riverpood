@@ -9,7 +9,7 @@ final ticketsServiceProvider = Provider<TicketsService>(
   (ref) => TicketsService(
     ref.watch(supabaseClientProvider),
     ref.watch(supabaseLoggerProvider),
-    ref.watch(supabaseFailureMapperProvider),
+    ref.watch(failureMapperProvider),
   ),
 );
 

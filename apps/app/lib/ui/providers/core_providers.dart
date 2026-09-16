@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase_client.dart';
@@ -10,6 +11,6 @@ final supabaseLoggerProvider = Provider<SupabaseLogger>(
   (_) => const SupabaseLogger(),
 );
 
-final supabaseFailureMapperProvider = Provider<SupabaseFailureMapper>(
+final failureMapperProvider = Provider<FailureMapper>(
   (_) => const SupabaseFailureMapper(),
 );

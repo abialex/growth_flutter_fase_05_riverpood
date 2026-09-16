@@ -13,7 +13,7 @@ final eventosServiceProvider = Provider<EventosService>(
   (ref) => EventosService(
     ref.watch(supabaseClientProvider),
     ref.watch(supabaseLoggerProvider),
-    ref.watch(supabaseFailureMapperProvider),
+    ref.watch(failureMapperProvider),
   ),
 );
 

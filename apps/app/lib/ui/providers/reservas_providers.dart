@@ -15,7 +15,7 @@ final reservasServiceProvider = Provider<ReservasService>(
   (ref) => ReservasService(
     ref.watch(supabaseClientProvider),
     ref.watch(supabaseLoggerProvider),
-    ref.watch(supabaseFailureMapperProvider),
+    ref.watch(failureMapperProvider),
   ),
 );
 

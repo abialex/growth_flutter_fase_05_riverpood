@@ -1,7 +1,7 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_service.dart';
-import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_failure_mapper.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/models/ticket_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
@@ -12,7 +12,7 @@ class TicketsService {
   TicketsService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
-    SupabaseFailureMapper failureMapper,
+    FailureMapper failureMapper,
   ) : _crudService = SupabaseCrudService<TicketModel>(
         supabaseClient: supabaseClient,
         logger: logger,

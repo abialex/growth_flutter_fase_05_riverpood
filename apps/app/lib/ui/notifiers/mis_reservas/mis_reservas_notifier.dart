@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
@@ -18,10 +16,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/providers/tickets_providers.
 
 class MisReservasNotifier extends Notifier<MisReservasState> {
   @override
-  MisReservasState build() {
-    unawaited(Future<void>.microtask(loadMisReservas));
-    return const MisReservasInitialState();
-  }
+  MisReservasState build() => const MisReservasInitialState();
 
   Future<void> loadMisReservas() async {
     state = const MisReservasLoadingState();
