@@ -1,8 +1,8 @@
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../domain/entities/evento.dart';
-import '../../domain/repositories/eventos_repository.dart';
-import '../services/eventos_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/eventos_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/eventos_repository.dart';
 
 class EventosRepositoryImpl implements EventosRepository {
   EventosRepositoryImpl(this._eventosService);

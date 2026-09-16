@@ -1,8 +1,8 @@
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../domain/entities/ticket.dart';
-import '../../domain/repositories/tickets_repository.dart';
-import '../services/tickets_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/tickets_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/tickets_repository.dart';
 
 class TicketsRepositoryImpl implements TicketsRepository {
   TicketsRepositoryImpl(this._ticketsService);

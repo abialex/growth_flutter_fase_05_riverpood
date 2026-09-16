@@ -1,6 +1,5 @@
+import 'package:growth_flutter_fase_05_riverpood/core/env.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'env.dart';
 
 Future<void> initSupabase() {
   return Supabase.initialize(

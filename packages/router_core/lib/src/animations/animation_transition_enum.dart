@@ -1,10 +1,20 @@
-/// Enum para definir los diferentes tipos de animaciones de transición de página.
-/// Puedes expandir este enum según las necesidades del proyecto.
+/// Defines the page transition animations supported by the router.
 enum AnimationTransitionEnum {
-  fade, // Desvanecimiento
-  slideHorizontal, // Deslizar de derecha a izquierda
-  slideVertical, // Deslizar de abajo hacia arriba
-  scale, // Escalado
-  rotation, // Rotación
-  none, // Sin animación
+  /// Fades the page in and out.
+  fade,
+
+  /// Slides the page horizontally.
+  slideHorizontal,
+
+  /// Slides the page vertically.
+  slideVertical,
+
+  /// Scales the page during the transition.
+  scale,
+
+  /// Rotates the page during the transition.
+  rotation,
+
+  /// Displays the page without an animation.
+  none,
 }

@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/login_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_providers.dart';
 import 'package:router_core/router_core.dart';
-
-import '../../notifiers/login/login_state.dart';
-import '../../notifiers/login/states/login_error_state.dart';
-import '../../notifiers/login/states/login_loading_state.dart';
-import '../../notifiers/login/states/login_success_state.dart';
-import '../../providers/auth_providers.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -28,14 +29,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void _onSubmit() {
-    ref.read(loginNotifierProvider.notifier).login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
+    unawaited(
+      ref
+          .read(loginNotifierProvider.notifier)
+          .login(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          ),
+    );
   }
 
   void _onNavigateToRegister() {
-    context.pushNamed('register');
+    unawaited(context.pushNamed('register'));
   }
 
   @override

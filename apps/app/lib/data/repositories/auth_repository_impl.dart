@@ -1,9 +1,8 @@
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/auth_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../services/auth_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._authService);

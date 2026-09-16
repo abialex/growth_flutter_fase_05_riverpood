@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/ticket_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_estado.dart';
 
 part 'ticket.freezed.dart';
 part 'ticket.g.dart';

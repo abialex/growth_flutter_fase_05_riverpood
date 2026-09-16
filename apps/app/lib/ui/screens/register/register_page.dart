@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../notifiers/register/states/register_error_state.dart';
-import '../../notifiers/register/states/register_loading_state.dart';
-import '../../notifiers/register/states/register_success_state.dart';
-import '../../providers/auth_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_success_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_providers.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -31,12 +33,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   void _onSubmit() {
     final ciudad = _ciudadController.text.trim();
-    ref.read(registerNotifierProvider.notifier).register(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          nombre: _nombreController.text.trim(),
-          ciudad: ciudad.isEmpty ? null : ciudad,
-        );
+    unawaited(
+      ref
+          .read(registerNotifierProvider.notifier)
+          .register(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+            nombre: _nombreController.text.trim(),
+            ciudad: ciudad.isEmpty ? null : ciudad,
+          ),
+    );
   }
 
   @override

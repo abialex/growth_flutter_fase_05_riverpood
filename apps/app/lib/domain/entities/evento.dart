@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/evento_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/evento_estado.dart';
 
 part 'evento.freezed.dart';
 part 'evento.g.dart';
@@ -17,8 +17,8 @@ abstract class Evento with _$Evento {
     required String lugar,
     @JsonKey(name: 'cupos_totales') required int cuposTotales,
     @JsonKey(name: 'cupos_disponibles') required int cuposDisponibles,
-    String? descripcion,
     required EventoEstado estado,
+    String? descripcion,
   }) = _Evento;
 
   factory Evento.fromJson(Map<String, dynamic> json) => _$EventoFromJson(json);

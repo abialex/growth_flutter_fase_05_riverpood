@@ -1,7 +1,6 @@
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
 
 class AuthService {
   AuthService(this._supabaseClient);
@@ -20,7 +19,7 @@ class AuthService {
         password: password,
         data: {
           'nombre': nombre,
-          if (ciudad != null) 'ciudad': ciudad,
+          'ciudad': ?ciudad,
         },
       );
     });
@@ -55,7 +54,7 @@ class AuthService {
       return const Success(null);
     } on AuthException catch (exception) {
       return Failure(AppFailure.fromAuthException(exception));
-    } catch (exception) {
+    } on Object catch (exception) {
       return Failure(AppFailure.unknown(exception));
     }
   }

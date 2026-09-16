@@ -1,18 +1,17 @@
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_estado.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../core/supabase/supabase_crud_service.dart';
-import '../../domain/entities/ticket.dart';
-import '../../domain/enums/ticket_estado.dart';
 
 class TicketsService {
   TicketsService(SupabaseClient supabaseClient)
-      : _crudService = SupabaseCrudService<Ticket>(
-          supabaseClient: supabaseClient,
-          tableName: 'tickets',
-          fromJson: Ticket.fromJson,
-        );
+    : _crudService = SupabaseCrudService<Ticket>(
+        supabaseClient: supabaseClient,
+        tableName: 'tickets',
+        fromJson: Ticket.fromJson,
+      );
 
   final SupabaseCrudService<Ticket> _crudService;
 

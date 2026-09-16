@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
-/// Observador personalizado para monitorear la navegación
+/// Observes navigation changes made by the application router.
 class AppGoRouterObserver extends NavigatorObserver {
-  final void Function(String?)? onRouteChange;
-
-  /// Callback específico para cuando se hace pop (incluyendo Navigator.of(context).pop())
-  final void Function(String? previousRouteName)? onPop;
-
+  /// Creates a navigation observer with optional change callbacks.
   AppGoRouterObserver({this.onRouteChange, this.onPop});
 
+  /// Called when the active route changes.
+  final void Function(String?)? onRouteChange;
+
+  /// Called when a route is removed from the navigation stack.
+  final void Function(String? previousRouteName)? onPop;
+
   @override
-  void didChangeTop(Route topRoute, Route? previousTopRoute) {
+  void didChangeTop(
+    Route<dynamic> topRoute,
+    Route<dynamic>? previousTopRoute,
+  ) {
     onRouteChange?.call(topRoute.settings.name);
     super.didChangeTop(topRoute, previousTopRoute);
   }

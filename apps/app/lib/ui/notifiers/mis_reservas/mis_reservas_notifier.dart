@@ -1,24 +1,25 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 
-import '../../../core/result/result.dart';
-import '../../../domain/entities/evento.dart';
-import '../../../domain/entities/reserva.dart';
-import '../../../domain/entities/ticket.dart';
-import '../../../domain/enums/reserva_estado.dart';
-import '../../providers/eventos_providers.dart';
-import '../../providers/reservas_providers.dart';
-import '../../providers/tickets_providers.dart';
-import '../eventos/states/eventos_loaded_state.dart';
-import 'mis_reservas_state.dart';
-import 'states/mis_reservas_error_state.dart';
-import 'states/mis_reservas_initial_state.dart';
-import 'states/mis_reservas_loaded_state.dart';
-import 'states/mis_reservas_loading_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_loaded_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/mis_reservas_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_initial_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loaded_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/eventos_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/tickets_providers.dart';
 
 class MisReservasNotifier extends Notifier<MisReservasState> {
   @override
   MisReservasState build() {
-    Future.microtask(loadMisReservas);
+    unawaited(Future<void>.microtask(loadMisReservas));
     return const MisReservasInitialState();
   }
 
@@ -40,10 +41,13 @@ class MisReservasNotifier extends Notifier<MisReservasState> {
     }
   }
 
-  Future<Map<String, Ticket>> _fetchTicketsPorReservaId(List<Reserva> reservas) async {
+  Future<Map<String, Ticket>> _fetchTicketsPorReservaId(
+    List<Reserva> reservas,
+  ) async {
     final ticketsRepository = ref.read(ticketsRepositoryProvider);
-    final reservasConfirmadas =
-        reservas.where((reserva) => reserva.estado == ReservaEstado.confirmada);
+    final reservasConfirmadas = reservas.where(
+      (reserva) => reserva.estado == ReservaEstado.confirmada,
+    );
 
     final ticketsPorReservaId = <String, Ticket>{};
     for (final reserva in reservasConfirmadas) {

@@ -1,24 +1,30 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loaded_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/confirmar_compra_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_success_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/mis_reservas/widgets/reserva_card.dart';
 import 'package:router_core/router_core.dart';
-
-import '../../notifiers/mis_reservas/states/mis_reservas_error_state.dart';
-import '../../notifiers/mis_reservas/states/mis_reservas_loaded_state.dart';
-import '../../notifiers/mis_reservas/states/mis_reservas_loading_state.dart';
-import '../../notifiers/reservas/confirmar_compra_state.dart';
-import '../../notifiers/reservas/states/confirmar_compra_success_state.dart';
-import '../../providers/reservas_providers.dart';
-import 'widgets/reserva_card.dart';
 
 class MisReservasPage extends ConsumerWidget {
   const MisReservasPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<ConfirmarCompraState>(confirmarCompraNotifierProvider, (previous, next) {
+    ref.listen<ConfirmarCompraState>(confirmarCompraNotifierProvider, (
+      previous,
+      next,
+    ) {
       if (next is ConfirmarCompraSuccessState) {
-        ref.read(misReservasNotifierProvider.notifier).loadMisReservas();
+        unawaited(
+          ref.read(misReservasNotifierProvider.notifier).loadMisReservas(),
+        );
       }
     });
 
@@ -66,7 +72,8 @@ class MisReservasPage extends ConsumerWidget {
       return ListView.separated(
         padding: const EdgeInsets.all(AppSpacing.md),
         itemCount: misReservasState.reservas.length,
-        separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.md),
+        separatorBuilder: (context, index) =>
+            const SizedBox(height: AppSpacing.md),
         itemBuilder: (context, index) {
           final reserva = misReservasState.reservas[index];
           return ReservaCard(

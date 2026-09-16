@@ -2,48 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:router_core/src/animations/animation_transition_enum.dart';
 import 'package:router_core/src/animations/app_build_stack_animation_page.dart';
-import 'package:router_core/src/i_route_module.dart';
 import 'package:router_core/src/app_router_observer.dart';
+import 'package:router_core/src/i_route_module.dart';
 
-final GlobalKey<NavigatorState> approotNavigatorKey = GlobalKey<NavigatorState>();
+/// Root navigator key shared by the router and navigation utilities.
+final GlobalKey<NavigatorState> approotNavigatorKey =
+    GlobalKey<NavigatorState>();
 
-/// Router V1 - Desacoplado usando Route Registry Pattern
+/// Builds a modular [GoRouter] from registered route modules.
 class AppGoRouter<T> {
-  late GoRouter _router;
-
-  /// Lista de rutas GoRoute y ShellRoute registradas
-  List<IRouteModule> routeModules;
-
-  /// Evento para actualizar la ruta actual
-  void Function(T route) updateCurrentRouteEvent;
-
-  /// Notificador para refrescar la UI
-  Listenable? refreshListenable;
-
-  /// para manejar la ruta actual y la anterior
-  T? currentRoute;
-  T? previousRoute;
-
-  ///
-  final Widget Function() pageSplashBuilder;
-
-  /// Ruta inicial de la aplicación
-  final String initialLocation;
-
-  /// Función para obtener el enum de ruta a partir del path
-  final T Function(String path) getRouteEnumFromPath;
-
-  /// Función para obtener el path a partir del enum de ruta
-  final String Function(T route) getPathFromRouteEnum;
-
-  /// Callback que se dispara cada vez que cambia la ruta activa
-  final void Function(String? routeName)? onRouteChange;
-
-  ///
-  final Widget Function(StatefulNavigationShell navigationShell) mainWrapperBuilder;
-
-  GoRouter get router => _router;
-
+  /// Creates a router from the supplied route modules and application hooks.
   AppGoRouter({
     required this.mainWrapperBuilder,
     required this.routeModules,
@@ -55,7 +23,8 @@ class AppGoRouter<T> {
     required this.getPathFromRouteEnum,
     this.onRouteChange,
   }) {
-    final goRouterList = routeModules.expand((module) => module.rootRoutes).toList();
+    final goRouterList =
+        routeModules.expand((module) => module.rootRoutes).toList();
     _router = GoRouter(
       navigatorKey: approotNavigatorKey,
       observers: [
@@ -70,7 +39,6 @@ class AppGoRouter<T> {
         ),
       ],
       debugLogDiagnostics: true,
-      routerNeglect: false,
       initialLocation: initialLocation,
       refreshListenable: refreshListenable,
       routes: [
@@ -78,7 +46,6 @@ class AppGoRouter<T> {
           path: initialLocation,
           name: 'splash',
           pageBuilder: (context, state) => AppBuildStackAnimationPage<T>(
-            routeEnum: null,
             state: state,
             child: pageSplashBuilder(),
             animationType: AnimationTransitionEnum.fade,
@@ -92,7 +59,7 @@ class AppGoRouter<T> {
             },
             branches: routeModules
                 .map((m) => m.branch)
-                .whereType<StatefulShellBranch>() // Filtramos los módulos que no tienen pestaña
+                .whereType<StatefulShellBranch>()
                 .toList(),
           ),
       ],
@@ -105,13 +72,53 @@ class AppGoRouter<T> {
           return null;
         }
 
-        return _handledPermisos(state);
+        return _handlePermissions();
       },
     );
   }
+  late GoRouter _router;
+
+  /// The route modules registered with this router.
+  List<IRouteModule> routeModules;
+
+  /// Called when the current route changes.
+  void Function(T route) updateCurrentRouteEvent;
+
+  /// Listenable used to refresh the router state.
+  Listenable? refreshListenable;
+
+  /// The current route identifier.
+  T? currentRoute;
+
+  /// The previous route identifier.
+  T? previousRoute;
+
+  /// Builds the splash screen shown at the initial route.
+  final Widget Function() pageSplashBuilder;
+
+  /// The initial route location.
+  final String initialLocation;
+
+  /// Converts a route path to its route identifier.
+  final T Function(String path) getRouteEnumFromPath;
+
+  /// Converts a route identifier to its route path.
+  final String Function(T route) getPathFromRouteEnum;
+
+  /// Called after the active route name changes.
+  final void Function(String? routeName)? onRouteChange;
+
+  /// Builds the persistent application shell.
+  final Widget Function(StatefulNavigationShell navigationShell)
+      mainWrapperBuilder;
+
+  /// The configured GoRouter instance.
+  GoRouter get router => _router;
 
   bool _validateUpdateRouteHistory() {
-    return currentRoute != null && previousRoute != null && currentRoute == previousRoute;
+    return currentRoute != null &&
+        previousRoute != null &&
+        currentRoute == previousRoute;
   }
 
   void _updateCurrentRoute(T route) {
@@ -125,12 +132,7 @@ class AppGoRouter<T> {
     return getRouteEnumFromPath(lastSegment);
   }
 
-  String? _handledPermisos(GoRouterState state) {
-    // ✅ Usar validators desacoplados en lugar de hardcodear lógica de permisos
-    // Cada módulo valida sus propias rutas a través de IRoutePermission
-    // final routePermissions = routeModules.map((element) => element.canAccess).toList();
-
-    // Permitir acceso a la ruta
+  String? _handlePermissions() {
     return null;
   }
 }

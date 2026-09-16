@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/reserva_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
 
 part 'reserva.freezed.dart';
 part 'reserva.g.dart';
@@ -16,5 +16,6 @@ abstract class Reserva with _$Reserva {
     @JsonKey(name: 'fecha_reserva') required DateTime fechaReserva,
   }) = _Reserva;
 
-  factory Reserva.fromJson(Map<String, dynamic> json) => _$ReservaFromJson(json);
+  factory Reserva.fromJson(Map<String, dynamic> json) =>
+      _$ReservaFromJson(json);
 }

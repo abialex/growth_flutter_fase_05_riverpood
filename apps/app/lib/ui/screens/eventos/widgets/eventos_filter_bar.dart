@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class EventosFilterBar extends StatelessWidget {
   const EventosFilterBar({
-    super.key,
     required this.deportesDisponibles,
     required this.ciudadesDisponibles,
     required this.selectedDeportes,
@@ -15,6 +14,7 @@ class EventosFilterBar extends StatelessWidget {
     required this.onPickFecha,
     required this.onClearFecha,
     required this.onClearFilters,
+    super.key,
   });
 
   final List<String> deportesDisponibles;
@@ -23,7 +23,8 @@ class EventosFilterBar extends StatelessWidget {
   final String? selectedCiudad;
   final DateTime? selectedDesde;
   final bool hasActiveFilters;
-  final void Function(String deporte, bool isSelected) onToggleDeporte;
+  final void Function(String deporte, {required bool isSelected})
+  onToggleDeporte;
   final ValueChanged<String?> onChangeCiudad;
   final VoidCallback onPickFecha;
   final VoidCallback onClearFecha;
@@ -40,7 +41,12 @@ class EventosFilterBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.md, AppSpacing.md, AppSpacing.md, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.md,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,14 +55,16 @@ class EventosFilterBar extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: deportesDisponibles.length,
-              separatorBuilder: (context, index) => const SizedBox(width: AppSpacing.sm),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(width: AppSpacing.sm),
               itemBuilder: (context, index) {
                 final deporte = deportesDisponibles[index];
                 return AppChip(
                   label: deporte,
                   type: AppChipType.filter,
                   isSelected: selectedDeportes.contains(deporte),
-                  onSelected: (isSelected) => onToggleDeporte(deporte, isSelected),
+                  onSelected: (isSelected) =>
+                      onToggleDeporte(deporte, isSelected: isSelected),
                 );
               },
             ),
@@ -72,7 +80,10 @@ class EventosFilterBar extends StatelessWidget {
                   hint: 'Todas',
                   initialValue: selectedCiudad,
                   items: ciudadesDisponibles
-                      .map((ciudad) => AppDropdownItem(value: ciudad, label: ciudad))
+                      .map(
+                        (ciudad) =>
+                            AppDropdownItem(value: ciudad, label: ciudad),
+                      )
                       .toList(),
                   onChanged: onChangeCiudad,
                 ),

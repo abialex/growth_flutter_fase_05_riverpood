@@ -1,7 +1,6 @@
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../errors/app_failure.dart';
-import '../result/result.dart';
 
 /// Generic CRUD wrapper around a single Supabase table.
 ///
@@ -12,9 +11,9 @@ class SupabaseCrudService<ModelType> {
     required SupabaseClient supabaseClient,
     required String tableName,
     required ModelType Function(Map<String, dynamic> jsonRow) fromJson,
-  })  : _supabaseClient = supabaseClient,
-        _tableName = tableName,
-        _fromJson = fromJson;
+  }) : _supabaseClient = supabaseClient,
+       _tableName = tableName,
+       _fromJson = fromJson;
 
   final SupabaseClient _supabaseClient;
   final String _tableName;
@@ -26,11 +25,13 @@ class SupabaseCrudService<ModelType> {
     int? limitCount,
   }) {
     return _run(() async {
-      var query = _supabaseClient
+      final query = _supabaseClient
           .from(_tableName)
           .select()
           .order(orderByColumn, ascending: ascending);
-      final rows = limitCount == null ? await query : await query.limit(limitCount);
+      final rows = limitCount == null
+          ? await query
+          : await query.limit(limitCount);
       return rows.map(_fromJson).toList();
     });
   }
@@ -60,8 +61,10 @@ class SupabaseCrudService<ModelType> {
     Object columnValue,
   ) {
     return _run(() async {
-      final rows =
-          await _supabaseClient.from(_tableName).select().eq(columnName, columnValue);
+      final rows = await _supabaseClient
+          .from(_tableName)
+          .select()
+          .eq(columnName, columnValue);
       return rows.map(_fromJson).toList();
     });
   }
@@ -70,8 +73,11 @@ class SupabaseCrudService<ModelType> {
     Map<String, dynamic> payload,
   ) {
     return _run(() async {
-      final row =
-          await _supabaseClient.from(_tableName).insert(payload).select().single();
+      final row = await _supabaseClient
+          .from(_tableName)
+          .insert(payload)
+          .select()
+          .single();
       return _fromJson(row);
     });
   }
@@ -109,7 +115,7 @@ class SupabaseCrudService<ModelType> {
       return Success(value);
     } on PostgrestException catch (exception) {
       return Failure(AppFailure.fromPostgrestException(exception));
-    } catch (exception) {
+    } on Object catch (exception) {
       return Failure(AppFailure.unknown(exception));
     }
   }

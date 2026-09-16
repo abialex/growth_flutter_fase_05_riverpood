@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'core/supabase_client.dart';
-import 'ui/routing/app_router_provider.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/supabase_client.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_router_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

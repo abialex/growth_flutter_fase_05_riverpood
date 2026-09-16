@@ -1,14 +1,10 @@
 import 'package:go_router/go_router.dart';
 
-/// Interfaz que define el contrato para todos los módulos de rutas
-/// Cada módulo debe implementar esta interfaz para registrar sus rutas
+/// Defines the contract used to register a group of application routes.
 abstract class IRouteModule {
-  // Para las pestañas que viven dentro del Shell persistente
+  /// The optional branch displayed inside a persistent shell.
   StatefulShellBranch? get branch => null;
 
-  // Para pantallas que "tapan" todo el app (Login, Splash, etc.)
+  /// The routes displayed outside the persistent shell.
   List<RouteBase> get rootRoutes => const [];
-
-  //bool canAccess(String routePath);
-  // void clearCache();
 }

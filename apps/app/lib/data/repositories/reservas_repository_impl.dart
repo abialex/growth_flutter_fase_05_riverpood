@@ -1,8 +1,8 @@
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../domain/entities/reserva.dart';
-import '../../domain/repositories/reservas_repository.dart';
-import '../services/reservas_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/reservas_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservas_repository.dart';
 
 class ReservasRepositoryImpl implements ReservasRepository {
   ReservasRepositoryImpl(this._reservasService);

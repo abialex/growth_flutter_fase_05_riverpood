@@ -1,24 +1,34 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../domain/entities/evento.dart';
-import '../../../notifiers/reservas/states/reservar_error_state.dart';
-import '../../../notifiers/reservas/states/reservar_loading_state.dart';
-import '../../../notifiers/reservas/states/reservar_success_state.dart';
-import '../../../providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_success_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
 
 class ReservarSection extends ConsumerWidget {
-  const ReservarSection({super.key, required this.evento, required this.isReservado});
+  const ReservarSection({
+    required this.evento,
+    required this.isReservado,
+    super.key,
+  });
 
   final Evento evento;
   final bool isReservado;
 
   void _onReservar(WidgetRef ref) {
-    ref.read(reservarNotifierProvider.notifier).reservar(
-          eventoId: evento.id,
-          cantidadCupos: 1,
-        );
+    unawaited(
+      ref
+          .read(reservarNotifierProvider.notifier)
+          .reservar(
+            eventoId: evento.id,
+            cantidadCupos: 1,
+          ),
+    );
   }
 
   @override
@@ -51,7 +61,6 @@ class ReservarSection extends ConsumerWidget {
         else if (isReservado)
           const AppBanner(
             message: 'Ya tienes una reserva para este evento.',
-            variant: AppBannerVariant.info,
           )
         else
           AppButton(

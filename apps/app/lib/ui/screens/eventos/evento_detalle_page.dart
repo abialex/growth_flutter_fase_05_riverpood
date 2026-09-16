@@ -1,19 +1,21 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../notifiers/evento_detalle/states/evento_detalle_error_state.dart';
-import '../../notifiers/evento_detalle/states/evento_detalle_loaded_state.dart';
-import '../../notifiers/evento_detalle/states/evento_detalle_loading_state.dart';
-import '../../notifiers/reservas/reservar_state.dart';
-import '../../notifiers/reservas/states/reservar_success_state.dart';
-import '../../providers/eventos_providers.dart';
-import '../../providers/reservas_providers.dart';
-import 'widgets/evento_detalle_content.dart';
-import 'widgets/reservar_section.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/evento_detalle/states/evento_detalle_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/evento_detalle/states/evento_detalle_loaded_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/evento_detalle/states/evento_detalle_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/reservar_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_success_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/eventos_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/evento_detalle_content.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/reservar_section.dart';
 
 class EventoDetallePage extends ConsumerStatefulWidget {
-  const EventoDetallePage({super.key, required this.eventoId});
+  const EventoDetallePage({required this.eventoId, super.key});
 
   final String eventoId;
 
@@ -25,18 +27,24 @@ class _EventoDetallePageState extends ConsumerState<EventoDetallePage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(eventoDetalleNotifierProvider.notifier).loadEvento(widget.eventoId);
-      ref.read(reservarNotifierProvider.notifier).reset();
-    });
+    unawaited(
+      ref
+          .read(eventoDetalleNotifierProvider.notifier)
+          .loadEvento(widget.eventoId),
+    );
+    ref.read(reservarNotifierProvider.notifier).reset();
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen<ReservarState>(reservarNotifierProvider, (previous, next) {
       if (next is ReservarSuccessState) {
-        ref.read(eventoDetalleNotifierProvider.notifier).loadEvento(widget.eventoId);
-        ref.read(eventosNotifierProvider.notifier).loadEventos();
+        unawaited(
+          ref
+              .read(eventoDetalleNotifierProvider.notifier)
+              .loadEvento(widget.eventoId),
+        );
+        unawaited(ref.read(eventosNotifierProvider.notifier).loadEventos());
       }
     });
 

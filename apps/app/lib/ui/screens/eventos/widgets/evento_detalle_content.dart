@@ -1,10 +1,10 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
 
 class EventoDetalleContent extends StatelessWidget {
-  const EventoDetalleContent({super.key, required this.evento});
+  const EventoDetalleContent({required this.evento, super.key});
 
   final Evento evento;
 
@@ -48,7 +48,9 @@ class EventoDetalleContent extends StatelessWidget {
           Text('${evento.lugar}, ${evento.ciudad}'),
           const SizedBox(height: AppSpacing.md),
           Text('Cupos', style: Theme.of(context).textTheme.labelLarge),
-          Text('${evento.cuposDisponibles} disponibles de ${evento.cuposTotales}'),
+          Text(
+            '${evento.cuposDisponibles} disponibles de ${evento.cuposTotales}',
+          ),
           const SizedBox(height: AppSpacing.md),
           Text('Estado', style: Theme.of(context).textTheme.labelLarge),
           Text(evento.estado.name),

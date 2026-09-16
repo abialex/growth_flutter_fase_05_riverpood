@@ -1,7 +1,6 @@
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/login/login_page.dart';
 import 'package:router_core/router_core.dart';
-
-import '../../routing/app_route.dart';
-import 'login_page.dart';
 
 class LoginRouteModule implements IRouteModule {
   @override
@@ -9,15 +8,15 @@ class LoginRouteModule implements IRouteModule {
 
   @override
   List<RouteBase> get rootRoutes => [
-        GoRoute(
-          path: AppRoute.login.path,
-          name: 'login',
-          pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
-            state: state,
-            child: const LoginPage(),
-            animationType: AnimationTransitionEnum.fade,
-            routeEnum: AppRoute.login,
-          ).build(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoute.login.path,
+      name: 'login',
+      pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
+        state: state,
+        child: const LoginPage(),
+        animationType: AnimationTransitionEnum.fade,
+        routeEnum: AppRoute.login,
+      ).build(),
+    ),
+  ];
 }

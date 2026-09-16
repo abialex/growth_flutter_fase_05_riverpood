@@ -1,17 +1,24 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../domain/entities/evento.dart';
-import '../../../../domain/entities/reserva.dart';
-import '../../../../domain/entities/ticket.dart';
-import '../../../../domain/enums/reserva_estado.dart';
-import '../../../notifiers/reservas/states/confirmar_compra_error_state.dart';
-import '../../../notifiers/reservas/states/confirmar_compra_loading_state.dart';
-import '../../../providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
 
 class ReservaCard extends ConsumerWidget {
-  const ReservaCard({super.key, required this.reserva, required this.evento, required this.ticket});
+  const ReservaCard({
+    required this.reserva,
+    required this.evento,
+    required this.ticket,
+    super.key,
+  });
 
   final Reserva reserva;
   final Evento? evento;
@@ -24,7 +31,11 @@ class ReservaCard extends ConsumerWidget {
   }
 
   void _onConfirmarCompra(WidgetRef ref) {
-    ref.read(confirmarCompraNotifierProvider.notifier).confirmarCompra(reserva.id);
+    unawaited(
+      ref
+          .read(confirmarCompraNotifierProvider.notifier)
+          .confirmarCompra(reserva.id),
+    );
   }
 
   @override
@@ -33,9 +44,11 @@ class ReservaCard extends ConsumerWidget {
     final ticket = this.ticket;
     final confirmarCompraState = ref.watch(confirmarCompraNotifierProvider);
 
-    final isConfirmandoEstaReserva = confirmarCompraState is ConfirmarCompraLoadingState &&
+    final isConfirmandoEstaReserva =
+        confirmarCompraState is ConfirmarCompraLoadingState &&
         confirmarCompraState.reservaId == reserva.id;
-    final errorEstaReserva = confirmarCompraState is ConfirmarCompraErrorState &&
+    final errorEstaReserva =
+        confirmarCompraState is ConfirmarCompraErrorState &&
             confirmarCompraState.reservaId == reserva.id
         ? confirmarCompraState
         : null;
@@ -67,7 +80,10 @@ class ReservaCard extends ConsumerWidget {
           ),
           if (evento != null) ...[
             const SizedBox(height: AppSpacing.sm),
-            Text('${_fechaFormatted(evento.fecha)} · ${evento.lugar}, ${evento.ciudad}'),
+            Text(
+              '${_fechaFormatted(evento.fecha)} · '
+              '${evento.lugar}, ${evento.ciudad}',
+            ),
           ],
           const SizedBox(height: AppSpacing.xs),
           Text('Cupos reservados: ${reserva.cantidadCupos}'),
@@ -89,7 +105,9 @@ class ReservaCard extends ConsumerWidget {
             AppButton(
               label: 'Confirmar compra',
               isLoading: isConfirmandoEstaReserva,
-              onPressed: isConfirmandoEstaReserva ? null : () => _onConfirmarCompra(ref),
+              onPressed: isConfirmandoEstaReserva
+                  ? null
+                  : () => _onConfirmarCompra(ref),
             ),
           ],
         ],

@@ -1,7 +1,6 @@
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
 
 abstract class AuthRepository {
   Future<Result<void, AppFailure>> signUp({

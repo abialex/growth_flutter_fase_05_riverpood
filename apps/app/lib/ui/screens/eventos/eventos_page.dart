@@ -1,15 +1,16 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_loaded_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eventos_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/eventos_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/evento_card.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/eventos_filter_bar.dart';
 import 'package:router_core/router_core.dart';
-
-import '../../../domain/entities/evento.dart';
-import '../../notifiers/eventos/states/eventos_error_state.dart';
-import '../../notifiers/eventos/states/eventos_loaded_state.dart';
-import '../../notifiers/eventos/states/eventos_loading_state.dart';
-import '../../providers/eventos_providers.dart';
-import 'widgets/evento_card.dart';
-import 'widgets/eventos_filter_bar.dart';
 
 class EventosPage extends ConsumerStatefulWidget {
   const EventosPage({super.key});
@@ -23,9 +24,12 @@ class _EventosPageState extends ConsumerState<EventosPage> {
   String? _selectedCiudad;
   DateTime? _selectedDesde;
 
-  bool get _hasActiveFilters => _selectedDeportes.isNotEmpty || _selectedCiudad != null || _selectedDesde != null;
+  bool get _hasActiveFilters =>
+      _selectedDeportes.isNotEmpty ||
+      _selectedCiudad != null ||
+      _selectedDesde != null;
 
-  void _onToggleDeporte(String deporte, bool isSelected) {
+  void _onToggleDeporte(String deporte, {required bool isSelected}) {
     setState(() {
       if (isSelected) {
         _selectedDeportes.add(deporte);
@@ -66,7 +70,8 @@ class _EventosPageState extends ConsumerState<EventosPage> {
 
   List<Evento> _applyFilters(List<Evento> eventos) {
     return eventos.where((evento) {
-      if (_selectedDeportes.isNotEmpty && !_selectedDeportes.contains(evento.deporte)) {
+      if (_selectedDeportes.isNotEmpty &&
+          !_selectedDeportes.contains(evento.deporte)) {
         return false;
       }
       if (_selectedCiudad != null && evento.ciudad != _selectedCiudad) {
@@ -91,7 +96,7 @@ class _EventosPageState extends ConsumerState<EventosPage> {
           IconButton(
             icon: const Icon(Icons.confirmation_number_outlined),
             tooltip: 'Mis reservas',
-            onPressed: () => context.pushNamed('mis-reservas'),
+            onPressed: () => unawaited(context.pushNamed('mis-reservas')),
           ),
         ],
       ),
@@ -108,7 +113,10 @@ class _EventosPageState extends ConsumerState<EventosPage> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),
-          child: AppBanner(message: eventosState.failure.message, variant: AppBannerVariant.error),
+          child: AppBanner(
+            message: eventosState.failure.message,
+            variant: AppBannerVariant.error,
+          ),
         ),
       );
     }
@@ -127,8 +135,12 @@ class _EventosPageState extends ConsumerState<EventosPage> {
         );
       }
 
-      final deportesDisponibles = eventosState.eventos.map((evento) => evento.deporte).toSet().toList()..sort();
-      final ciudadesDisponibles = eventosState.eventos.map((evento) => evento.ciudad).toSet().toList()..sort();
+      final deportesDisponibles =
+          eventosState.eventos.map((evento) => evento.deporte).toSet().toList()
+            ..sort();
+      final ciudadesDisponibles =
+          eventosState.eventos.map((evento) => evento.ciudad).toSet().toList()
+            ..sort();
       final eventosFiltrados = _applyFilters(eventosState.eventos);
 
       return Column(
@@ -153,7 +165,8 @@ class _EventosPageState extends ConsumerState<EventosPage> {
                       padding: const EdgeInsets.all(AppSpacing.md),
                       child: AppEmptyState(
                         title: 'No hay eventos que coincidan con los filtros',
-                        description: 'Prueba ajustando o limpiando los filtros.',
+                        description:
+                            'Prueba ajustando o limpiando los filtros.',
                         icon: Icons.filter_alt_off_outlined,
                         actionLabel: 'Limpiar filtros',
                         onAction: _onClearFilters,
@@ -163,10 +176,13 @@ class _EventosPageState extends ConsumerState<EventosPage> {
                 : ListView.separated(
                     padding: const EdgeInsets.all(AppSpacing.md),
                     itemCount: eventosFiltrados.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.md),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: AppSpacing.md),
                     itemBuilder: (context, index) => EventoCard(
                       evento: eventosFiltrados[index],
-                      isReservado: eventosState.eventosReservadosIds.contains(eventosFiltrados[index].id),
+                      isReservado: eventosState.eventosReservadosIds.contains(
+                        eventosFiltrados[index].id,
+                      ),
                     ),
                   ),
           ),

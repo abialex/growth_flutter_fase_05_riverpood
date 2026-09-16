@@ -1,6 +1,5 @@
+import 'package:growth_flutter_fase_05_riverpood/core/enums/app_failure_type.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../enums/app_failure_type.dart';
 
 class AppFailure {
   const AppFailure({

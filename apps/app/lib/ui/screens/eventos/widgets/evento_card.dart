@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
 import 'package:router_core/router_core.dart';
 
-import '../../../../domain/entities/evento.dart';
-
 class EventoCard extends StatelessWidget {
-  const EventoCard({super.key, required this.evento, required this.isReservado});
+  const EventoCard({
+    required this.evento,
+    required this.isReservado,
+    super.key,
+  });
 
   final Evento evento;
   final bool isReservado;
@@ -22,7 +27,9 @@ class EventoCard extends StatelessWidget {
   }
 
   void _onTap(BuildContext context) {
-    context.pushNamed('evento-detalle', pathParameters: {'id': evento.id});
+    unawaited(
+      context.pushNamed('evento-detalle', pathParameters: {'id': evento.id}),
+    );
   }
 
   @override

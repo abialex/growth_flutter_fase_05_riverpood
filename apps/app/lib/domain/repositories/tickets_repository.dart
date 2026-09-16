@@ -1,6 +1,6 @@
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
 
 abstract class TicketsRepository {
   Future<Result<List<Ticket>, AppFailure>> getTicketsByReservaId(

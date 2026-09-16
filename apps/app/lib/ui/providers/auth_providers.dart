@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/repositories/auth_repository_impl.dart';
-import '../../data/services/auth_service.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../notifiers/login/login_notifier.dart';
-import '../notifiers/login/login_state.dart';
-import '../notifiers/register/register_notifier.dart';
-import '../notifiers/register/register_state.dart';
-import 'core_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/repositories/auth_repository_impl.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/auth_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/login_notifier.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/login_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/register_notifier.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/register_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/core_providers.dart';
 
 final authServiceProvider = Provider<AuthService>(
   (ref) => AuthService(ref.watch(supabaseClientProvider)),
@@ -21,6 +21,7 @@ final loginNotifierProvider = NotifierProvider<LoginNotifier, LoginState>(
   LoginNotifier.new,
 );
 
-final registerNotifierProvider = NotifierProvider<RegisterNotifier, RegisterState>(
-  RegisterNotifier.new,
-);
+final registerNotifierProvider =
+    NotifierProvider<RegisterNotifier, RegisterState>(
+      RegisterNotifier.new,
+    );

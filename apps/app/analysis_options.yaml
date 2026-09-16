@@ -1,8 +1,20 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
+
+formatter:
+  page_width: 80
 
 analyzer:
+  exclude:
+    - lib/**/*.freezed.dart
+    - lib/**/*.g.dart
   errors:
     # False positive on freezed constructors: @JsonKey on a constructor
     # parameter is valid (freezed generates the backing field), but the
     # analyzer's built-in lint doesn't know that.
     invalid_annotation_target: ignore
+
+linter:
+  rules:
+    # App-internal widgets and states are not a consumer-facing package API.
+    # Reusable package APIs, such as router_core, keep this rule enabled.
+    public_member_api_docs: false

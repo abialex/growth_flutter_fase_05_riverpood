@@ -1,6 +1,6 @@
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../entities/evento.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
 
 abstract class EventosRepository {
   Future<Result<List<Evento>, AppFailure>> getEventos();
