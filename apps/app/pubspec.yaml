@@ -10,7 +10,7 @@ dependencies:
   app_ui_kit:
     git:
       url: https://github.com/abialex/growth_flutter_fase_04_riverpood.git
-      ref: v0.5.1
+      ref: v0.6.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.1

@@ -59,69 +59,78 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: AppCard(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Iniciar sesión',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    if (loginState is LoginErrorState) ...[
-                      AppBanner(
-                        message: loginState.failure.message,
-                        variant: AppBannerVariant.error,
+              child: AutofillGroup(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Iniciar sesión',
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                      const SizedBox(height: AppSpacing.md),
-                    ],
-                    if (loginState is LoginSuccessState) ...[
-                      const AppBanner(
-                        message: 'Sesión iniciada correctamente',
-                        variant: AppBannerVariant.success,
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                    ],
-                    AppValidatedField(
-                      controller: _emailController,
-                      label: 'Correo',
-                      keyboardType: TextInputType.emailAddress,
-                      validator: AppValidators.compose([
-                        AppValidators.requiredField(
-                          message: 'Ingresa tu correo.',
+                      const SizedBox(height: AppSpacing.lg),
+                      if (loginState is LoginErrorState) ...[
+                        AppBanner(
+                          message: loginState.failure.message,
+                          variant: AppBannerVariant.error,
                         ),
-                        AppValidators.email(),
-                      ]),
-                      enabled: !isLoading,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    AppValidatedField(
-                      controller: _passwordController,
-                      label: 'Contraseña',
-                      obscureText: true,
-                      validator: AppValidators.password(
-                        emptyMessage: 'Ingresa tu contraseña.',
-                        minLengthMessage: 'Usa al menos 6 caracteres.',
+                        const SizedBox(height: AppSpacing.md),
+                      ],
+                      if (loginState is LoginSuccessState) ...[
+                        const AppBanner(
+                          message: 'Sesión iniciada correctamente',
+                          variant: AppBannerVariant.success,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                      ],
+                      AppValidatedField(
+                        controller: _emailController,
+                        label: 'Correo',
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        autofillHints: const [
+                          AutofillHints.username,
+                          AutofillHints.email,
+                        ],
+                        validator: AppValidators.compose([
+                          AppValidators.requiredField(
+                            message: 'Ingresa tu correo.',
+                          ),
+                          AppValidators.email(),
+                        ]),
+                        enabled: !isLoading,
                       ),
-                      enabled: !isLoading,
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    if (isLoading)
-                      const Center(child: AppLoader())
-                    else
-                      AppButton(label: 'Ingresar', onPressed: _onSubmit),
-                    const SizedBox(height: AppSpacing.md),
-                    Center(
-                      child: AppButton(
-                        label: '¿No tienes cuenta? Regístrate',
-                        emphasis: AppEmphasis.outline,
-                        size: AppButtonSize.small,
-                        onPressed: isLoading ? null : _onNavigateToRegister,
+                      const SizedBox(height: AppSpacing.md),
+                      AppValidatedField(
+                        controller: _passwordController,
+                        label: 'Contraseña',
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: const [AutofillHints.password],
+                        validator: AppValidators.password(
+                          emptyMessage: 'Ingresa tu contraseña.',
+                          minLengthMessage: 'Usa al menos 6 caracteres.',
+                        ),
+                        enabled: !isLoading,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: AppSpacing.lg),
+                      if (isLoading)
+                        const Center(child: AppLoader())
+                      else
+                        AppButton(label: 'Ingresar', onPressed: _onSubmit),
+                      const SizedBox(height: AppSpacing.md),
+                      Center(
+                        child: AppButton(
+                          label: '¿No tienes cuenta? Regístrate',
+                          emphasis: AppEmphasis.outline,
+                          size: AppButtonSize.small,
+                          onPressed: isLoading ? null : _onNavigateToRegister,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

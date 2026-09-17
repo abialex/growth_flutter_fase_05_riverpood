@@ -18,12 +18,12 @@ visual `app_ui_kit` de la fase 04.
 ~~~text
 apps/app/                 Aplicación principal de eventos y reservas.
 packages/router_core/     Paquete reutilizable de navegación.
-app_ui_kit (Git)          Design system consumido desde el tag v0.5.1 de fase 04.
+app_ui_kit (Git)          Design system consumido desde el tag v0.6.0 de fase 04.
 supabase/scripts/         Scripts SQL numerados para configurar Supabase.
 docs/                     Requisitos y documentos de referencia local.
 ~~~
 
-La dependencia visual se mantiene fijada al tag remoto `v0.5.1` para evitar
+La dependencia visual se mantiene fijada al tag remoto `v0.6.0` para evitar
 que cambios no controlados del paquete alteren esta aplicación.
 
 ## Instalación

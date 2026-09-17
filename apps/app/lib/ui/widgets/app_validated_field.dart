@@ -9,6 +9,8 @@ class AppValidatedField extends StatelessWidget {
     required this.label,
     this.validator,
     this.keyboardType,
+    this.textInputAction,
+    this.autofillHints,
     this.obscureText = false,
     this.enabled = true,
     super.key,
@@ -25,6 +27,12 @@ class AppValidatedField extends StatelessWidget {
 
   /// Keyboard type used by regular text fields.
   final TextInputType? keyboardType;
+
+  /// Action shown on the software keyboard.
+  final TextInputAction? textInputAction;
+
+  /// Autofill semantics exposed to the operating system.
+  final Iterable<String>? autofillHints;
 
   /// Whether the field should render as a password field.
   final bool obscureText;
@@ -47,6 +55,8 @@ class AppValidatedField extends StatelessWidget {
             label: label,
             errorText: errorText,
             enabled: enabled,
+            textInputAction: textInputAction,
+            autofillHints: autofillHints,
             onChanged: (value) => field.didChange(value),
           );
         }
@@ -57,6 +67,8 @@ class AppValidatedField extends StatelessWidget {
           errorText: errorText,
           enabled: enabled,
           keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          autofillHints: autofillHints,
           onChanged: (value) => field.didChange(value),
         );
       },
