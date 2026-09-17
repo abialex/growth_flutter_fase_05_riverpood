@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loading_state.dart';
@@ -11,6 +10,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_stat
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/event_card.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/events_filter_bar.dart';
 import 'package:router_core/router_core.dart';
@@ -23,9 +23,7 @@ class EventsPage extends ConsumerStatefulWidget {
 }
 
 class _EventsPageState extends ConsumerState<EventsPage> {
-  final Set<String> _selectedSports = {};
-  String? _selectedCity;
-  DateTime? _selectedFrom;
+  EventFilters _filters = EventFilters();
 
   @override
   void initState() {
@@ -37,65 +35,38 @@ class _EventsPageState extends ConsumerState<EventsPage> {
     unawaited(ref.read(logoutNotifierProvider.notifier).onLogout());
   }
 
-  bool get _hasActiveFilters =>
-      _selectedSports.isNotEmpty ||
-      _selectedCity != null ||
-      _selectedFrom != null;
-
   void _onToggleSport(String sport, {required bool isSelected}) {
-    setState(() {
-      if (isSelected) {
-        _selectedSports.add(sport);
-      } else {
-        _selectedSports.remove(sport);
-      }
-    });
+    setState(
+      () => _filters = _filters.toggleSport(
+        sport,
+        isSelected: isSelected,
+      ),
+    );
   }
 
   void _onChangeCity(String? city) {
-    setState(() => _selectedCity = city);
+    setState(() => _filters = _filters.selectCity(city));
   }
 
   Future<void> _onPickDate() async {
     final now = DateTime.now();
     final picked = await showDatePicker(
       context: context,
-      initialDate: _selectedFrom ?? now,
+      initialDate: _filters.fromDate ?? now,
       firstDate: DateTime(now.year - 1),
       lastDate: DateTime(now.year + 2),
     );
     if (picked != null) {
-      setState(() => _selectedFrom = picked);
+      setState(() => _filters = _filters.selectFromDate(picked));
     }
   }
 
   void _onClearDate() {
-    setState(() => _selectedFrom = null);
+    setState(() => _filters = _filters.selectFromDate(null));
   }
 
   void _onClearFilters() {
-    setState(() {
-      _selectedSports.clear();
-      _selectedCity = null;
-      _selectedFrom = null;
-    });
-  }
-
-  List<Event> _applyFilters(List<Event> events) {
-    return events.where((event) {
-      if (_selectedSports.isNotEmpty &&
-          !_selectedSports.contains(event.sport)) {
-        return false;
-      }
-      if (_selectedCity != null && event.city != _selectedCity) {
-        return false;
-      }
-      final selectedFrom = _selectedFrom;
-      if (selectedFrom != null && event.date.isBefore(selectedFrom)) {
-        return false;
-      }
-      return true;
-    }).toList();
+    setState(() => _filters = _filters.clear());
   }
 
   @override
@@ -169,17 +140,16 @@ class _EventsPageState extends ConsumerState<EventsPage> {
       final availableCities =
           eventsState.events.map((event) => event.city).toSet().toList()
             ..sort();
-      final filteredEvents = _applyFilters(eventsState.events);
+      final filteredEvents = eventsState.events
+          .where(_filters.matches)
+          .toList();
 
       return Column(
         children: [
           EventsFilterBar(
             availableSports: availableSports,
             availableCities: availableCities,
-            selectedSports: _selectedSports,
-            selectedCity: _selectedCity,
-            selectedFrom: _selectedFrom,
-            hasActiveFilters: _hasActiveFilters,
+            filters: _filters,
             onToggleSport: _onToggleSport,
             onChangeCity: _onChangeCity,
             onPickDate: _onPickDate,

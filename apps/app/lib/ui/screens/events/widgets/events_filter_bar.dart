@@ -1,14 +1,12 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 
 class EventsFilterBar extends StatefulWidget {
   const EventsFilterBar({
     required this.availableSports,
     required this.availableCities,
-    required this.selectedSports,
-    required this.selectedCity,
-    required this.selectedFrom,
-    required this.hasActiveFilters,
+    required this.filters,
     required this.onToggleSport,
     required this.onChangeCity,
     required this.onPickDate,
@@ -19,10 +17,7 @@ class EventsFilterBar extends StatefulWidget {
 
   final List<String> availableSports;
   final List<String> availableCities;
-  final Set<String> selectedSports;
-  final String? selectedCity;
-  final DateTime? selectedFrom;
-  final bool hasActiveFilters;
+  final EventFilters filters;
   final void Function(String sport, {required bool isSelected}) onToggleSport;
   final ValueChanged<String?> onChangeCity;
   final VoidCallback onPickDate;
@@ -39,14 +34,14 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
   @override
   void initState() {
     super.initState();
-    _dateController.text = _formatDate(widget.selectedFrom);
+    _dateController.text = _formatDate(widget.filters.fromDate);
   }
 
   @override
   void didUpdateWidget(covariant EventsFilterBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedFrom != widget.selectedFrom) {
-      _dateController.text = _formatDate(widget.selectedFrom);
+    if (oldWidget.filters.fromDate != widget.filters.fromDate) {
+      _dateController.text = _formatDate(widget.filters.fromDate);
     }
   }
 
@@ -86,7 +81,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
                 return AppChip(
                   label: sport,
                   type: AppChipType.filter,
-                  isSelected: widget.selectedSports.contains(sport),
+                  isSelected: widget.filters.selectedSports.contains(sport),
                   onSelected: (isSelected) =>
                       widget.onToggleSport(sport, isSelected: isSelected),
                 );
@@ -99,10 +94,10 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
             children: [
               Expanded(
                 child: AppDropdownField<String>(
-                  key: ValueKey(widget.selectedCity),
+                  key: ValueKey(widget.filters.selectedCity),
                   label: 'Ciudad',
                   hint: 'Todas',
-                  initialValue: widget.selectedCity,
+                  initialValue: widget.filters.selectedCity,
                   items: widget.availableCities
                       .map(
                         (city) => AppDropdownItem(value: city, label: city),
@@ -119,7 +114,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
                   hint: 'Cualquiera',
                   controller: _dateController,
                   onTap: widget.onPickDate,
-                  suffixIcon: widget.selectedFrom == null
+                  suffixIcon: widget.filters.fromDate == null
                       ? null
                       : IconButton(
                           icon: const Icon(Icons.clear),
@@ -129,7 +124,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
               ),
             ],
           ),
-          if (widget.hasActiveFilters) ...[
+          if (widget.filters.hasActiveFilters) ...[
             const SizedBox(height: AppSpacing.xs),
             Align(
               alignment: Alignment.centerLeft,
