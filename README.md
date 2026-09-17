@@ -126,6 +126,13 @@ dart format --set-exit-if-changed .
 git diff --check
 ~~~
 
+El workflow `.github/workflows/ci.yml` ejecuta una validación ligera de formato
+y análisis en cada push, sin importar la rama. Cuando se abre o actualiza un
+pull request dirigido a `main`, agrega la validación completa y el build
+release de Android; el APK se publica como artefacto temporal durante siete
+días. No ejecuta `build_runner` porque esta fase no utiliza generación de
+código.
+
 El alcance actual prioriza análisis estático, formato, arquitectura y
 seguridad del flujo. No se agrega una suite de pruebas en esta fase porque no
 forma parte de los requisitos actuales.
