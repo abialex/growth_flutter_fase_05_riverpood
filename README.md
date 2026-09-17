@@ -99,11 +99,14 @@ aplicación; cada provider se resuelve cuando alguna parte de la UI lo necesita.
 El modo visual se controla con `themeModeNotifierProvider`: el botón disponible
 en login y junto a “Mis reservas” alterna entre `AppTheme.light()` y
 `AppTheme.dark()`.
-El guard de autenticación pertenece a la app y se inyecta en `router_core`.
 
-`packages/router_core` expone su API pública desde `lib/router_core.dart` y
-mantiene la implementación interna en `lib/src/`. La app conserva la decisión
-de quién puede acceder a cada ruta.
+### Paquete aislado: `router_core`
+
+`router_core` es un paquete independiente y reutilizable que concentra la
+infraestructura de navegación sobre `go_router`. La app le entrega sus rutas y
+guard de autenticación, manteniendo sus reglas fuera del paquete.
+
+[Ver API y detalles de `router_core`](packages/router_core/README.md).
 
 ## Ejecutar la aplicación
 
@@ -131,7 +134,7 @@ git diff --check
 
 El workflow `.github/workflows/ci.yml` ejecuta una validación ligera de formato
 y análisis en cada push, sin importar la rama. Cuando se abre o actualiza un
-pull request dirigido a `main`, agrega la validación completa y el build
+pull request dirigido a `master`, agrega la validación completa y el build
 release de Android; el APK se publica como artefacto temporal durante siete
 días. No ejecuta `build_runner` porque esta fase no utiliza generación de
 código.
@@ -139,7 +142,3 @@ código.
 El alcance actual prioriza análisis estático, formato, arquitectura y
 seguridad del flujo. No se agrega una suite de pruebas en esta fase porque no
 forma parte de los requisitos actuales.
-
-## Referencias
-
-- [Documentación de `router_core`](packages/router_core/README.md)
