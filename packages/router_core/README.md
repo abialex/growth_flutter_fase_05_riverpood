@@ -16,12 +16,13 @@ Add the package as a local dependency in the application:
 ```yaml
 dependencies:
   router_core:
-    path: ../packages/router_core
+    path: ../../packages/router_core
 ```
 
 Import the public barrel:
 
 ```dart
+import 'package:flutter/material.dart';
 import 'package:router_core/router_core.dart';
 ```
 
@@ -153,7 +154,7 @@ and application-specific error pages.
 ## Architecture
 
 The package exposes its consumer-facing API from `lib/router_core.dart`. The
-implementation is organized under `lib/src/`, while only the routing types
-needed to implement modules are re-exported from `go_router`. The application
-owns authentication state and supplies its guard and refresh listenable through
-dependency injection.
+internal implementation is organized under `lib/src/`, while public utilities
+are exposed from `lib/utils/`. Only the routing types needed by consumers are
+re-exported from `go_router`. The application owns authentication state and
+supplies its guard and refresh listenable through dependency injection.
