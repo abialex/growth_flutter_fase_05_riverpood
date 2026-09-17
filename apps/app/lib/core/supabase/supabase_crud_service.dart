@@ -86,6 +86,29 @@ class SupabaseCrudService<ModelType> {
     );
   }
 
+  /// Fetches records whose [columnName] matches any of [columnValues].
+  Future<Result<List<ModelType>, AppFailure>> fetchWhereIn(
+    String columnName,
+    List<Object> columnValues,
+  ) {
+    if (columnValues.isEmpty) {
+      return Future.value(
+        Success<List<ModelType>, AppFailure>(<ModelType>[]),
+      );
+    }
+
+    return _run(
+      operation: 'fetchWhereIn',
+      action: () async {
+        final rows = await _supabaseClient
+            .from(_tableName)
+            .select()
+            .inFilter(columnName, columnValues);
+        return rows.map(_fromJson).toList();
+      },
+    );
+  }
+
   Future<Result<ModelType, AppFailure>> insertRecord(
     Map<String, dynamic> payload,
   ) {

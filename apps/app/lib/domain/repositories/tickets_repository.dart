@@ -3,8 +3,9 @@ import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
 
 abstract class TicketsRepository {
-  Future<Result<List<Ticket>, AppFailure>> getTicketsByReservaId(
-    String reservaId,
+  /// Gets all tickets associated with the supplied reservation identifiers.
+  Future<Result<List<Ticket>, AppFailure>> getTicketsByReservaIds(
+    List<String> reservaIds,
   );
 
   Future<Result<Ticket, AppFailure>> getTicketById(String ticketId);

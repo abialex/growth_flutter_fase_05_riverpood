@@ -47,31 +47,33 @@ final class LoadMyReservationsUseCase {
     List<Reserva> reservations,
     List<Evento> events,
   ) async {
-    final ticketsByReservationId = <String, Ticket>{};
-    final confirmedReservations = reservations.where(
-      (reservation) => reservation.estado == ReservaEstado.confirmada,
+    final reservationIds = reservations
+        .where(
+          (reservation) => reservation.estado == ReservaEstado.confirmada,
+        )
+        .map((reservation) => reservation.id)
+        .toList();
+    final ticketsResult = await _ticketsRepository.getTicketsByReservaIds(
+      reservationIds,
     );
 
-    for (final reservation in confirmedReservations) {
-      final ticketsResult = await _ticketsRepository.getTicketsByReservaId(
-        reservation.id,
-      );
-      switch (ticketsResult) {
-        case Failure(failure: final failure):
-          return Failure(failure);
-        case Success(value: final tickets):
-          if (tickets.isNotEmpty) {
-            ticketsByReservationId[reservation.id] = tickets.first;
-          }
-      }
-    }
-
-    return Success(
-      MyReservationsData(
-        reservations: reservations,
-        eventsById: {for (final event in events) event.id: event},
-        ticketsByReservationId: ticketsByReservationId,
+    return switch (ticketsResult) {
+      Failure(failure: final failure) => Failure(failure),
+      Success(value: final tickets) => Success(
+        MyReservationsData(
+          reservations: reservations,
+          eventsById: {for (final event in events) event.id: event},
+          ticketsByReservationId: _mapTicketsByReservationId(tickets),
+        ),
       ),
-    );
+    };
+  }
+
+  Map<String, Ticket> _mapTicketsByReservationId(List<Ticket> tickets) {
+    final ticketsByReservationId = <String, Ticket>{};
+    for (final ticket in tickets) {
+      ticketsByReservationId.putIfAbsent(ticket.reservaId, () => ticket);
+    }
+    return ticketsByReservationId;
   }
 }

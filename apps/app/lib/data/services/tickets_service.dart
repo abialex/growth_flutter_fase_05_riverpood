@@ -23,10 +23,11 @@ class TicketsService {
 
   final SupabaseCrudService<TicketModel> _crudService;
 
-  Future<Result<List<Ticket>, AppFailure>> fetchTicketsByReservaId(
-    String reservaId,
+  /// Fetches all tickets linked to [reservaIds] in one request.
+  Future<Result<List<Ticket>, AppFailure>> fetchTicketsByReservaIds(
+    List<String> reservaIds,
   ) async {
-    final result = await _crudService.fetchWhere('reserva_id', reservaId);
+    final result = await _crudService.fetchWhereIn('reserva_id', reservaIds);
     return switch (result) {
       Success(value: final models) => Success(
         models.map((model) => model.toEntity()).toList(),
