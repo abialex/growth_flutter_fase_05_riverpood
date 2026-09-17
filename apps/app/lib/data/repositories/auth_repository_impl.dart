@@ -1,11 +1,12 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/auth_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
 
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../services/auth_service.dart';
-
+/// Implements [AuthRepository] with the authentication data service.
 class AuthRepositoryImpl implements AuthRepository {
+  /// Creates an authentication repository.
   AuthRepositoryImpl(this._authService);
 
   final AuthService _authService;
@@ -14,14 +15,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<void, AppFailure>> signUp({
     required String email,
     required String password,
-    required String nombre,
-    String? ciudad,
+    required String name,
+    String? city,
   }) {
     return _authService.signUp(
       email: email,
       password: password,
-      nombre: nombre,
-      ciudad: ciudad,
+      name: name,
+      city: city,
     );
   }
 
@@ -39,8 +40,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Session? get currentSession => _authService.currentSession;
+  bool get isAuthenticated => _authService.isAuthenticated;
 
   @override
-  Stream<AuthState> get authStateChanges => _authService.authStateChanges;
+  Stream<AuthStatus> get authStatusChanges => _authService.authStatusChanges;
 }

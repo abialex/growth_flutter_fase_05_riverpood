@@ -1,19 +1,41 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_status.dart';
+import 'package:meta/meta.dart';
 
-import '../enums/ticket_estado.dart';
+/// Represents a ticket generated for a confirmed reservation.
+@immutable
+final class Ticket {
+  /// Creates a ticket.
+  const Ticket({
+    required this.id,
+    required this.reservationId,
+    required this.code,
+    required this.status,
+    required this.createdAt,
+  });
 
-part 'ticket.freezed.dart';
-part 'ticket.g.dart';
+  final String id;
+  final String reservationId;
+  final String code;
+  final TicketStatus status;
+  final DateTime createdAt;
 
-@freezed
-abstract class Ticket with _$Ticket {
-  const factory Ticket({
-    required String id,
-    @JsonKey(name: 'reserva_id') required String reservaId,
-    required String codigo,
-    required TicketEstado estado,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-  }) = _Ticket;
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is Ticket &&
+            other.id == id &&
+            other.reservationId == reservationId &&
+            other.code == code &&
+            other.status == status &&
+            other.createdAt == createdAt;
+  }
 
-  factory Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
+  @override
+  int get hashCode => Object.hash(
+    id,
+    reservationId,
+    code,
+    status,
+    createdAt,
+  );
 }

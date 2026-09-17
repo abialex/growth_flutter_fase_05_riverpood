@@ -1,3 +1,8 @@
 {
-    "dart.flutterSdkPath": "D:\\projects_flutter\\autplan_2026\\.fvm\\versions\\3.35.7"
+    "dart.flutterSdkPath": "D:\\projects_flutter\\autplan_2026\\.fvm\\versions\\3.35.7",
+    "editor.rulers": [80],
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true
+    }
 }

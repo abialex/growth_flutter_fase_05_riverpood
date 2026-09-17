@@ -1,32 +1,26 @@
-import '../../core/errors/app_failure.dart';
-import '../../core/result/result.dart';
-import '../../domain/entities/ticket.dart';
-import '../../domain/repositories/tickets_repository.dart';
-import '../services/tickets_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/tickets_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/tickets_repository.dart';
 
+/// Implements [TicketsRepository] with the ticket data service.
 class TicketsRepositoryImpl implements TicketsRepository {
+  /// Creates a ticket repository.
   TicketsRepositoryImpl(this._ticketsService);
 
   final TicketsService _ticketsService;
 
   @override
-  Future<Result<List<Ticket>, AppFailure>> getTicketsByReservaId(
-    String reservaId,
+  Future<Result<List<Ticket>, AppFailure>> getTicketsByReservationIds(
+    List<String> reservationIds,
   ) {
-    return _ticketsService.fetchTicketsByReservaId(reservaId);
+    return _ticketsService.fetchTicketsByReservationIds(reservationIds);
   }
 
   @override
   Future<Result<Ticket, AppFailure>> getTicketById(String ticketId) {
     return _ticketsService.fetchTicketById(ticketId);
-  }
-
-  @override
-  Future<Result<Ticket, AppFailure>> createTicket({
-    required String reservaId,
-    required String codigo,
-  }) {
-    return _ticketsService.createTicket(reservaId: reservaId, codigo: codigo);
   }
 
   @override

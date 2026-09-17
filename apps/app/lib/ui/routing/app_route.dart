@@ -2,28 +2,51 @@ enum AppRoute {
   splash,
   login,
   register,
-  eventos,
-  eventoDetalle,
-  misReservas;
+  events,
+  eventDetail,
+  myReservations;
 
-  // NOTA: eventoDetalle.path es el patrón que registra GoRoute ('/eventos/:id'),
-  // no una URL real navegable. Con un id real en la URL, fromPath() no lo va a
-  // reconocer (cae al fallback splash) — eso solo afecta el bookkeeping interno
-  // de router_core (currentRoute/previousRoute), hoy un no-op. El matching real
-  // de rutas lo hace go_router internamente vía GoRoute(path:), no este enum.
   String get path => switch (this) {
-        AppRoute.splash => '/splash',
-        AppRoute.login => '/login',
-        AppRoute.register => '/register',
-        AppRoute.eventos => '/eventos',
-        AppRoute.eventoDetalle => '/eventos/:id',
-        AppRoute.misReservas => '/mis-reservas',
-      };
+    AppRoute.splash => '/splash',
+    AppRoute.login => '/login',
+    AppRoute.register => '/register',
+    AppRoute.events => '/eventos',
+    AppRoute.eventDetail => '/eventos/:id',
+    AppRoute.myReservations => '/mis-reservas',
+  };
+
+  String get routeName => switch (this) {
+    AppRoute.splash => 'splash',
+    AppRoute.login => 'login',
+    AppRoute.register => 'register',
+    AppRoute.events => 'events',
+    AppRoute.eventDetail => 'event-detail',
+    AppRoute.myReservations => 'my-reservations',
+  };
 
   static AppRoute fromPath(String path) {
-    return AppRoute.values.firstWhere(
-      (route) => route.path == path,
-      orElse: () => AppRoute.splash,
-    );
+    final normalizedPath = _normalizePath(path);
+
+    for (final route in AppRoute.values) {
+      if (route.path == normalizedPath) {
+        return route;
+      }
+    }
+
+    final eventDetailPrefix = '${AppRoute.events.path}/';
+    if (normalizedPath.startsWith(eventDetailPrefix) &&
+        normalizedPath.length > eventDetailPrefix.length) {
+      return AppRoute.eventDetail;
+    }
+
+    return AppRoute.splash;
+  }
+
+  static String _normalizePath(String path) {
+    final pathWithoutQuery = path.split('?').first;
+    if (pathWithoutQuery.length > 1 && pathWithoutQuery.endsWith('/')) {
+      return pathWithoutQuery.substring(0, pathWithoutQuery.length - 1);
+    }
+    return pathWithoutQuery;
   }
 }

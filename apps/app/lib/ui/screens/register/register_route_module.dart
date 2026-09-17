@@ -1,7 +1,6 @@
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/register/register_page.dart';
 import 'package:router_core/router_core.dart';
-
-import '../../routing/app_route.dart';
-import 'register_page.dart';
 
 class RegisterRouteModule implements IRouteModule {
   @override
@@ -9,15 +8,16 @@ class RegisterRouteModule implements IRouteModule {
 
   @override
   List<RouteBase> get rootRoutes => [
-        GoRoute(
-          path: AppRoute.register.path,
-          name: 'register',
-          pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
-            state: state,
-            child: const RegisterPage(),
-            animationType: AnimationTransitionEnum.fade,
-            routeEnum: AppRoute.register,
-          ).build(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoute.register.path,
+      name: AppRoute.register.routeName,
+      pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
+        state: state,
+        child: const RegisterPage(),
+        animationType: AnimationTransitionEnum.fade,
+        routeEnum: AppRoute.register,
+        routePath: state.matchedLocation,
+      ).build(),
+    ),
+  ];
 }
