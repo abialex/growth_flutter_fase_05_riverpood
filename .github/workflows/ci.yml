@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-  # Pull requests to main receive the complete validation below.
+  # Pull requests to master receive the complete validation below.
   pull_request:
     branches:
-      - main
+      - master
 
 permissions:
   contents: read
@@ -43,7 +43,7 @@ jobs:
   validate:
     name: Validate pull request
     needs: quality
-    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    if: github.event_name == 'pull_request' && github.base_ref == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
