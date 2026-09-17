@@ -54,6 +54,8 @@ En el SQL Editor de Supabase, ejecuta los scripts en este orden:
 4. `supabase/scripts/004-funciones-rpc.sql`: crea `crear_reserva` y `confirmar_compra`, y
   restringe las operaciones sensibles.
 5. `supabase/scripts/005-seed-eventos.sql`: carga los eventos de demostración.
+6. `supabase/scripts/006-ajustar-rls-usuarios.sql`: aplica el `WITH CHECK`
+   explícito para actualizar el perfil del usuario.
 
 
 ## Arquitectura

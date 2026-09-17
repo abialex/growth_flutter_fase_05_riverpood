@@ -19,7 +19,8 @@ create policy "usuarios_insert_own"
 
 create policy "usuarios_update_own"
   on public.usuarios for update
-  using (auth.uid() = id);
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
 
 -- ============ eventos ============
 -- lectura pública (con o sin login se puede ver el listado/detalle de eventos)
