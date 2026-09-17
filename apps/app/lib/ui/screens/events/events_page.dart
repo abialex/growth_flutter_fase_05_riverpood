@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_state.dart';
@@ -122,7 +123,8 @@ class _EventsPageState extends ConsumerState<EventsPage> {
   }
 
   Widget _buildBody(BuildContext context, Object eventsState) {
-    if (eventsState is EventsLoadingState) {
+    if (eventsState is EventsInitialState ||
+        eventsState is EventsLoadingState) {
       return const Center(child: AppLoader(message: 'Cargando eventos...'));
     }
 

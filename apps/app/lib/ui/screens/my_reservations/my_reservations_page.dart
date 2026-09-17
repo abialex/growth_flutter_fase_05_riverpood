@@ -8,6 +8,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_stat
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/confirm_purchase_state.dart';
@@ -98,7 +99,8 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
   }
 
   Widget _buildBody(BuildContext context, Object myReservationsState) {
-    if (myReservationsState is MyReservationsLoadingState) {
+    if (myReservationsState is MyReservationsInitialState ||
+        myReservationsState is MyReservationsLoadingState) {
       return const Center(
         child: AppLoader(message: 'Cargando tus reservas...'),
       );

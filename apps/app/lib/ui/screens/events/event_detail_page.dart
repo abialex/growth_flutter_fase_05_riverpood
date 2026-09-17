@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/create_reservation_state.dart';
@@ -79,7 +80,8 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
   }
 
   Widget _buildBody(BuildContext context, Object eventDetailState) {
-    if (eventDetailState is EventDetailLoadingState) {
+    if (eventDetailState is EventDetailInitialState ||
+        eventDetailState is EventDetailLoadingState) {
       return const Center(
         child: AppLoader(message: 'Cargando detalle del evento...'),
       );
