@@ -22,14 +22,6 @@ class TicketsRepositoryImpl implements TicketsRepository {
   }
 
   @override
-  Future<Result<Ticket, AppFailure>> createTicket({
-    required String reservaId,
-    required String codigo,
-  }) {
-    return _ticketsService.createTicket(reservaId: reservaId, codigo: codigo);
-  }
-
-  @override
   Future<Result<Ticket, AppFailure>> markTicketAsUsed(String ticketId) {
     return _ticketsService.markTicketAsUsed(ticketId);
   }

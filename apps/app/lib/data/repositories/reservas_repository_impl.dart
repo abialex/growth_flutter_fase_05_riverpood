@@ -24,9 +24,4 @@ class ReservasRepositoryImpl implements ReservasRepository {
   Future<Result<List<Reserva>, AppFailure>> getMisReservas() {
     return _reservasService.fetchMisReservas();
   }
-
-  @override
-  Future<Result<Reserva, AppFailure>> confirmarReserva(String reservaId) {
-    return _reservasService.confirmarReserva(reservaId);
-  }
 }

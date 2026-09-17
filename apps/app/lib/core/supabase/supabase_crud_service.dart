@@ -8,6 +8,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 ///
 /// Feature services compose this instead of talking to [SupabaseClient]
 /// directly, so every table's error handling stays in one place.
+/// Read-only queries can still access a table directly:
+///
+/// ```dart
+/// final rows = await supabase.from('eventos').select();
+/// ```
 class SupabaseCrudService<ModelType> {
   SupabaseCrudService({
     required SupabaseClient supabaseClient,

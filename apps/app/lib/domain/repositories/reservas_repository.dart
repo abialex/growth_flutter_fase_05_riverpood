@@ -9,6 +9,4 @@ abstract class ReservasRepository {
   });
 
   Future<Result<List<Reserva>, AppFailure>> getMisReservas();
-
-  Future<Result<Reserva, AppFailure>> confirmarReserva(String reservaId);
 }

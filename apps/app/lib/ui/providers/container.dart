@@ -6,14 +6,17 @@ import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.d
 import 'package:growth_flutter_fase_05_riverpood/core/supabase_client.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/repositories/auth_repository_impl.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/repositories/eventos_repository_impl.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/repositories/purchase_repository_impl.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/repositories/reservas_repository_impl.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/repositories/tickets_repository_impl.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/auth_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/eventos_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/services/purchase_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/reservas_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/tickets_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/eventos_repository.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/purchase_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservas_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/tickets_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/confirm_purchase_use_case.dart';
@@ -78,6 +81,18 @@ final eventosRepositoryProvider = Provider<EventosRepository>(
   (ref) => EventosRepositoryImpl(ref.watch(eventosServiceProvider)),
 );
 
+final purchaseServiceProvider = Provider<PurchaseService>(
+  (ref) => PurchaseService(
+    ref.watch(supabaseClientProvider),
+    ref.watch(supabaseLoggerProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+final purchaseRepositoryProvider = Provider<PurchaseRepository>(
+  (ref) => PurchaseRepositoryImpl(ref.watch(purchaseServiceProvider)),
+);
+
 final reservasServiceProvider = Provider<ReservasService>(
   (ref) => ReservasService(
     ref.watch(supabaseClientProvider),
@@ -133,8 +148,7 @@ final createReservationUseCaseProvider = Provider<CreateReservationUseCase>(
 
 final confirmPurchaseUseCaseProvider = Provider<ConfirmPurchaseUseCase>(
   (ref) => ConfirmPurchaseUseCase(
-    reservasRepository: ref.watch(reservasRepositoryProvider),
-    ticketsRepository: ref.watch(ticketsRepositoryProvider),
+    purchaseRepository: ref.watch(purchaseRepositoryProvider),
   ),
 );
 

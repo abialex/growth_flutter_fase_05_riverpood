@@ -5,7 +5,6 @@ import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_ser
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/models/reservation_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ReservasService {
@@ -46,16 +45,6 @@ class ReservasService {
       Success(value: final models) => Success(
         models.map((model) => model.toEntity()).toList(),
       ),
-      Failure(failure: final appFailure) => Failure(appFailure),
-    };
-  }
-
-  Future<Result<Reserva, AppFailure>> confirmarReserva(String reservaId) async {
-    final result = await _crudService.updateRecord(reservaId, {
-      'estado': ReservaEstado.confirmada.name,
-    });
-    return switch (result) {
-      Success(value: final model) => Success(model.toEntity()),
       Failure(failure: final appFailure) => Failure(appFailure),
     };
   }
