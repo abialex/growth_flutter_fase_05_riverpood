@@ -5,7 +5,9 @@ import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.d
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+/// Performs authentication operations through Supabase.
 class AuthService {
+  /// Creates an authentication service with its external dependencies.
   AuthService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
@@ -18,6 +20,7 @@ class AuthService {
   final SupabaseLogger _logger;
   final FailureMapper _failureMapper;
 
+  /// Creates a user account.
   Future<Result<void, AppFailure>> signUp({
     required String email,
     required String password,
@@ -39,6 +42,7 @@ class AuthService {
     );
   }
 
+  /// Signs in a user with email and password.
   Future<Result<void, AppFailure>> signIn({
     required String email,
     required String password,
@@ -54,6 +58,7 @@ class AuthService {
     );
   }
 
+  /// Signs out the current user.
   Future<Result<void, AppFailure>> signOut() {
     return _run(
       operation: 'signOut',
@@ -61,8 +66,10 @@ class AuthService {
     );
   }
 
+  /// Whether an authenticated session is available.
   bool get isAuthenticated => _supabaseClient.auth.currentSession != null;
 
+  /// Emits authentication status changes.
   Stream<AuthStatus> get authStatusChanges =>
       _supabaseClient.auth.onAuthStateChange.map(
         (authState) => authState.session == null

@@ -1,8 +1,10 @@
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 import 'package:meta/meta.dart';
 
+/// Represents an event available for reservation.
 @immutable
 final class Event {
+  /// Creates an event.
   const Event({
     required this.id,
     required this.name,

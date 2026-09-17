@@ -4,7 +4,9 @@ import 'package:growth_flutter_fase_05_riverpood/data/services/reservations_serv
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 
+/// Implements [ReservationsRepository] with the reservation data service.
 class ReservationsRepositoryImpl implements ReservationsRepository {
+  /// Creates a reservation repository.
   ReservationsRepositoryImpl(this._reservationsService);
 
   final ReservationsService _reservationsService;

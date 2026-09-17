@@ -4,7 +4,9 @@ import 'package:growth_flutter_fase_05_riverpood/data/services/events_service.da
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
 
+/// Implements [EventsRepository] with the event data service.
 class EventsRepositoryImpl implements EventsRepository {
+  /// Creates an event repository.
   EventsRepositoryImpl(this._eventsService);
 
   final EventsService _eventsService;

@@ -7,7 +7,9 @@ import 'package:growth_flutter_fase_05_riverpood/data/models/event_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+/// Loads event data from Supabase and maps it to domain entities.
 class EventsService {
+  /// Creates an event service with its external dependencies.
   EventsService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
@@ -22,6 +24,7 @@ class EventsService {
 
   final SupabaseCrudService<EventModel> _crudService;
 
+  /// Fetches all events ordered by date.
   Future<Result<List<Event>, AppFailure>> fetchEvents() async {
     final result = await _crudService.fetchAll(
       orderByColumn: 'fecha',
@@ -35,6 +38,7 @@ class EventsService {
     };
   }
 
+  /// Fetches an event by its [id].
   Future<Result<Event, AppFailure>> fetchEventById(String id) async {
     final result = await _crudService.fetchById(id);
     return switch (result) {

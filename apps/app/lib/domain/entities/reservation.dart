@@ -1,8 +1,10 @@
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_status.dart';
 import 'package:meta/meta.dart';
 
+/// Represents a user's reservation for an event.
 @immutable
 final class Reservation {
+  /// Creates a reservation.
   const Reservation({
     required this.id,
     required this.userId,

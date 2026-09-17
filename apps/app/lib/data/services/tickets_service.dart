@@ -7,7 +7,9 @@ import 'package:growth_flutter_fase_05_riverpood/data/models/ticket_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+/// Performs ticket data operations through Supabase.
 class TicketsService {
+  /// Creates a ticket service with its external dependencies.
   TicketsService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
@@ -38,6 +40,7 @@ class TicketsService {
     };
   }
 
+  /// Fetches a ticket by its [ticketId].
   Future<Result<Ticket, AppFailure>> fetchTicketById(String ticketId) async {
     final result = await _crudService.fetchById(ticketId);
     return switch (result) {
@@ -46,6 +49,7 @@ class TicketsService {
     };
   }
 
+  /// Marks a ticket as used.
   Future<Result<Ticket, AppFailure>> markTicketAsUsed(String ticketId) async {
     final result = await _crudService.updateRecord(ticketId, {
       'estado': 'usado',

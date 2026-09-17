@@ -4,7 +4,9 @@ import 'package:growth_flutter_fase_05_riverpood/data/services/auth_service.dart
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
 
+/// Implements [AuthRepository] with the authentication data service.
 class AuthRepositoryImpl implements AuthRepository {
+  /// Creates an authentication repository.
   AuthRepositoryImpl(this._authService);
 
   final AuthService _authService;

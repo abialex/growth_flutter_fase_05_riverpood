@@ -1,8 +1,10 @@
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_status.dart';
 import 'package:meta/meta.dart';
 
+/// Represents a ticket generated for a confirmed reservation.
 @immutable
 final class Ticket {
+  /// Creates a ticket.
   const Ticket({
     required this.id,
     required this.reservationId,

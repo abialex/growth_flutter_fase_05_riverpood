@@ -7,7 +7,9 @@ import 'package:growth_flutter_fase_05_riverpood/data/models/reservation_model.d
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+/// Performs reservation data operations through Supabase.
 class ReservationsService {
+  /// Creates a reservation service with its external dependencies.
   ReservationsService(
     SupabaseClient supabaseClient,
     SupabaseLogger logger,
@@ -22,6 +24,7 @@ class ReservationsService {
 
   final SupabaseCrudService<ReservationModel> _crudService;
 
+  /// Creates a reservation through the reservation RPC.
   Future<Result<Reservation, AppFailure>> createReservation({
     required String eventId,
     required int seatCount,
@@ -39,6 +42,7 @@ class ReservationsService {
     };
   }
 
+  /// Fetches reservations belonging to the current user.
   Future<Result<List<Reservation>, AppFailure>> fetchMyReservations() async {
     final result = await _crudService.fetchAll(orderByColumn: 'fecha_reserva');
     return switch (result) {
