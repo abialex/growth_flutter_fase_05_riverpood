@@ -40,17 +40,16 @@ class EventsFilterBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.md,
-        0,
+      padding: const EdgeInsets.only(
+        left: AppSpacing.md,
+        top: AppSpacing.md,
+        right: AppSpacing.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 40,
+            height: AppSpacing.xxl,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: availableSports.length,
