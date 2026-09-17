@@ -96,6 +96,9 @@ Dentro de `apps/app/lib/`:
 `ui/providers/container.dart` centraliza la composición de servicios,
 repositorios y casos de uso. `ProviderScope` proporciona el contenedor a la
 aplicación; cada provider se resuelve cuando alguna parte de la UI lo necesita.
+El modo visual se controla con `themeModeNotifierProvider`: el botón disponible
+en login y junto a “Mis reservas” alterna entre `AppTheme.light()` y
+`AppTheme.dark()`.
 El guard de autenticación pertenece a la app y se inyecta en `router_core`.
 
 `packages/router_core` expone su API pública desde `lib/router_core.dart` y

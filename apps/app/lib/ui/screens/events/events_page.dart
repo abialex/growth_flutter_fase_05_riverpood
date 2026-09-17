@@ -15,6 +15,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/event_card.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/events_filter_bar.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/widgets/theme_mode_button.dart';
 import 'package:router_core/router_core.dart';
 
 class EventsPage extends ConsumerStatefulWidget {
@@ -101,6 +102,7 @@ class _EventsPageState extends ConsumerState<EventsPage> {
             tooltip: 'Mis reservas',
             onPressed: () => unawaited(context.pushNamed('my-reservations')),
           ),
+          const ThemeModeButton(heroTag: 'theme-mode-toggle'),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Cerrar sesión',

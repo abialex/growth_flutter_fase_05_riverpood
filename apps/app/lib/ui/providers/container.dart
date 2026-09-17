@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
@@ -43,6 +44,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/confi
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/confirm_purchase_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/create_reservation_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/create_reservation_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/theme/theme_notifier.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Core dependencies.
@@ -181,6 +183,9 @@ final registerNotifierProvider =
 final logoutNotifierProvider = NotifierProvider<LogoutNotifier, LogoutState>(
   LogoutNotifier.new,
 );
+
+final themeModeNotifierProvider =
+    NotifierProvider<ThemeModeNotifier, ThemeMode>(ThemeModeNotifier.new);
 
 final eventsNotifierProvider = NotifierProvider<EventsNotifier, EventsState>(
   EventsNotifier.new,

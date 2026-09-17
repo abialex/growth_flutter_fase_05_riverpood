@@ -9,6 +9,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/widgets/app_validated_field.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/widgets/theme_mode_button.dart';
 import 'package:router_core/router_core.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -55,6 +56,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final isLoading = loginState is LoginLoadingState;
 
     return Scaffold(
+      appBar: AppBar(
+        actions: const [
+          ThemeModeButton(heroTag: 'theme-mode-toggle'),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

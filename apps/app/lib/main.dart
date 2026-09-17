@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/core/supabase_client.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_router_provider.dart';
 
 Future<void> main() async {
@@ -18,9 +19,12 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeNotifierProvider);
+
     return MaterialApp.router(
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
+      themeMode: themeMode,
       routerConfig: ref.watch(appRouterProvider),
     );
   }
