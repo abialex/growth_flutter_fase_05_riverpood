@@ -34,8 +34,19 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final semanticLabel = [
+      'Evento ${event.name}',
+      'Deporte ${event.sport}',
+      'Fecha $_formattedDate a las $_formattedTime',
+      'Lugar ${event.venue}, ${event.city}',
+      'Cupos disponibles ${event.availableSlots} de ${event.totalSlots}',
+      if (isReserved) 'Ya tienes una reserva',
+    ].join('. ');
+
     return AppCard(
       onTap: () => _onTap(context),
+      semanticLabel: semanticLabel,
+      semanticHint: 'Toca para abrir el detalle del evento.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

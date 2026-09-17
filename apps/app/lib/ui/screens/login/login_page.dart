@@ -117,7 +117,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       if (isLoading)
-                        const Center(child: AppLoader())
+                        const Center(
+                          child: AppLoader(message: 'Iniciando sesión...'),
+                        )
                       else
                         AppButton(label: 'Ingresar', onPressed: _onSubmit),
                       const SizedBox(height: AppSpacing.md),

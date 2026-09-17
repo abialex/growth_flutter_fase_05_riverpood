@@ -64,7 +64,9 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
 
   Widget _buildBody(BuildContext context, Object eventDetailState) {
     if (eventDetailState is EventDetailLoadingState) {
-      return const Center(child: AppLoader());
+      return const Center(
+        child: AppLoader(message: 'Cargando detalle del evento...'),
+      );
     }
 
     if (eventDetailState is EventDetailErrorState) {

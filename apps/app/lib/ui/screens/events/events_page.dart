@@ -109,7 +109,7 @@ class _EventsPageState extends ConsumerState<EventsPage> {
 
   Widget _buildBody(BuildContext context, Object eventsState) {
     if (eventsState is EventsLoadingState) {
-      return const Center(child: AppLoader());
+      return const Center(child: AppLoader(message: 'Cargando eventos...'));
     }
 
     if (eventsState is EventsErrorState) {

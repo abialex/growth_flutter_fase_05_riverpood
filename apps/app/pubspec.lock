@@ -53,11 +53,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.6.0"
-      resolved-ref: "5596a42f3d5d83f05fc6267b530bd49526391772"
+      ref: "v0.7.0"
+      resolved-ref: dcc63401b24805ee2ad84825509c8c2cb49f512c
       url: "https://github.com/abialex/growth_flutter_fase_04_riverpood.git"
     source: git
-    version: "0.6.0"
+    version: "0.7.0"
   args:
     dependency: transitive
     description:

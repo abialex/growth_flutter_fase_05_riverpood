@@ -55,7 +55,7 @@ class ReservationSection extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
         ],
         if (isLoading)
-          const Center(child: AppLoader())
+          const Center(child: AppLoader(message: 'Procesando reserva...'))
         else if (createReservationState is CreateReservationSuccessState)
           const SizedBox.shrink()
         else if (isReserved)

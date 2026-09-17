@@ -139,7 +139,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       if (isLoading)
-                        const Center(child: AppLoader())
+                        const Center(
+                          child: AppLoader(message: 'Creando tu cuenta...'),
+                        )
                       else
                         AppButton(label: 'Registrarme', onPressed: _onSubmit),
                     ],

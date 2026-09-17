@@ -85,7 +85,9 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
 
   Widget _buildBody(BuildContext context, Object myReservationsState) {
     if (myReservationsState is MyReservationsLoadingState) {
-      return const Center(child: AppLoader());
+      return const Center(
+        child: AppLoader(message: 'Cargando tus reservas...'),
+      );
     }
 
     if (myReservationsState is MyReservationsErrorState) {

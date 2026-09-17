@@ -117,6 +117,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
                   suffixIcon: widget.filters.fromDate == null
                       ? null
                       : IconButton(
+                          tooltip: 'Limpiar fecha',
                           icon: const Icon(Icons.clear),
                           onPressed: widget.onClearDate,
                         ),
