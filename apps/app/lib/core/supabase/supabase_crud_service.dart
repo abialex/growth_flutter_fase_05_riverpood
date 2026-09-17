@@ -109,6 +109,22 @@ class SupabaseCrudService<ModelType> {
     );
   }
 
+  /// Executes a stored procedure that returns one model.
+  Future<Result<ModelType, AppFailure>> callRpc({
+    required String functionName,
+    required Map<String, dynamic> parameters,
+  }) {
+    return _run(
+      operation: 'rpc:$functionName',
+      action: () async {
+        final row = await _supabaseClient
+            .rpc<Map<String, dynamic>>(functionName, params: parameters)
+            .single();
+        return _fromJson(row);
+      },
+    );
+  }
+
   Future<Result<ModelType, AppFailure>> insertRecord(
     Map<String, dynamic> payload,
   ) {

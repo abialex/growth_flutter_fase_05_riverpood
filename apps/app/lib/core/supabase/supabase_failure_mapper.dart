@@ -46,7 +46,8 @@ final class SupabaseFailureMapper implements FailureMapper {
     return switch (code) {
       'PGRST116' => AppFailureType.notFound,
       '42501' => AppFailureType.unauthorized,
-      '23505' || 'P0001' => AppFailureType.validation,
+      '23505' || 'P0001' || 'P0003' || 'P0004' => AppFailureType.validation,
+      'P0002' => AppFailureType.notFound,
       null => AppFailureType.network,
       _ => AppFailureType.server,
     };
@@ -57,7 +58,10 @@ final class SupabaseFailureMapper implements FailureMapper {
       'PGRST116' => 'No se encontró el registro solicitado.',
       '42501' => 'No tienes permisos para realizar esta operación.',
       '23505' => 'Ya tienes una reserva para este evento.',
-      'P0001' => 'No se pudo validar la operación.',
+      'P0001' => 'La cantidad de cupos solicitada no es válida.',
+      'P0002' => 'El evento no existe.',
+      'P0003' => 'El evento ya no está disponible para reservas.',
+      'P0004' => 'No hay suficientes cupos disponibles.',
       null => 'No se pudo conectar con el servidor.',
       _ => 'No se pudo completar la operación con el servidor.',
     };

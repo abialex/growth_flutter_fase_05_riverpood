@@ -27,11 +27,13 @@ class ReservasService {
     required String eventoId,
     required int cantidadCupos,
   }) async {
-    final result = await _crudService.insertRecord({
-      'evento_id': eventoId,
-      'cantidad_cupos': cantidadCupos,
-      'estado': ReservaEstado.pendiente.name,
-    });
+    final result = await _crudService.callRpc(
+      functionName: 'crear_reserva',
+      parameters: {
+        'p_evento_id': eventoId,
+        'p_cantidad_cupos': cantidadCupos,
+      },
+    );
     return switch (result) {
       Success(value: final model) => Success(model.toEntity()),
       Failure(failure: final appFailure) => Failure(appFailure),
