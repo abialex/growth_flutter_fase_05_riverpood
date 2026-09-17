@@ -92,6 +92,8 @@ revoke execute on function public.crear_reserva(uuid, integer) from public;
 grant execute on function public.crear_reserva(uuid, integer) to authenticated;
 
 -- Confirma una reserva y crea su ticket dentro de una única transacción.
+-- Current reservation transition: pending -> confirmed.
+-- Cancellation is not exposed until its cup-restoration flow is defined.
 create or replace function public.confirmar_compra(
   p_reserva_id uuid
 )
