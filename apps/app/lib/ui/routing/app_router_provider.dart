@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_repository_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/auth_state_refresh_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/splash_page.dart';

@@ -10,8 +10,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/eventos/states/eve
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/eventos_providers.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/logout_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/evento_card.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/eventos_filter_bar.dart';
 import 'package:router_core/router_core.dart';

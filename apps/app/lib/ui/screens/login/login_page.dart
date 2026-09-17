@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:router_core/router_core.dart';
 
 class LoginPage extends ConsumerStatefulWidget {

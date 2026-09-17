@@ -9,8 +9,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/evento_detalle/sta
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/evento_detalle/states/evento_detalle_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/reservar_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/eventos_providers.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/evento_detalle_content.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/widgets/reservar_section.dart';
 

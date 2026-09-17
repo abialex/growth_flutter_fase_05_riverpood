@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/auth_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});

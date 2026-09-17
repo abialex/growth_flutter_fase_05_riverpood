@@ -10,7 +10,7 @@ import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_loading_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 
 class ReservaCard extends ConsumerWidget {
   const ReservaCard({

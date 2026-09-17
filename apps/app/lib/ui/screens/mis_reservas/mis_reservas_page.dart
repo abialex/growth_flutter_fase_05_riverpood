@@ -11,8 +11,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/state
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/mis_reservas/states/mis_reservas_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/confirmar_compra_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/confirmar_compra_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/logout_providers.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/mis_reservas/widgets/reserva_card.dart';
 import 'package:router_core/router_core.dart';
 

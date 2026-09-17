@@ -8,7 +8,7 @@ import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservas/states/reservar_success_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/reservas_providers.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 
 class ReservarSection extends ConsumerWidget {
   const ReservarSection({
