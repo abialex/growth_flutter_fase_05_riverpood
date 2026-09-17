@@ -8,6 +8,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/re
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/widgets/app_validated_field.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -17,6 +18,7 @@ class RegisterPage extends ConsumerStatefulWidget {
 }
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -32,6 +34,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   }
 
   void _onSubmit() {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
     final city = _cityController.text.trim();
     unawaited(
       ref
@@ -57,54 +63,77 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: AppCard(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (registerState is RegisterErrorState) ...[
-                    AppBanner(
-                      message: registerState.failure.message,
-                      variant: AppBannerVariant.error,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (registerState is RegisterErrorState) ...[
+                      AppBanner(
+                        message: registerState.failure.message,
+                        variant: AppBannerVariant.error,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                    if (registerState is RegisterSuccessState) ...[
+                      const AppBanner(
+                        message: 'Registro exitoso',
+                        variant: AppBannerVariant.success,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                    AppValidatedField(
+                      controller: _nameController,
+                      label: 'Nombre',
+                      validator: AppValidators.compose([
+                        AppValidators.requiredField(
+                          message: 'Ingresa tu nombre.',
+                        ),
+                        AppValidators.minLength(
+                          minLength: 2,
+                          message: 'Ingresa un nombre válido.',
+                        ),
+                      ]),
+                      enabled: !isLoading,
                     ),
                     const SizedBox(height: AppSpacing.md),
-                  ],
-                  if (registerState is RegisterSuccessState) ...[
-                    const AppBanner(
-                      message: 'Registro exitoso',
-                      variant: AppBannerVariant.success,
+                    AppValidatedField(
+                      controller: _emailController,
+                      label: 'Correo',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: AppValidators.compose([
+                        AppValidators.requiredField(
+                          message: 'Ingresa tu correo.',
+                        ),
+                        AppValidators.email(),
+                      ]),
+                      enabled: !isLoading,
                     ),
                     const SizedBox(height: AppSpacing.md),
+                    AppValidatedField(
+                      controller: _passwordController,
+                      label: 'Contraseña',
+                      obscureText: true,
+                      validator: AppValidators.password(
+                        emptyMessage: 'Ingresa tu contraseña.',
+                        minLengthMessage: 'Usa al menos 6 caracteres.',
+                      ),
+                      enabled: !isLoading,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    AppTextField(
+                      controller: _cityController,
+                      label: 'Ciudad (opcional)',
+                      enabled: !isLoading,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    if (isLoading)
+                      const Center(child: AppLoader())
+                    else
+                      AppButton(label: 'Registrarme', onPressed: _onSubmit),
                   ],
-                  AppTextField(
-                    controller: _nameController,
-                    label: 'Nombre',
-                    enabled: !isLoading,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppTextField(
-                    controller: _emailController,
-                    label: 'Correo',
-                    keyboardType: TextInputType.emailAddress,
-                    enabled: !isLoading,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppPasswordField(
-                    controller: _passwordController,
-                    label: 'Contraseña',
-                    enabled: !isLoading,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppTextField(
-                    controller: _cityController,
-                    label: 'Ciudad (opcional)',
-                    enabled: !isLoading,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  if (isLoading)
-                    const Center(child: AppLoader())
-                  else
-                    AppButton(label: 'Registrarme', onPressed: _onSubmit),
-                ],
+                ),
               ),
             ),
           ),

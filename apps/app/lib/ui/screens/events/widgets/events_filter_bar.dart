@@ -128,9 +128,11 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
             const SizedBox(height: AppSpacing.xs),
             Align(
               alignment: Alignment.centerLeft,
-              child: TextButton(
+              child: AppButton(
+                label: 'Limpiar filtros',
+                emphasis: AppEmphasis.outline,
+                size: AppButtonSize.small,
                 onPressed: widget.onClearFilters,
-                child: const Text('Limpiar filtros'),
               ),
             ),
           ] else

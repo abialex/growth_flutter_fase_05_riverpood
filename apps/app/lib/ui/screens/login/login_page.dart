@@ -7,6 +7,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/widgets/app_validated_field.dart';
 import 'package:router_core/router_core.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -28,6 +30,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void _onSubmit() {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
     unawaited(
       ref
           .read(loginNotifierProvider.notifier)
@@ -53,52 +59,70 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: AppCard(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Iniciar sesión',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  if (loginState is LoginErrorState) ...[
-                    AppBanner(
-                      message: loginState.failure.message,
-                      variant: AppBannerVariant.error,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Iniciar sesión',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    if (loginState is LoginErrorState) ...[
+                      AppBanner(
+                        message: loginState.failure.message,
+                        variant: AppBannerVariant.error,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                    if (loginState is LoginSuccessState) ...[
+                      const AppBanner(
+                        message: 'Sesión iniciada correctamente',
+                        variant: AppBannerVariant.success,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                    AppValidatedField(
+                      controller: _emailController,
+                      label: 'Correo',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: AppValidators.compose([
+                        AppValidators.requiredField(
+                          message: 'Ingresa tu correo.',
+                        ),
+                        AppValidators.email(),
+                      ]),
+                      enabled: !isLoading,
                     ),
                     const SizedBox(height: AppSpacing.md),
-                  ],
-                  if (loginState is LoginSuccessState) ...[
-                    const AppBanner(
-                      message: 'Sesión iniciada correctamente',
-                      variant: AppBannerVariant.success,
+                    AppValidatedField(
+                      controller: _passwordController,
+                      label: 'Contraseña',
+                      obscureText: true,
+                      validator: AppValidators.password(
+                        emptyMessage: 'Ingresa tu contraseña.',
+                        minLengthMessage: 'Usa al menos 6 caracteres.',
+                      ),
+                      enabled: !isLoading,
                     ),
+                    const SizedBox(height: AppSpacing.lg),
+                    if (isLoading)
+                      const Center(child: AppLoader())
+                    else
+                      AppButton(label: 'Ingresar', onPressed: _onSubmit),
                     const SizedBox(height: AppSpacing.md),
+                    Center(
+                      child: AppButton(
+                        label: '¿No tienes cuenta? Regístrate',
+                        emphasis: AppEmphasis.outline,
+                        size: AppButtonSize.small,
+                        onPressed: isLoading ? null : _onNavigateToRegister,
+                      ),
+                    ),
                   ],
-                  AppTextField(
-                    controller: _emailController,
-                    label: 'Correo',
-                    keyboardType: TextInputType.emailAddress,
-                    enabled: !isLoading,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppPasswordField(
-                    controller: _passwordController,
-                    label: 'Contraseña',
-                    enabled: !isLoading,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  if (isLoading)
-                    const Center(child: AppLoader())
-                  else
-                    AppButton(label: 'Ingresar', onPressed: _onSubmit),
-                  const SizedBox(height: AppSpacing.md),
-                  TextButton(
-                    onPressed: isLoading ? null : _onNavigateToRegister,
-                    child: const Text('¿No tienes cuenta? Regístrate'),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
