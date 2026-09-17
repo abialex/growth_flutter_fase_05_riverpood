@@ -11,7 +11,9 @@ visual `app_ui_kit` de la fase 04.
 - Dart 3.9.2 o superior.
 - Un proyecto de Supabase configurado con Auth, tablas, políticas RLS y las
   funciones RPC de `supabase/scripts/`.
-- Un dispositivo, emulador o navegador compatible con Flutter.
+- Un dispositivo o emulador Android compatible con Flutter. Esta fase solo
+  incluye la configuración de Android; iOS y web no están habilitados en la
+  aplicación actual.
 
 ## Estructura del monorepo
 
@@ -106,6 +108,9 @@ de quién puede acceder a cada ruta.
 Set-Location apps/app
 flutter run
 ~~~
+
+La plataforma validada en esta fase es Android. El build release genera el
+artefacto `apps/app/build/app/outputs/flutter-apk/app-release.apk`.
 
 La navegación privada requiere una sesión válida de Supabase. La sesión
 persistida se restaura al iniciar y el router redirige a login o eventos según
