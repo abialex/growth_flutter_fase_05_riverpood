@@ -1,6 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/parsing/json_parsing.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/evento_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 
 /// Persistence representation of an event returned by Supabase.
 final class EventModel {
@@ -29,11 +29,7 @@ final class EventModel {
     venue: parseStringSafe(json['lugar']),
     totalSlots: parseIntSafe(json['cupos_totales']),
     availableSlots: parseIntSafe(json['cupos_disponibles']),
-    status: parseEnumSafe(
-      json['estado'],
-      values: EventoEstado.values,
-      fallback: EventoEstado.abierto,
-    ),
+    status: _parseEventStatus(json['estado']),
     description: parseNullableStringSafe(json['descripcion']),
   );
 
@@ -46,21 +42,29 @@ final class EventModel {
   final String venue;
   final int totalSlots;
   final int availableSlots;
-  final EventoEstado status;
+  final EventStatus status;
   final String? description;
 
   /// Converts the persistence model into the domain entity used by the app.
-  Evento toEntity() => Evento(
+  Event toEntity() => Event(
     id: id,
-    nombre: name,
-    deporte: sport,
-    fecha: date,
-    hora: time,
-    ciudad: city,
-    lugar: venue,
-    cuposTotales: totalSlots,
-    cuposDisponibles: availableSlots,
-    estado: status,
-    descripcion: description,
+    name: name,
+    sport: sport,
+    date: date,
+    time: time,
+    city: city,
+    venue: venue,
+    totalSlots: totalSlots,
+    availableSlots: availableSlots,
+    status: status,
+    description: description,
   );
 }
+
+EventStatus _parseEventStatus(dynamic value) =>
+    switch (parseStringSafe(value)) {
+      'abierto' => EventStatus.open,
+      'cerrado' => EventStatus.closed,
+      'finalizado' => EventStatus.finished,
+      _ => EventStatus.open,
+    };

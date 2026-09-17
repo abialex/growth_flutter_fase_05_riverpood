@@ -13,14 +13,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<void, AppFailure>> signUp({
     required String email,
     required String password,
-    required String nombre,
-    String? ciudad,
+    required String name,
+    String? city,
   }) {
     return _authService.signUp(
       email: email,
       password: password,
-      nombre: nombre,
-      ciudad: ciudad,
+      name: name,
+      city: city,
     );
   }
 

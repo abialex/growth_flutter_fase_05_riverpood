@@ -1,11 +1,11 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/evento.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/repositories/eventos_repository.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservas_repository.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_status.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/tickets_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/my_reservations_data.dart';
 
@@ -13,20 +13,21 @@ import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/my_reservation
 final class LoadMyReservationsUseCase {
   /// Creates a use case with the repositories required by the flow.
   const LoadMyReservationsUseCase({
-    required ReservasRepository reservasRepository,
-    required EventosRepository eventosRepository,
+    required ReservationsRepository reservationsRepository,
+    required EventsRepository eventsRepository,
     required TicketsRepository ticketsRepository,
-  }) : _reservasRepository = reservasRepository,
-       _eventosRepository = eventosRepository,
+  }) : _reservationsRepository = reservationsRepository,
+       _eventsRepository = eventsRepository,
        _ticketsRepository = ticketsRepository;
 
-  final ReservasRepository _reservasRepository;
-  final EventosRepository _eventosRepository;
+  final ReservationsRepository _reservationsRepository;
+  final EventsRepository _eventsRepository;
   final TicketsRepository _ticketsRepository;
 
   /// Loads reservations and their related events and tickets.
   Future<Result<MyReservationsData, AppFailure>> call() async {
-    final reservationsResult = await _reservasRepository.getMisReservas();
+    final reservationsResult = await _reservationsRepository
+        .getMyReservations();
     return switch (reservationsResult) {
       Failure(failure: final failure) => Failure(failure),
       Success(value: final reservations) => _loadRelatedData(reservations),
@@ -34,9 +35,9 @@ final class LoadMyReservationsUseCase {
   }
 
   Future<Result<MyReservationsData, AppFailure>> _loadRelatedData(
-    List<Reserva> reservations,
+    List<Reservation> reservations,
   ) async {
-    final eventsResult = await _eventosRepository.getEventos();
+    final eventsResult = await _eventsRepository.getEvents();
     return switch (eventsResult) {
       Failure(failure: final failure) => Failure(failure),
       Success(value: final events) => _loadTickets(reservations, events),
@@ -44,16 +45,16 @@ final class LoadMyReservationsUseCase {
   }
 
   Future<Result<MyReservationsData, AppFailure>> _loadTickets(
-    List<Reserva> reservations,
-    List<Evento> events,
+    List<Reservation> reservations,
+    List<Event> events,
   ) async {
     final reservationIds = reservations
         .where(
-          (reservation) => reservation.estado == ReservaEstado.confirmada,
+          (reservation) => reservation.status == ReservationStatus.confirmed,
         )
         .map((reservation) => reservation.id)
         .toList();
-    final ticketsResult = await _ticketsRepository.getTicketsByReservaIds(
+    final ticketsResult = await _ticketsRepository.getTicketsByReservationIds(
       reservationIds,
     );
 
@@ -72,7 +73,7 @@ final class LoadMyReservationsUseCase {
   Map<String, Ticket> _mapTicketsByReservationId(List<Ticket> tickets) {
     final ticketsByReservationId = <String, Ticket>{};
     for (final ticket in tickets) {
-      ticketsByReservationId.putIfAbsent(ticket.reservaId, () => ticket);
+      ticketsByReservationId.putIfAbsent(ticket.reservationId, () => ticket);
     }
     return ticketsByReservationId;
   }

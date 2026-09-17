@@ -8,6 +8,6 @@ export 'src/app_go_router.dart';
 export 'src/app_router_observer.dart';
 export 'src/i_route_module.dart';
 // Mobile utilities
-export 'src/mobile/app_back_mobil_handler.dart';
+export 'src/mobile/app_back_mobile_handler.dart';
 // Utils
 export 'utils/navigation_utils.dart';

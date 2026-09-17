@@ -17,11 +17,11 @@ class RegisterNotifier extends Notifier<RegisterState> {
     return const RegisterInitialState();
   }
 
-  Future<void> register({
+  Future<void> onRegister({
     required String email,
     required String password,
-    required String nombre,
-    String? ciudad,
+    required String name,
+    String? city,
   }) async {
     if (state is RegisterLoadingState) return;
 
@@ -31,8 +31,8 @@ class RegisterNotifier extends Notifier<RegisterState> {
     final result = await registerUseCase(
       email: email,
       password: password,
-      nombre: nombre,
-      ciudad: ciudad,
+      name: name,
+      city: city,
     );
     if (!_operationGuard.isCurrent(operationId)) return;
 

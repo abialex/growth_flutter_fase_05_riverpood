@@ -1,6 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/parsing/json_parsing.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/reserva.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/reserva_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_status.dart';
 
 /// Persistence representation of a reservation returned by Supabase.
 final class ReservationModel {
@@ -20,11 +20,7 @@ final class ReservationModel {
         userId: parseStringSafe(json['usuario_id']),
         eventId: parseStringSafe(json['evento_id']),
         seatCount: parseIntSafe(json['cantidad_cupos']),
-        status: parseEnumSafe(
-          json['estado'],
-          values: ReservaEstado.values,
-          fallback: ReservaEstado.pendiente,
-        ),
+        status: _parseReservationStatus(json['estado']),
         reservedAt: parseDateTimeSafe(json['fecha_reserva']),
       );
 
@@ -32,16 +28,24 @@ final class ReservationModel {
   final String userId;
   final String eventId;
   final int seatCount;
-  final ReservaEstado status;
+  final ReservationStatus status;
   final DateTime reservedAt;
 
   /// Converts the persistence model into the domain entity used by the app.
-  Reserva toEntity() => Reserva(
+  Reservation toEntity() => Reservation(
     id: id,
-    usuarioId: userId,
-    eventoId: eventId,
-    cantidadCupos: seatCount,
-    estado: status,
-    fechaReserva: reservedAt,
+    userId: userId,
+    eventId: eventId,
+    seatCount: seatCount,
+    status: status,
+    reservedAt: reservedAt,
   );
 }
+
+ReservationStatus _parseReservationStatus(dynamic value) =>
+    switch (parseStringSafe(value)) {
+      'pendiente' => ReservationStatus.pending,
+      'confirmada' => ReservationStatus.confirmed,
+      'cancelada' => ReservationStatus.cancelled,
+      _ => ReservationStatus.pending,
+    };

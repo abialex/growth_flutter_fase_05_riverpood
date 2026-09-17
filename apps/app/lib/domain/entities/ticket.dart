@@ -1,20 +1,20 @@
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_estado.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_status.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 final class Ticket {
   const Ticket({
     required this.id,
-    required this.reservaId,
-    required this.codigo,
-    required this.estado,
+    required this.reservationId,
+    required this.code,
+    required this.status,
     required this.createdAt,
   });
 
   final String id;
-  final String reservaId;
-  final String codigo;
-  final TicketEstado estado;
+  final String reservationId;
+  final String code;
+  final TicketStatus status;
   final DateTime createdAt;
 
   @override
@@ -22,18 +22,18 @@ final class Ticket {
     return identical(this, other) ||
         other is Ticket &&
             other.id == id &&
-            other.reservaId == reservaId &&
-            other.codigo == codigo &&
-            other.estado == estado &&
+            other.reservationId == reservationId &&
+            other.code == code &&
+            other.status == status &&
             other.createdAt == createdAt;
   }
 
   @override
   int get hashCode => Object.hash(
     id,
-    reservaId,
-    codigo,
-    estado,
+    reservationId,
+    code,
+    status,
     createdAt,
   );
 }

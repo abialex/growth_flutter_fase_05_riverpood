@@ -14,14 +14,14 @@ final class RegisterUseCase {
   Future<Result<void, AppFailure>> call({
     required String email,
     required String password,
-    required String nombre,
-    String? ciudad,
+    required String name,
+    String? city,
   }) {
     return _authRepository.signUp(
       email: email,
       password: password,
-      nombre: nombre,
-      ciudad: ciudad,
+      name: name,
+      city: city,
     );
   }
 }

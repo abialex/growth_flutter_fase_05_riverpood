@@ -21,8 +21,8 @@ class AuthService {
   Future<Result<void, AppFailure>> signUp({
     required String email,
     required String password,
-    required String nombre,
-    String? ciudad,
+    required String name,
+    String? city,
   }) {
     return _run(
       operation: 'signUp',
@@ -31,8 +31,8 @@ class AuthService {
           email: email,
           password: password,
           data: {
-            'nombre': nombre,
-            'ciudad': ?ciudad,
+            'nombre': name,
+            'ciudad': ?city,
           },
         );
       },

@@ -1,4 +1,0 @@
-enum TicketEstado {
-  valido,
-  usado,
-}

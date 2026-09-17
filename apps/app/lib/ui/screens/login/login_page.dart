@@ -31,7 +31,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     unawaited(
       ref
           .read(loginNotifierProvider.notifier)
-          .login(
+          .onLogin(
             email: _emailController.text.trim(),
             password: _passwordController.text,
           ),

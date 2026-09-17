@@ -5,7 +5,6 @@ import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_ser
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/models/ticket_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_estado.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TicketsService {
@@ -23,11 +22,14 @@ class TicketsService {
 
   final SupabaseCrudService<TicketModel> _crudService;
 
-  /// Fetches all tickets linked to [reservaIds] in one request.
-  Future<Result<List<Ticket>, AppFailure>> fetchTicketsByReservaIds(
-    List<String> reservaIds,
+  /// Fetches all tickets linked to [reservationIds] in one request.
+  Future<Result<List<Ticket>, AppFailure>> fetchTicketsByReservationIds(
+    List<String> reservationIds,
   ) async {
-    final result = await _crudService.fetchWhereIn('reserva_id', reservaIds);
+    final result = await _crudService.fetchWhereIn(
+      'reserva_id',
+      reservationIds,
+    );
     return switch (result) {
       Success(value: final models) => Success(
         models.map((model) => model.toEntity()).toList(),
@@ -46,7 +48,7 @@ class TicketsService {
 
   Future<Result<Ticket, AppFailure>> markTicketAsUsed(String ticketId) async {
     final result = await _crudService.updateRecord(ticketId, {
-      'estado': TicketEstado.usado.name,
+      'estado': 'usado',
     });
     return switch (result) {
       Success(value: final model) => Success(model.toEntity()),

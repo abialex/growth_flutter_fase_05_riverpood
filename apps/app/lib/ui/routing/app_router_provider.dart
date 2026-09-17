@@ -5,10 +5,10 @@ import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/auth_state_refresh_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/splash_page.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/evento_detalle_route_module.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/screens/eventos/eventos_route_module.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_detail_route_module.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/events_route_module.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/login/login_route_module.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/screens/mis_reservas/mis_reservas_route_module.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/screens/my_reservations/my_reservations_route_module.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/register/register_route_module.dart';
 import 'package:router_core/router_core.dart';
 
@@ -24,9 +24,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routeModules: [
       LoginRouteModule(),
       RegisterRouteModule(),
-      EventosRouteModule(),
-      EventoDetalleRouteModule(),
-      MisReservasRouteModule(),
+      EventsRouteModule(),
+      EventDetailRouteModule(),
+      MyReservationsRouteModule(),
     ],
     updateCurrentRouteEvent: (route) {},
     refreshListenable: authStateRefreshNotifier,
@@ -54,7 +54,7 @@ String? _redirectForAuthentication(
   }
 
   if (isAuthenticated && (isPublicRoute || location == AppRoute.splash.path)) {
-    return AppRoute.eventos.path;
+    return AppRoute.events.path;
   }
 
   return null;

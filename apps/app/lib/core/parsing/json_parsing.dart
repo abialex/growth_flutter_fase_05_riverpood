@@ -29,20 +29,6 @@ DateTime parseDateTimeSafe(dynamic value) {
   return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
 }
 
-/// Safely parses an enum value using its serialized enum name.
-T parseEnumSafe<T extends Enum>(
-  dynamic value, {
-  required List<T> values,
-  required T fallback,
-}) {
-  if (value is String) {
-    for (final enumValue in values) {
-      if (enumValue.name == value) return enumValue;
-    }
-  }
-  return fallback;
-}
-
 /// Safely parses a JSON list into strings.
 List<String> parseStringListSafe(dynamic value) {
   if (value is! List) return const [];

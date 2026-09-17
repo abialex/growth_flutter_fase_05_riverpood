@@ -11,8 +11,8 @@ final class ConfirmPurchaseUseCase {
 
   final PurchaseRepository _purchaseRepository;
 
-  /// Confirms [reservaId] and creates its ticket atomically.
-  Future<Result<Ticket, AppFailure>> call(String reservaId) {
-    return _purchaseRepository.confirmPurchase(reservaId);
+  /// Confirms [reservationId] and creates its ticket atomically.
+  Future<Result<Ticket, AppFailure>> call(String reservationId) {
+    return _purchaseRepository.confirmPurchase(reservationId);
   }
 }

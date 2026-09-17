@@ -6,8 +6,8 @@ abstract class AuthRepository {
   Future<Result<void, AppFailure>> signUp({
     required String email,
     required String password,
-    required String nombre,
-    String? ciudad,
+    required String name,
+    String? city,
   });
 
   Future<Result<void, AppFailure>> signIn({

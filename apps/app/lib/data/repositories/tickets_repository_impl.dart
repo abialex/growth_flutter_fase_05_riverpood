@@ -10,10 +10,10 @@ class TicketsRepositoryImpl implements TicketsRepository {
   final TicketsService _ticketsService;
 
   @override
-  Future<Result<List<Ticket>, AppFailure>> getTicketsByReservaIds(
-    List<String> reservaIds,
+  Future<Result<List<Ticket>, AppFailure>> getTicketsByReservationIds(
+    List<String> reservationIds,
   ) {
-    return _ticketsService.fetchTicketsByReservaIds(reservaIds);
+    return _ticketsService.fetchTicketsByReservationIds(reservationIds);
   }
 
   @override

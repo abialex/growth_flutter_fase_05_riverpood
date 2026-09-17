@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:router_core/src/animations/animation_transition_enum.dart';
-import 'package:router_core/src/mobile/app_back_mobil_handler.dart';
+import 'package:router_core/src/mobile/app_back_mobile_handler.dart';
 
 /// Builds a [CustomTransitionPage] with a configurable page transition.
 class AppBuildStackAnimationPage<T> {
@@ -43,7 +43,7 @@ class AppBuildStackAnimationPage<T> {
     return CustomTransitionPage<void>(
       name: routeEnum?.toString(),
       key: transitionKey,
-      child: AppBackMobilHandler(key: transitionKey, child: child),
+      child: AppBackMobileHandler(key: transitionKey, child: child),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return _buildTransition(animation, child);
       },

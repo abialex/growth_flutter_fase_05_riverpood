@@ -17,7 +17,7 @@ class LoginNotifier extends Notifier<LoginState> {
     return const LoginInitialState();
   }
 
-  Future<void> login({
+  Future<void> onLogin({
     required String email,
     required String password,
   }) async {

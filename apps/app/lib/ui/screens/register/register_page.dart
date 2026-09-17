@@ -17,30 +17,30 @@ class RegisterPage extends ConsumerStatefulWidget {
 }
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
-  final _nombreController = TextEditingController();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _ciudadController = TextEditingController();
+  final _cityController = TextEditingController();
 
   @override
   void dispose() {
-    _nombreController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _ciudadController.dispose();
+    _cityController.dispose();
     super.dispose();
   }
 
   void _onSubmit() {
-    final ciudad = _ciudadController.text.trim();
+    final city = _cityController.text.trim();
     unawaited(
       ref
           .read(registerNotifierProvider.notifier)
-          .register(
+          .onRegister(
             email: _emailController.text.trim(),
             password: _passwordController.text,
-            nombre: _nombreController.text.trim(),
-            ciudad: ciudad.isEmpty ? null : ciudad,
+            name: _nameController.text.trim(),
+            city: city.isEmpty ? null : city,
           ),
     );
   }
@@ -76,7 +76,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     const SizedBox(height: AppSpacing.md),
                   ],
                   AppTextField(
-                    controller: _nombreController,
+                    controller: _nameController,
                     label: 'Nombre',
                     enabled: !isLoading,
                   ),
@@ -95,7 +95,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   AppTextField(
-                    controller: _ciudadController,
+                    controller: _cityController,
                     label: 'Ciudad (opcional)',
                     enabled: !isLoading,
                   ),

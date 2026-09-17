@@ -20,7 +20,7 @@ class LogoutNotifier extends Notifier<LogoutState> {
   }
 
   /// Signs out the current user and invalidates authenticated state.
-  Future<void> logout() async {
+  Future<void> onLogout() async {
     if (state is LogoutLoadingState) return;
 
     final operationId = _operationGuard.start();
@@ -42,10 +42,10 @@ class LogoutNotifier extends Notifier<LogoutState> {
 
   void _clearAuthenticatedState() {
     ref
-      ..invalidate(eventosNotifierProvider)
-      ..invalidate(eventoDetalleNotifierProvider)
-      ..invalidate(reservarNotifierProvider)
-      ..invalidate(confirmarCompraNotifierProvider)
-      ..invalidate(misReservasNotifierProvider);
+      ..invalidate(eventsNotifierProvider)
+      ..invalidate(eventDetailNotifierProvider)
+      ..invalidate(createReservationNotifierProvider)
+      ..invalidate(confirmPurchaseNotifierProvider)
+      ..invalidate(myReservationsNotifierProvider);
   }
 }
