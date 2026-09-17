@@ -35,6 +35,10 @@ class _EventsPageState extends ConsumerState<EventsPage> {
     unawaited(ref.read(logoutNotifierProvider.notifier).onLogout());
   }
 
+  void _onRetryEvents() {
+    unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
+  }
+
   void _onToggleSport(String sport, {required bool isSelected}) {
     setState(
       () => _filters = _filters.toggleSport(
@@ -109,12 +113,15 @@ class _EventsPageState extends ConsumerState<EventsPage> {
     }
 
     if (eventsState is EventsErrorState) {
+      final failure = eventsState.failure;
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),
           child: AppBanner(
-            message: eventsState.failure.message,
+            message: failure.message,
             variant: AppBannerVariant.error,
+            actionLabel: failure.isRetryable ? 'Reintentar' : null,
+            onAction: failure.isRetryable ? _onRetryEvents : null,
           ),
         ),
       );

@@ -32,6 +32,12 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     ref.read(createReservationNotifierProvider.notifier).reset();
   }
 
+  void _onRetryEvent() {
+    unawaited(
+      ref.read(eventDetailNotifierProvider.notifier).loadEvent(widget.eventId),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<CreateReservationState>(createReservationNotifierProvider, (
@@ -62,12 +68,15 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     }
 
     if (eventDetailState is EventDetailErrorState) {
+      final failure = eventDetailState.failure;
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),
           child: AppBanner(
-            message: eventDetailState.failure.message,
+            message: failure.message,
             variant: AppBannerVariant.error,
+            actionLabel: failure.isRetryable ? 'Reintentar' : null,
+            onAction: failure.isRetryable ? _onRetryEvent : null,
           ),
         ),
       );

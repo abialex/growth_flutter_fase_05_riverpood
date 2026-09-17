@@ -35,6 +35,12 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
     unawaited(ref.read(logoutNotifierProvider.notifier).onLogout());
   }
 
+  void _onRetryReservations() {
+    unawaited(
+      ref.read(myReservationsNotifierProvider.notifier).loadMyReservations(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ref
@@ -83,12 +89,15 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
     }
 
     if (myReservationsState is MyReservationsErrorState) {
+      final failure = myReservationsState.failure;
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),
           child: AppBanner(
-            message: myReservationsState.failure.message,
+            message: failure.message,
             variant: AppBannerVariant.error,
+            actionLabel: failure.isRetryable ? 'Reintentar' : null,
+            onAction: failure.isRetryable ? _onRetryReservations : null,
           ),
         ),
       );
