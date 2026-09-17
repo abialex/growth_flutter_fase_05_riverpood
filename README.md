@@ -89,7 +89,7 @@ Dentro de `apps/app/lib/`:
 - `domain/`: entidades, enums, contratos de repositorio y casos de uso sin
   dependencias de Flutter ni de Supabase.
 - `ui/`: composición de Riverpod, navegación, notifiers, estados, pantallas y
-  widgets.
+  widgets. `ui/layout/` centraliza los breakpoints y anchos máximos de la app.
 
 `ui/providers/container.dart` centraliza la composición de servicios,
 repositorios y casos de uso. `ProviderScope` proporciona el contenedor a la

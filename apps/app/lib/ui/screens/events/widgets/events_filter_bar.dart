@@ -1,5 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 
 class EventsFilterBar extends StatefulWidget {
@@ -60,6 +63,15 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
 
   @override
   Widget build(BuildContext context) {
+    final labelFontSize = Theme.of(context).textTheme.labelMedium?.fontSize;
+    final scaledLabelHeight = labelFontSize == null
+        ? 0.0
+        : MediaQuery.textScalerOf(context).scale(labelFontSize);
+    final filterListHeight = math.max(
+      AppSpacing.xxl,
+      scaledLabelHeight + AppSpacing.md,
+    );
+
     return Padding(
       padding: const EdgeInsets.only(
         left: AppSpacing.md,
@@ -70,7 +82,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: AppSpacing.xxl,
+            height: filterListHeight,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: widget.availableSports.length,
@@ -89,42 +101,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: AppDropdownField<String>(
-                  key: ValueKey(widget.filters.selectedCity),
-                  label: 'Ciudad',
-                  hint: 'Todas',
-                  initialValue: widget.filters.selectedCity,
-                  items: widget.availableCities
-                      .map(
-                        (city) => AppDropdownItem(value: city, label: city),
-                      )
-                      .toList(),
-                  onChanged: widget.onChangeCity,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: AppTextField(
-                  label: 'Desde',
-                  readOnly: true,
-                  hint: 'Cualquiera',
-                  controller: _dateController,
-                  onTap: widget.onPickDate,
-                  suffixIcon: widget.filters.fromDate == null
-                      ? null
-                      : IconButton(
-                          tooltip: 'Limpiar fecha',
-                          icon: const Icon(Icons.clear),
-                          onPressed: widget.onClearDate,
-                        ),
-                ),
-              ),
-            ],
-          ),
+          _buildFilterFields(),
           if (widget.filters.hasActiveFilters) ...[
             const SizedBox(height: AppSpacing.xs),
             Align(
@@ -140,6 +117,65 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
             const SizedBox(height: AppSpacing.sm),
         ],
       ),
+    );
+  }
+
+  Widget _buildFilterFields() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cityField = _buildCityField();
+        final dateField = _buildDateField();
+
+        if (constraints.maxWidth < AppLayoutTokens.compactBreakpoint) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              cityField,
+              const SizedBox(height: AppSpacing.md),
+              dateField,
+            ],
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: cityField),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: dateField),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildCityField() {
+    return AppDropdownField<String>(
+      key: ValueKey(widget.filters.selectedCity),
+      label: 'Ciudad',
+      hint: 'Todas',
+      initialValue: widget.filters.selectedCity,
+      items: widget.availableCities
+          .map((city) => AppDropdownItem(value: city, label: city))
+          .toList(),
+      onChanged: widget.onChangeCity,
+    );
+  }
+
+  Widget _buildDateField() {
+    return AppTextField(
+      label: 'Desde',
+      readOnly: true,
+      hint: 'Cualquiera',
+      controller: _dateController,
+      onTap: widget.onPickDate,
+      suffixIcon: widget.filters.fromDate == null
+          ? null
+          : IconButton(
+              tooltip: 'Limpiar fecha',
+              icon: const Icon(Icons.clear),
+              onPressed: widget.onClearDate,
+            ),
     );
   }
 }

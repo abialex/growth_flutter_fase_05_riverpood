@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
@@ -26,9 +27,12 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
   @override
   void initState() {
     super.initState();
-    unawaited(
-      ref.read(myReservationsNotifierProvider.notifier).loadMyReservations(),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(
+        ref.read(myReservationsNotifierProvider.notifier).loadMyReservations(),
+      );
+    });
   }
 
   void _onLogout() {
@@ -79,7 +83,17 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
           ),
         ],
       ),
-      body: _buildBody(context, myReservationsState),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppLayoutTokens.contentMaxWidth,
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            child: _buildBody(context, myReservationsState),
+          ),
+        ),
+      ),
     );
   }
 

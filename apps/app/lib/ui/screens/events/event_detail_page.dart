@@ -4,6 +4,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/states/event_detail_loading_state.dart';
@@ -26,10 +27,15 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
   @override
   void initState() {
     super.initState();
-    unawaited(
-      ref.read(eventDetailNotifierProvider.notifier).loadEvent(widget.eventId),
-    );
-    ref.read(createReservationNotifierProvider.notifier).reset();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ref.read(createReservationNotifierProvider.notifier).reset();
+      unawaited(
+        ref
+            .read(eventDetailNotifierProvider.notifier)
+            .loadEvent(widget.eventId),
+      );
+    });
   }
 
   void _onRetryEvent() {
@@ -58,7 +64,17 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detalle del evento')),
-      body: _buildBody(context, eventDetailState),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppLayoutTokens.contentMaxWidth,
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            child: _buildBody(context, eventDetailState),
+          ),
+        ),
+      ),
     );
   }
 

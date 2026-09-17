@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loading_state.dart';
@@ -28,7 +29,10 @@ class _EventsPageState extends ConsumerState<EventsPage> {
   @override
   void initState() {
     super.initState();
-    unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
+    });
   }
 
   void _onLogout() {
@@ -103,7 +107,17 @@ class _EventsPageState extends ConsumerState<EventsPage> {
           ),
         ],
       ),
-      body: _buildBody(context, eventsState),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppLayoutTokens.contentMaxWidth,
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            child: _buildBody(context, eventsState),
+          ),
+        ),
+      ),
     );
   }
 
