@@ -10,7 +10,7 @@ class EventDetailRouteModule implements IRouteModule {
   List<RouteBase> get rootRoutes => [
     GoRoute(
       path: AppRoute.eventDetail.path,
-      name: 'event-detail',
+      name: AppRoute.eventDetail.routeName,
       pageBuilder: (context, state) {
         final eventId = state.pathParameters['id'] ?? '';
         return AppBuildStackAnimationPage<AppRoute>(
@@ -18,6 +18,7 @@ class EventDetailRouteModule implements IRouteModule {
           child: EventDetailPage(eventId: eventId),
           animationType: AnimationTransitionEnum.slideHorizontal,
           routeEnum: AppRoute.eventDetail,
+          routePath: state.matchedLocation,
         ).build();
       },
     ),

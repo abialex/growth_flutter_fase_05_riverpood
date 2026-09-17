@@ -11,6 +11,7 @@ class AppBuildStackAnimationPage<T> {
     required this.child,
     required this.animationType,
     this.routeEnum,
+    this.routePath,
     this.valueKey,
     this.transitionDuration,
   });
@@ -33,6 +34,9 @@ class AppBuildStackAnimationPage<T> {
   /// An optional route identifier used as the page name.
   final T? routeEnum;
 
+  /// An optional resolved path used by route observers and path mappers.
+  final String? routePath;
+
   /// Builds the configured transition page.
   CustomTransitionPage<void> build() {
     return _buildCustomTransitionPage();
@@ -41,7 +45,7 @@ class AppBuildStackAnimationPage<T> {
   CustomTransitionPage<void> _buildCustomTransitionPage() {
     final transitionKey = valueKey ?? ValueKey(state.matchedLocation);
     return CustomTransitionPage<void>(
-      name: routeEnum?.toString(),
+      name: routePath ?? routeEnum?.toString(),
       key: transitionKey,
       child: AppBackMobileHandler(key: transitionKey, child: child),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {

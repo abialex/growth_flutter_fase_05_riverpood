@@ -8,6 +8,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/login/states/login_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/widgets/app_validated_field.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/widgets/theme_mode_button.dart';
 import 'package:router_core/router_core.dart';
@@ -47,7 +48,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void _onNavigateToRegister() {
-    unawaited(context.pushNamed('register'));
+    unawaited(context.pushNamed(AppRoute.register.routeName));
   }
 
   @override

@@ -11,3 +11,9 @@ All notable changes to this package are documented in this file.
 - Removed the unused route-to-path callback from `AppGoRouter`.
 - Restricted the public `go_router` exports to the types required by consumers.
 - Updated the README to document the current public API.
+
+### Fixed
+
+- Pass the complete matched location to the route mapper so parameterized
+  routes are identified correctly.
+- Preserve the resolved route path in custom page settings for pop events.

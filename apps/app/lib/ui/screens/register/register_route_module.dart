@@ -10,12 +10,13 @@ class RegisterRouteModule implements IRouteModule {
   List<RouteBase> get rootRoutes => [
     GoRoute(
       path: AppRoute.register.path,
-      name: 'register',
+      name: AppRoute.register.routeName,
       pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
         state: state,
         child: const RegisterPage(),
         animationType: AnimationTransitionEnum.fade,
         routeEnum: AppRoute.register,
+        routePath: state.matchedLocation,
       ).build(),
     ),
   ];

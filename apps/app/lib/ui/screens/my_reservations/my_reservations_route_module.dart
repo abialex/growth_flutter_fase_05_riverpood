@@ -10,12 +10,13 @@ class MyReservationsRouteModule implements IRouteModule {
   List<RouteBase> get rootRoutes => [
     GoRoute(
       path: AppRoute.myReservations.path,
-      name: 'my-reservations',
+      name: AppRoute.myReservations.routeName,
       pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
         state: state,
         child: const MyReservationsPage(),
         animationType: AnimationTransitionEnum.slideHorizontal,
         routeEnum: AppRoute.myReservations,
+        routePath: state.matchedLocation,
       ).build(),
     ),
   ];

@@ -10,12 +10,13 @@ class LoginRouteModule implements IRouteModule {
   List<RouteBase> get rootRoutes => [
     GoRoute(
       path: AppRoute.login.path,
-      name: 'login',
+      name: AppRoute.login.routeName,
       pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
         state: state,
         child: const LoginPage(),
         animationType: AnimationTransitionEnum.fade,
         routeEnum: AppRoute.login,
+        routePath: state.matchedLocation,
       ).build(),
     ),
   ];

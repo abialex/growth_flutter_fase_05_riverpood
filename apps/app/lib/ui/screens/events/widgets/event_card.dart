@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:router_core/router_core.dart';
 
 class EventCard extends StatelessWidget {
@@ -28,7 +29,10 @@ class EventCard extends StatelessWidget {
 
   void _onTap(BuildContext context) {
     unawaited(
-      context.pushNamed('event-detail', pathParameters: {'id': event.id}),
+      context.pushNamed(
+        AppRoute.eventDetail.routeName,
+        pathParameters: {'id': event.id},
+      ),
     );
   }
 

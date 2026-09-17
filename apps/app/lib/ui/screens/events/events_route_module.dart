@@ -10,12 +10,13 @@ class EventsRouteModule implements IRouteModule {
   List<RouteBase> get rootRoutes => [
     GoRoute(
       path: AppRoute.events.path,
-      name: 'events',
+      name: AppRoute.events.routeName,
       pageBuilder: (context, state) => AppBuildStackAnimationPage<AppRoute>(
         state: state,
         child: const EventsPage(),
         animationType: AnimationTransitionEnum.fade,
         routeEnum: AppRoute.events,
+        routePath: state.matchedLocation,
       ).build(),
     ),
   ];

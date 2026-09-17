@@ -27,6 +27,22 @@ import 'package:router_core/router_core.dart';
 
 ## Initialization
 
+Keep the route paths and names in an application-owned catalog. The reusable
+package does not decide the identifiers used by a specific application:
+
+```dart
+enum AppRoute {
+  splash(path: '/', routeName: 'splash'),
+  events(path: '/events', routeName: 'events'),
+  eventDetail(path: '/events/:id', routeName: 'event-detail');
+
+  const AppRoute({required this.path, required this.routeName});
+
+  final String path;
+  final String routeName;
+}
+```
+
 Create a route module for each feature. Routes outside a persistent shell are
 returned from `rootRoutes`:
 
@@ -38,8 +54,8 @@ class FeatureRouteModule implements IRouteModule {
   @override
   List<RouteBase> get rootRoutes => [
     GoRoute(
-      name: 'events',
-      path: '/events',
+      name: AppRoute.events.routeName,
+      path: AppRoute.events.path,
       builder: (context, state) => const Placeholder(),
     ),
   ];
@@ -50,10 +66,24 @@ Build the application router by providing the route modules and the
 application-specific route mapping:
 
 ```dart
-enum AppRoute { splash, events }
-
 AppRoute routeFromPath(String path) {
-  return path == '/events' ? AppRoute.events : AppRoute.splash;
+  final pathWithoutQuery = path.split('?').first;
+  final normalizedPath = pathWithoutQuery.length > 1 &&
+          pathWithoutQuery.endsWith('/')
+      ? pathWithoutQuery.substring(0, pathWithoutQuery.length - 1)
+      : pathWithoutQuery;
+
+  if (normalizedPath == AppRoute.events.path) {
+    return AppRoute.events;
+  }
+
+  final eventDetailPrefix = '${AppRoute.events.path}/';
+  if (normalizedPath.startsWith(eventDetailPrefix) &&
+      normalizedPath.length > eventDetailPrefix.length) {
+    return AppRoute.eventDetail;
+  }
+
+  return AppRoute.splash;
 }
 
 final refreshListenable = ChangeNotifier();
@@ -63,12 +93,15 @@ final appRouter = AppGoRouter<AppRoute>(
   updateCurrentRouteEvent: (route) {},
   refreshListenable: refreshListenable,
   pageSplashBuilder: () => const Placeholder(),
-  initialLocation: '/',
+  initialLocation: AppRoute.splash.path,
   getRouteEnumFromPath: routeFromPath,
 );
 
 MaterialApp.router(routerConfig: appRouter.router);
 ```
+
+The mapper receives the complete matched location, including dynamic segments
+such as `/events/42`. Unknown paths can safely fall back to the splash route.
 
 Pass an application-owned `routeGuard` when access depends on authentication or
 another state condition. Return a path to redirect or `null` to continue.
@@ -78,8 +111,8 @@ another state condition. Return a path to redirect or `null` to continue.
 Navigate by route name from a widget or from a post-frame callback:
 
 ```dart
-context.goNamed('events');
-NavigationUtils.navigateSafely('events');
+context.goNamed(AppRoute.events.routeName);
+NavigationUtils.navigateSafely(AppRoute.events.routeName);
 ```
 
 Use `AppBuildStackAnimationPage` when a route needs a standard transition:
@@ -91,8 +124,12 @@ pageBuilder: (context, state) =>
       child: const Placeholder(),
       animationType: AnimationTransitionEnum.fade,
       routeEnum: AppRoute.events,
+      routePath: state.matchedLocation,
     ).build(),
 ```
+
+Pass the resolved `state.matchedLocation` when using a custom page so the
+router observer can map pop events with the same path mapper.
 
 ## Error handling
 

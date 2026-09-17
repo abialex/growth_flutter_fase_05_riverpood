@@ -12,6 +12,7 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_stat
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/event_card.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/events_filter_bar.dart';
@@ -100,7 +101,8 @@ class _EventsPageState extends ConsumerState<EventsPage> {
           IconButton(
             icon: const Icon(Icons.confirmation_number_outlined),
             tooltip: 'Mis reservas',
-            onPressed: () => unawaited(context.pushNamed('my-reservations')),
+            onPressed: () =>
+                unawaited(context.pushNamed(AppRoute.myReservations.routeName)),
           ),
           const ThemeModeButton(heroTag: 'theme-mode-toggle'),
           IconButton(

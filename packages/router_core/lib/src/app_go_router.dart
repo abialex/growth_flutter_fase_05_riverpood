@@ -51,6 +51,7 @@ class AppGoRouter<T> {
             state: state,
             child: pageSplashBuilder(),
             animationType: AnimationTransitionEnum.fade,
+            routePath: state.matchedLocation,
           ).build(),
         ),
         ...goRouterList,
@@ -122,8 +123,6 @@ class AppGoRouter<T> {
   }
 
   T _getRouteEnum(GoRouterState state) {
-    final path = state.matchedLocation;
-    final lastSegment = '/${path.split('/').last}';
-    return getRouteEnumFromPath(lastSegment);
+    return getRouteEnumFromPath(state.matchedLocation);
   }
 }
