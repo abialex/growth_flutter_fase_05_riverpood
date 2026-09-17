@@ -29,6 +29,10 @@ jobs:
           flutter-version: 3.35.7
           cache: true
 
+      - name: Create CI environment file
+        working-directory: apps/app
+        run: cp .env.example .env
+
       - name: Install workspace dependencies
         run: |
           dart pub get
