@@ -22,7 +22,8 @@ class AppBackMobileHandler extends StatelessWidget {
           return;
         }
 
-        final shouldExit = await showDialog<bool>(
+        final shouldExit =
+            await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('¿Salir de la app?'),

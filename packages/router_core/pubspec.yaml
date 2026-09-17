@@ -4,8 +4,8 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ^3.6.0
-  flutter: ^3.27.1
+  sdk: ^3.9.2
+  flutter: ^3.35.0
 
 dependencies:
   flutter:

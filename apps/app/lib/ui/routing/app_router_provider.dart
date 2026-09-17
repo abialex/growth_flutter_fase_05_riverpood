@@ -35,7 +35,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     pageSplashBuilder: () => const SplashPage(),
     initialLocation: AppRoute.splash.path,
     getRouteEnumFromPath: AppRoute.fromPath,
-    getPathFromRouteEnum: (route) => route.path,
   );
   return appGoRouter.router;
 });

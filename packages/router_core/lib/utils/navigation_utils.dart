@@ -7,7 +7,7 @@ class NavigationUtils {
   /// Navigates to [routeName] after the current frame completes when possible.
   static void navigateSafely(String routeName) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final context = approotNavigatorKey.currentContext;
+      final context = appRootNavigatorKey.currentContext;
       if (context != null && context.mounted) {
         context.goNamed(routeName);
       }
