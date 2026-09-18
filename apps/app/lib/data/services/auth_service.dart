@@ -30,7 +30,7 @@ class AuthService {
     return _run(
       operation: 'signUp',
       action: () async {
-        await _supabaseClient.auth.signUp(
+        final response = await _supabaseClient.auth.signUp(
           email: email,
           password: password,
           data: {
@@ -38,6 +38,11 @@ class AuthService {
             'ciudad': ?city,
           },
         );
+
+        // Close the automatic session so login remains an explicit action.
+        if (response.session != null) {
+          await _supabaseClient.auth.signOut();
+        }
       },
     );
   }

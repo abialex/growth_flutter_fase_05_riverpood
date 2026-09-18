@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/register_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/register/states/register_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/widgets/app_validated_field.dart';
+import 'package:router_core/router_core.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -54,6 +57,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<RegisterState>(registerNotifierProvider, (previous, next) {
+      if (next is RegisterSuccessState && context.mounted) {
+        context.go(AppRoute.login.path);
+      }
+    });
+
     final registerState = ref.watch(registerNotifierProvider);
     final isLoading = registerState is RegisterLoadingState;
 
