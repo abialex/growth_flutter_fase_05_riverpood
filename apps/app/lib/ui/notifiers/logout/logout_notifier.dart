@@ -42,6 +42,7 @@ class LogoutNotifier extends Notifier<LogoutState> {
 
   void _clearAuthenticatedState() {
     ref
+      ..invalidate(loginNotifierProvider)
       ..invalidate(eventsNotifierProvider)
       ..invalidate(eventDetailNotifierProvider)
       ..invalidate(createReservationNotifierProvider)
