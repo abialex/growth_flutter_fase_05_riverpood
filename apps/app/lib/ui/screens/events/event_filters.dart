@@ -8,8 +8,9 @@ final class EventFilters {
   EventFilters({
     Iterable<String> selectedSports = const <String>[],
     this.selectedCity,
-    this.fromDate,
-  }) : selectedSports = Set.unmodifiable(selectedSports);
+    DateTime? fromDate,
+  }) : selectedSports = Set.unmodifiable(selectedSports),
+       fromDate = fromDate == null ? null : _dateOnly(fromDate);
 
   /// Sports that an event must match. An empty set matches every sport.
   final Set<String> selectedSports;
@@ -72,9 +73,16 @@ final class EventFilters {
       return false;
     }
     final selectedFromDate = fromDate;
-    if (selectedFromDate != null && event.date.isBefore(selectedFromDate)) {
+    if (selectedFromDate != null &&
+        _dateOnly(event.date).isBefore(selectedFromDate)) {
       return false;
     }
     return true;
   }
+}
+
+/// Returns a copy of [value] with the time set to midnight.
+/// This is used to compare dates without considering the time of day.
+DateTime _dateOnly(DateTime value) {
+  return DateTime(value.year, value.month, value.day);
 }
