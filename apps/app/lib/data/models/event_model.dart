@@ -66,5 +66,5 @@ EventStatus _parseEventStatus(dynamic value) =>
       'abierto' => EventStatus.open,
       'cerrado' => EventStatus.closed,
       'finalizado' => EventStatus.finished,
-      _ => EventStatus.open,
+      _ => EventStatus.unknown,
     };

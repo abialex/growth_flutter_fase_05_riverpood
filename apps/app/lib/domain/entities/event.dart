@@ -31,6 +31,19 @@ final class Event {
   final EventStatus status;
   final String? description;
 
+  /// Whether the event currently accepts reservations.
+  bool get canAcceptReservations {
+    return status == EventStatus.open && availableSlots > 0;
+  }
+
+  /// Returns a display label for the event status.
+  String get statusDisplay => switch (status) {
+    EventStatus.open => 'abierto',
+    EventStatus.closed => 'cerrado',
+    EventStatus.finished => 'finalizado',
+    EventStatus.unknown => 'desconocido',
+  };
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||

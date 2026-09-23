@@ -8,4 +8,7 @@ enum EventStatus {
 
   /// The event has already ended.
   finished,
+
+  /// The backend returned a status that this app does not know.
+  unknown,
 }
