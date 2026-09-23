@@ -16,7 +16,10 @@ class EventDetailContent extends StatelessWidget {
   }
 
   String get _formattedTime {
-    return event.time.length >= 5 ? event.time.substring(0, 5) : event.time;
+    if (event.time.length < 5) {
+      return event.time;
+    }
+    return event.time.substring(0, 5);
   }
 
   @override

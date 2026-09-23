@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/create_reservation_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/create_reservation_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/create_reservation_success_state.dart';
@@ -19,6 +20,20 @@ class ReservationSection extends ConsumerWidget {
 
   final Event event;
   final bool isReserved;
+
+  String get _reservationButtonLabel {
+    if (event.status == EventStatus.unknown) {
+      return 'Estado desconocido';
+    }
+    if (event.availableSlots <= 0) {
+      return 'Sin cupos disponibles';
+    }
+    if (!event.canAcceptReservations) {
+      return 'Reservas cerradas';
+    }
+
+    return 'Reservar cupo';
+  }
 
   void _onCreateReservation(WidgetRef ref) {
     unawaited(
@@ -35,7 +50,7 @@ class ReservationSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final createReservationState = ref.watch(createReservationNotifierProvider);
     final isLoading = createReservationState is CreateReservationLoadingState;
-    final hasNoAvailableSlots = event.availableSlots <= 0;
+    final canReserve = event.canAcceptReservations;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,12 +79,8 @@ class ReservationSection extends ConsumerWidget {
           )
         else
           AppButton(
-            label: hasNoAvailableSlots
-                ? 'Sin cupos disponibles'
-                : 'Reservar cupo',
-            onPressed: hasNoAvailableSlots
-                ? null
-                : () => _onCreateReservation(ref),
+            label: _reservationButtonLabel,
+            onPressed: canReserve ? () => _onCreateReservation(ref) : null,
           ),
       ],
     );
