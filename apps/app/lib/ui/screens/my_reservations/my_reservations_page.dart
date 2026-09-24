@@ -7,11 +7,14 @@ import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dar
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/logout_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/my_reservations_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_loaded_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/states/my_reservations_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/confirm_purchase_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/confirm_purchase_error_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/confirm_purchase_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/confirm_purchase_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/my_reservations/widgets/reservation_card.dart';
@@ -46,6 +49,14 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
     );
   }
 
+  void _onConfirmPurchase(String reservationId) {
+    unawaited(
+      ref
+          .read(confirmPurchaseNotifierProvider.notifier)
+          .onConfirmPurchase(reservationId),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ref
@@ -54,10 +65,41 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
         next,
       ) {
         if (next is ConfirmPurchaseSuccessState) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Compra confirmada correctamente')),
+            );
+          }
           unawaited(
             ref
                 .read(myReservationsNotifierProvider.notifier)
                 .loadMyReservations(),
+          );
+          ref.read(confirmPurchaseNotifierProvider.notifier).reset();
+        }
+      })
+      ..listen<MyReservationsState>(myReservationsNotifierProvider, (
+        previous,
+        next,
+      ) {
+        final previousFailure = previous is MyReservationsLoadedState
+            ? previous.refreshFailure
+            : null;
+        final nextFailure = next is MyReservationsLoadedState
+            ? next.refreshFailure
+            : null;
+
+        if (nextFailure != null && nextFailure != previousFailure && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(nextFailure.message),
+              action: nextFailure.isRetryable
+                  ? SnackBarAction(
+                      label: 'Reintentar',
+                      onPressed: _onRetryReservations,
+                    )
+                  : null,
+            ),
           );
         }
       })
@@ -72,6 +114,7 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
     final isLoggingOut =
         ref.watch(logoutNotifierProvider) is LogoutLoadingState;
     final myReservationsState = ref.watch(myReservationsNotifierProvider);
+    final confirmPurchaseState = ref.watch(confirmPurchaseNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -91,14 +134,22 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
           ),
           child: SizedBox(
             width: double.infinity,
-            child: _buildBody(context, myReservationsState),
+            child: _buildBody(
+              context,
+              myReservationsState,
+              confirmPurchaseState,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context, Object myReservationsState) {
+  Widget _buildBody(
+    BuildContext context,
+    Object myReservationsState,
+    ConfirmPurchaseState confirmPurchaseState,
+  ) {
     if (myReservationsState is MyReservationsInitialState ||
         myReservationsState is MyReservationsLoadingState) {
       return const Center(
@@ -122,7 +173,9 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
     }
 
     if (myReservationsState is MyReservationsLoadedState) {
-      if (myReservationsState.reservations.isEmpty) {
+      final reservationsData = myReservationsState.data;
+
+      if (reservationsData.reservations.isEmpty) {
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
@@ -137,19 +190,43 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
         );
       }
 
-      return ListView.separated(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        itemCount: myReservationsState.reservations.length,
-        separatorBuilder: (context, index) =>
-            const SizedBox(height: AppSpacing.md),
-        itemBuilder: (context, index) {
-          final reservation = myReservationsState.reservations[index];
-          return ReservationCard(
-            reservation: reservation,
-            event: myReservationsState.eventsById[reservation.eventId],
-            ticket: myReservationsState.ticketsByReservationId[reservation.id],
-          );
-        },
+      return Stack(
+        children: [
+          ListView.separated(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            itemCount: reservationsData.reservations.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.md),
+            itemBuilder: (context, index) {
+              final reservation = reservationsData.reservations[index];
+              final isConfirmingPurchase =
+                  confirmPurchaseState is ConfirmPurchaseLoadingState &&
+                  confirmPurchaseState.reservationId == reservation.id;
+              final purchaseErrorMessage =
+                  confirmPurchaseState is ConfirmPurchaseErrorState &&
+                      confirmPurchaseState.reservationId == reservation.id
+                  ? confirmPurchaseState.failure.message
+                  : null;
+
+              return ReservationCard(
+                isLoading:
+                    isConfirmingPurchase || myReservationsState.isRefreshing,
+                reservation: reservation,
+                event: reservationsData.eventsById[reservation.eventId],
+                ticket: reservationsData.ticketsByReservationId[reservation.id],
+                purchaseErrorMessage: purchaseErrorMessage,
+                onConfirmPurchase: () => _onConfirmPurchase(reservation.id),
+              );
+            },
+          ),
+          if (myReservationsState.isRefreshing)
+            const Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: LinearProgressIndicator(),
+            ),
+        ],
       );
     }
 
