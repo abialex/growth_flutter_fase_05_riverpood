@@ -15,6 +15,7 @@ import 'package:growth_flutter_fase_05_riverpood/data/services/events_service.da
 import 'package:growth_flutter_fase_05_riverpood/data/services/purchase_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/reservations_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/tickets_service.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/purchase_repository.dart';
@@ -28,6 +29,7 @@ import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/load_my_reserv
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/login_use_case.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/logout_use_case.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/register_use_case.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/auth/auth_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/event_detail_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/event_detail_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/events_notifier.dart';
@@ -173,6 +175,10 @@ final logoutUseCaseProvider = Provider<LogoutUseCase>(
 );
 
 // Presentation notifiers.
+final authNotifierProvider = NotifierProvider<AuthNotifier, AuthStatus>(
+  AuthNotifier.new,
+);
+
 final loginNotifierProvider = NotifierProvider<LoginNotifier, LoginState>(
   LoginNotifier.new,
 );
