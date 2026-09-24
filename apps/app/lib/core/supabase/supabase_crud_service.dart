@@ -1,5 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/parsing_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -184,6 +185,14 @@ class SupabaseCrudService<ModelType> {
     try {
       final value = await action();
       return Success(value);
+    } on ParsingFailure catch (failure, stackTrace) {
+      _logger.logParsingError(
+        operation: operation,
+        resource: _tableName,
+        failure: failure,
+        stackTrace: stackTrace,
+      );
+      return Failure(_failureMapper.map(failure));
     } on PostgrestException catch (exception, stackTrace) {
       _logger.logPostgrestError(
         operation: operation,

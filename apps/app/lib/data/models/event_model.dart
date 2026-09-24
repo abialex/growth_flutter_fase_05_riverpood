@@ -20,17 +20,27 @@ final class EventModel {
 
   /// Creates a model from a Supabase row without assuming JSON types.
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
-    id: parseStringSafe(json['id']),
-    name: parseStringSafe(json['nombre']),
-    sport: parseStringSafe(json['deporte']),
-    date: parseDateTimeSafe(json['fecha']),
-    time: parseStringSafe(json['hora']),
-    city: parseStringSafe(json['ciudad']),
-    venue: parseStringSafe(json['lugar']),
-    totalSlots: parseIntSafe(json['cupos_totales']),
-    availableSlots: parseIntSafe(json['cupos_disponibles']),
-    status: _parseEventStatus(json['estado']),
-    description: parseNullableStringSafe(json['descripcion']),
+    id: parseRequiredString(json['id'], field: 'id'),
+    name: parseRequiredString(json['nombre'], field: 'nombre'),
+    sport: parseRequiredString(json['deporte'], field: 'deporte'),
+    date: parseRequiredDateTime(json['fecha'], field: 'fecha'),
+    time: parseRequiredString(json['hora'], field: 'hora'),
+    city: parseRequiredString(json['ciudad'], field: 'ciudad'),
+    venue: parseRequiredString(json['lugar'], field: 'lugar'),
+    totalSlots: parseRequiredInt(
+      json['cupos_totales'],
+      field: 'cupos_totales',
+      minimum: 0,
+    ),
+    availableSlots: parseRequiredInt(
+      json['cupos_disponibles'],
+      field: 'cupos_disponibles',
+      minimum: 0,
+    ),
+    status: _parseEventStatus(
+      parseRequiredString(json['estado'], field: 'estado'),
+    ),
+    description: parseOptionalString(json['descripcion']),
   );
 
   final String id;
@@ -61,10 +71,9 @@ final class EventModel {
   );
 }
 
-EventStatus _parseEventStatus(dynamic value) =>
-    switch (parseStringSafe(value)) {
-      'abierto' => EventStatus.open,
-      'cerrado' => EventStatus.closed,
-      'finalizado' => EventStatus.finished,
-      _ => EventStatus.unknown,
-    };
+EventStatus _parseEventStatus(String value) => switch (value) {
+  'abierto' => EventStatus.open,
+  'cerrado' => EventStatus.closed,
+  'finalizado' => EventStatus.finished,
+  _ => EventStatus.unknown,
+};
