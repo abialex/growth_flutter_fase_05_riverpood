@@ -41,4 +41,10 @@ class RegisterNotifier extends Notifier<RegisterState> {
       Failure(failure: final appFailure) => RegisterErrorState(appFailure),
     };
   }
+
+  /// Resets the transient registration result after it is consumed by the UI.
+  void reset() {
+    _operationGuard.cancel();
+    state = const RegisterInitialState();
+  }
 }

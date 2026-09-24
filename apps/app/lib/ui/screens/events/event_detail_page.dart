@@ -52,12 +52,18 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
       next,
     ) {
       if (next is CreateReservationSuccessState) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Reserva creada correctamente')),
+          );
+        }
         unawaited(
           ref
               .read(eventDetailNotifierProvider.notifier)
               .loadEvent(widget.eventId),
         );
         unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
+        ref.read(createReservationNotifierProvider.notifier).reset();
       }
     });
 

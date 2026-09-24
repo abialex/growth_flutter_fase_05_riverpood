@@ -8,7 +8,6 @@ import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/create_reservation_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/create_reservation_loading_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/create_reservation_success_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 
 class ReservationSection extends ConsumerWidget {
@@ -62,17 +61,8 @@ class ReservationSection extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.md),
         ],
-        if (createReservationState is CreateReservationSuccessState) ...[
-          const AppBanner(
-            message: 'Reserva creada correctamente',
-            variant: AppBannerVariant.success,
-          ),
-          const SizedBox(height: AppSpacing.md),
-        ],
         if (isLoading)
           const Center(child: AppLoader(message: 'Procesando reserva...'))
-        else if (createReservationState is CreateReservationSuccessState)
-          const SizedBox.shrink()
         else if (isReserved)
           const AppBanner(
             message: 'Ya tienes una reserva para este evento.',

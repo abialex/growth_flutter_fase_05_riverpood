@@ -37,6 +37,7 @@ class LogoutNotifier extends Notifier<LogoutState> {
 
     if (result case Success()) {
       _clearAuthenticatedState();
+      state = const LogoutInitialState();
     }
   }
 
