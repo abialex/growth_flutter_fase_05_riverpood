@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/data/repositories/events_repository_impl.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/events_service.dart';
@@ -43,6 +44,6 @@ final eventsNotifierProvider = NotifierProvider<EventsNotifier, EventsState>(
 );
 
 final eventDetailNotifierProvider =
-    NotifierProvider<EventDetailNotifier, EventDetailState>(
+    NotifierProvider.family<EventDetailNotifier, EventDetailState, String>(
       EventDetailNotifier.new,
     );

@@ -28,20 +28,12 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      ref.read(createReservationNotifierProvider.notifier).reset();
-      unawaited(
-        ref
-            .read(eventDetailNotifierProvider.notifier)
-            .loadEvent(widget.eventId),
-      );
-    });
+    ref.read(createReservationNotifierProvider.notifier).reset();
   }
 
   void _onRetryEvent() {
     unawaited(
-      ref.read(eventDetailNotifierProvider.notifier).loadEvent(widget.eventId),
+      ref.read(eventDetailNotifierProvider(widget.eventId).notifier).onRetry(),
     );
   }
 
@@ -59,15 +51,17 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
         }
         unawaited(
           ref
-              .read(eventDetailNotifierProvider.notifier)
-              .loadEvent(widget.eventId),
+              .read(eventDetailNotifierProvider(widget.eventId).notifier)
+              .onRetry(),
         );
         unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
         ref.read(createReservationNotifierProvider.notifier).reset();
       }
     });
 
-    final eventDetailState = ref.watch(eventDetailNotifierProvider);
+    final eventDetailState = ref.watch(
+      eventDetailNotifierProvider(widget.eventId),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detalle del evento')),
