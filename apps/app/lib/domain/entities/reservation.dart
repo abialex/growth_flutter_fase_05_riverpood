@@ -21,6 +21,16 @@ final class Reservation {
   final ReservationStatus status;
   final DateTime reservedAt;
 
+  /// Whether the reservation can be completed with a purchase.
+  bool get canConfirmPurchase => status != ReservationStatus.cancelled;
+
+  /// Returns the display label for the reservation status.
+  String get statusDisplay => switch (status) {
+    ReservationStatus.pending => 'pendiente',
+    ReservationStatus.confirmed => 'confirmada',
+    ReservationStatus.cancelled => 'cancelada',
+  };
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
