@@ -1,25 +1,19 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_status.dart';
 
 class ReservationCard extends StatelessWidget {
   const ReservationCard({
-    required this.reservation,
-    required this.event,
-    required this.ticket,
+    required this.reservationDetails,
     required this.purchaseErrorMessage,
     required this.onConfirmPurchase,
     required this.isLoading,
     super.key,
   });
 
-  final Reservation reservation;
-  final Event? event;
-  final Ticket? ticket;
+  final ReservationWithDetails reservationDetails;
   final String? purchaseErrorMessage;
   final VoidCallback onConfirmPurchase;
   final bool isLoading;
@@ -32,8 +26,9 @@ class ReservationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final event = this.event;
-    final ticket = this.ticket;
+    final reservation = reservationDetails.reservation;
+    final event = reservationDetails.event;
+    final ticket = reservationDetails.ticket;
     final purchaseErrorMessage = this.purchaseErrorMessage;
 
     return AppCard(
@@ -45,7 +40,7 @@ class ReservationCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  event?.name ?? 'Evento no encontrado',
+                  event.name,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -61,13 +56,11 @@ class ReservationCard extends StatelessWidget {
               ),
             ],
           ),
-          if (event != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              '${_formattedDate(event.date)} · '
-              '${event.venue}, ${event.city}',
-            ),
-          ],
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            '${_formattedDate(event.date)} · '
+            '${event.venue}, ${event.city}',
+          ),
           const SizedBox(height: AppSpacing.xs),
           Text('Cupos reservados: ${reservation.seatCount}'),
           if (purchaseErrorMessage != null) ...[

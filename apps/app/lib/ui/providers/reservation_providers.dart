@@ -13,7 +13,6 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/my
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/create_reservation_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/create_reservation_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/core_providers.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/event_providers.dart';
 
 final reservationsServiceProvider = Provider<ReservationsService>(
   (ref) => ReservationsService(
@@ -42,8 +41,6 @@ final ticketsRepositoryProvider = Provider<TicketsRepository>(
 final loadMyReservationsUseCaseProvider = Provider<LoadMyReservationsUseCase>(
   (ref) => LoadMyReservationsUseCase(
     reservationsRepository: ref.watch(reservationsRepositoryProvider),
-    eventsRepository: ref.watch(eventsRepositoryProvider),
-    ticketsRepository: ref.watch(ticketsRepositoryProvider),
   ),
 );
 

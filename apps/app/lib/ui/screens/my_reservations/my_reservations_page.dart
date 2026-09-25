@@ -173,9 +173,9 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
     }
 
     if (myReservationsState is MyReservationsLoadedState) {
-      final reservationsData = myReservationsState.data;
+      final reservations = myReservationsState.reservations;
 
-      if (reservationsData.reservations.isEmpty) {
+      if (reservations.isEmpty) {
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
@@ -194,11 +194,12 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
         children: [
           ListView.separated(
             padding: const EdgeInsets.all(AppSpacing.md),
-            itemCount: reservationsData.reservations.length,
+            itemCount: reservations.length,
             separatorBuilder: (context, index) =>
                 const SizedBox(height: AppSpacing.md),
             itemBuilder: (context, index) {
-              final reservation = reservationsData.reservations[index];
+              final reservationDetails = reservations[index];
+              final reservation = reservationDetails.reservation;
               final isConfirmingPurchase =
                   confirmPurchaseState is ConfirmPurchaseLoadingState &&
                   confirmPurchaseState.reservationId == reservation.id;
@@ -211,9 +212,7 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
               return ReservationCard(
                 isLoading:
                     isConfirmingPurchase || myReservationsState.isRefreshing,
-                reservation: reservation,
-                event: reservationsData.eventsById[reservation.eventId],
-                ticket: reservationsData.ticketsByReservationId[reservation.id],
+                reservationDetails: reservationDetails,
                 purchaseErrorMessage: purchaseErrorMessage,
                 onConfirmPurchase: () => _onConfirmPurchase(reservation.id),
               );

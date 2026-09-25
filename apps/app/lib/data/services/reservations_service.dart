@@ -4,7 +4,9 @@ import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_crud_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/models/reservation_model.dart';
+import 'package:growth_flutter_fase_05_riverpood/data/models/reservation_with_details_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Performs reservation data operations through Supabase.
@@ -45,6 +47,22 @@ class ReservationsService {
   /// Fetches reservations belonging to the current user.
   Future<Result<List<Reservation>, AppFailure>> fetchMyReservations() async {
     final result = await _crudService.fetchAll(orderByColumn: 'fecha_reserva');
+    return switch (result) {
+      Success(value: final models) => Success(
+        models.map((model) => model.toEntity()).toList(),
+      ),
+      Failure(failure: final appFailure) => Failure(appFailure),
+    };
+  }
+
+  /// Fetches the current user's reservations with related details.
+  Future<Result<List<ReservationWithDetails>, AppFailure>>
+  fetchMyReservationsWithDetails() async {
+    final result = await _crudService.callRpcList<ReservationWithDetailsModel>(
+      functionName: 'get_my_reservations_with_details',
+      parameters: const {},
+      fromJson: ReservationWithDetailsModel.fromJson,
+    );
     return switch (result) {
       Success(value: final models) => Success(
         models.map((model) => model.toEntity()).toList(),

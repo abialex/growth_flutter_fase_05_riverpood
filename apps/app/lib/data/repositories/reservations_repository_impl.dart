@@ -2,6 +2,7 @@ import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/data/services/reservations_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 
 /// Implements [ReservationsRepository] with the reservation data service.
@@ -25,5 +26,11 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
   @override
   Future<Result<List<Reservation>, AppFailure>> getMyReservations() {
     return _reservationsService.fetchMyReservations();
+  }
+
+  @override
+  Future<Result<List<ReservationWithDetails>, AppFailure>>
+  getMyReservationsWithDetails() {
+    return _reservationsService.fetchMyReservationsWithDetails();
   }
 }

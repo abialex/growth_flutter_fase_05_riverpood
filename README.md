@@ -58,6 +58,8 @@ En el SQL Editor de Supabase, ejecuta los scripts en este orden:
 5. `supabase/scripts/005-seed-eventos.sql`: carga los eventos de demostración.
 6. `supabase/scripts/006-ajustar-rls-usuarios.sql`: aplica el `WITH CHECK`
    explícito para actualizar el perfil del usuario.
+7. `supabase/scripts/007-funcion-mis-reservas.sql`: crea la consulta RPC que
+   devuelve cada reserva del usuario con su evento y ticket opcional.
 
 
 ## Arquitectura

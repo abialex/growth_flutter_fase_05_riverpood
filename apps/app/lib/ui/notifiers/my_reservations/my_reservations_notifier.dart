@@ -27,7 +27,7 @@ class MyReservationsNotifier extends Notifier<MyReservationsState> {
       state = const MyReservationsLoadingState();
     } else {
       state = MyReservationsLoadedState(
-        data: previousLoadedState.data,
+        reservations: previousLoadedState.reservations,
         isRefreshing: true,
       );
     }
@@ -38,16 +38,20 @@ class MyReservationsNotifier extends Notifier<MyReservationsState> {
 
     if (previousLoadedState == null) {
       state = switch (result) {
-        Success(value: final data) => MyReservationsLoadedState(data: data),
+        Success(value: final reservations) => MyReservationsLoadedState(
+          reservations: reservations,
+        ),
         Failure(failure: final failure) => MyReservationsErrorState(failure),
       };
       return;
     }
 
     state = switch (result) {
-      Success(value: final data) => MyReservationsLoadedState(data: data),
+      Success(value: final reservations) => MyReservationsLoadedState(
+        reservations: reservations,
+      ),
       Failure(failure: final failure) => MyReservationsLoadedState(
-        data: previousLoadedState.data,
+        reservations: previousLoadedState.reservations,
         refreshFailure: failure,
       ),
     };
