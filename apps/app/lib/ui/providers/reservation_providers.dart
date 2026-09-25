@@ -7,6 +7,7 @@ import 'package:growth_flutter_fase_05_riverpood/data/services/tickets_service.d
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/tickets_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/create_reservation_use_case.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/evaluate_reservation_eligibility_use_case.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/load_my_reservations_use_case.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/my_reservations_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/my_reservations/my_reservations_state.dart';
@@ -49,6 +50,11 @@ final createReservationUseCaseProvider = Provider<CreateReservationUseCase>(
     reservationsRepository: ref.watch(reservationsRepositoryProvider),
   ),
 );
+
+final evaluateReservationEligibilityUseCaseProvider =
+    Provider<EvaluateReservationEligibilityUseCase>(
+      (ref) => const EvaluateReservationEligibilityUseCase(),
+    );
 
 final createReservationNotifierProvider =
     NotifierProvider<CreateReservationNotifier, CreateReservationState>(

@@ -76,7 +76,7 @@ class ReservationCard extends StatelessWidget {
               'Código de ticket: ${ticket.code}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
-          ] else if (reservation.canConfirmPurchase) ...[
+          ] else if (reservationDetails.canConfirmPurchase) ...[
             const SizedBox(height: AppSpacing.sm),
             if (isLoading)
               const Center(child: AppLoader(message: 'Confirmando compra...'))

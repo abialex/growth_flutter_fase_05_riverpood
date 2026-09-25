@@ -111,8 +111,8 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
             EventDetailContent(event: eventDetailState.event),
             const SizedBox(height: AppSpacing.lg),
             ReservationSection(
-              event: eventDetailState.event,
-              isReserved: eventDetailState.isReserved,
+              eventId: eventDetailState.event.id,
+              eligibility: eventDetailState.reservationEligibility,
             ),
           ],
         ),

@@ -36,9 +36,16 @@ class EventDetailNotifier extends Notifier<EventDetailState> {
 
     switch (result) {
       case Success(value: final data):
+        final evaluateReservationEligibility = ref.read(
+          evaluateReservationEligibilityUseCaseProvider,
+        );
         state = EventDetailLoadedState(
-          data.event,
-          isReserved: data.isReserved,
+          event: data.event,
+          reservationEligibility: evaluateReservationEligibility(
+            event: data.event,
+            isReserved: data.isReserved,
+            seatCount: 1,
+          ),
         );
       case Failure(failure: final appFailure):
         state = EventDetailErrorState(appFailure);
