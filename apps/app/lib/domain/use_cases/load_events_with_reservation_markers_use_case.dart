@@ -6,10 +6,10 @@ import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repo
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/events_data.dart';
 
-/// Loads events and the current user's reservation markers.
-final class LoadEventsUseCase {
-  /// Creates a use case with the repositories required by the flow.
-  const LoadEventsUseCase({
+/// Combines events with the current user's reservation markers.
+final class LoadEventsWithReservationMarkersUseCase {
+  /// Creates a use case for the events overview data.
+  const LoadEventsWithReservationMarkersUseCase({
     required EventsRepository eventsRepository,
     required ReservationsRepository reservationsRepository,
   }) : _eventsRepository = eventsRepository,
@@ -18,7 +18,7 @@ final class LoadEventsUseCase {
   final EventsRepository _eventsRepository;
   final ReservationsRepository _reservationsRepository;
 
-  /// Loads the events displayed by the events screen.
+  /// Loads events and marks those already reserved by the current user.
   Future<Result<EventsData, AppFailure>> call() async {
     final eventsResult = await _eventsRepository.getEvents();
     return switch (eventsResult) {

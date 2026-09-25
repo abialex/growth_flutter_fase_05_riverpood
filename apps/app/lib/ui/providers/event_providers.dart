@@ -5,7 +5,7 @@ import 'package:growth_flutter_fase_05_riverpood/data/repositories/events_reposi
 import 'package:growth_flutter_fase_05_riverpood/data/services/events_service.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/load_event_detail_use_case.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/load_events_use_case.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/load_events_with_reservation_markers_use_case.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/event_detail_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/event_detail/event_detail_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/events_notifier.dart';
@@ -25,12 +25,13 @@ final eventsRepositoryProvider = Provider<EventsRepository>(
   (ref) => EventsRepositoryImpl(ref.watch(eventsServiceProvider)),
 );
 
-final loadEventsUseCaseProvider = Provider<LoadEventsUseCase>(
-  (ref) => LoadEventsUseCase(
-    eventsRepository: ref.watch(eventsRepositoryProvider),
-    reservationsRepository: ref.watch(reservationsRepositoryProvider),
-  ),
-);
+final loadEventsWithReservationMarkersUseCaseProvider =
+    Provider<LoadEventsWithReservationMarkersUseCase>(
+      (ref) => LoadEventsWithReservationMarkersUseCase(
+        eventsRepository: ref.watch(eventsRepositoryProvider),
+        reservationsRepository: ref.watch(reservationsRepositoryProvider),
+      ),
+    );
 
 final loadEventDetailUseCaseProvider = Provider<LoadEventDetailUseCase>(
   (ref) => LoadEventDetailUseCase(
@@ -43,7 +44,8 @@ final eventsNotifierProvider = NotifierProvider<EventsNotifier, EventsState>(
   EventsNotifier.new,
 );
 
-final eventDetailNotifierProvider =
+final NotifierProviderFamily<EventDetailNotifier, EventDetailState, String>
+eventDetailNotifierProvider =
     NotifierProvider.family<EventDetailNotifier, EventDetailState, String>(
       EventDetailNotifier.new,
     );
