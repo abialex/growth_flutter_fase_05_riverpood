@@ -1,4 +1,3 @@
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:meta/meta.dart';
 
 /// Describes the filters applied to the events list.
@@ -62,19 +61,4 @@ final class EventFilters {
 
   /// Returns an empty filter set.
   EventFilters clear() => EventFilters();
-
-  /// Whether [event] satisfies every active filter.
-  bool matches(Event event) {
-    if (selectedSports.isNotEmpty && !selectedSports.contains(event.sport)) {
-      return false;
-    }
-    if (selectedCity != null && event.city != selectedCity) {
-      return false;
-    }
-    final selectedFromDate = fromDate;
-    if (selectedFromDate != null && event.date.isBefore(selectedFromDate)) {
-      return false;
-    }
-    return true;
-  }
 }

@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 
 class EventsFilterBar extends StatefulWidget {
   const EventsFilterBar({
