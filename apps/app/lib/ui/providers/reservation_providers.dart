@@ -56,8 +56,12 @@ final evaluateReservationEligibilityUseCaseProvider =
       (ref) => const EvaluateReservationEligibilityUseCase(),
     );
 
-final createReservationNotifierProvider =
-    NotifierProvider<CreateReservationNotifier, CreateReservationState>(
+final NotifierProvider<CreateReservationNotifier, CreateReservationState>
+createReservationNotifierProvider =
+    NotifierProvider.autoDispose<
+      CreateReservationNotifier,
+      CreateReservationState
+    >(
       CreateReservationNotifier.new,
     );
 

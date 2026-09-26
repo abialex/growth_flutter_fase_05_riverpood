@@ -25,12 +25,6 @@ class EventDetailPage extends ConsumerStatefulWidget {
 }
 
 class _EventDetailPageState extends ConsumerState<EventDetailPage> {
-  @override
-  void initState() {
-    super.initState();
-    ref.read(createReservationNotifierProvider.notifier).reset();
-  }
-
   void _onRetryEvent() {
     unawaited(
       ref.read(eventDetailNotifierProvider(widget.eventId).notifier).onRetry(),
@@ -55,7 +49,6 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
               .onRetry(),
         );
         unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
-        ref.read(createReservationNotifierProvider.notifier).reset();
       }
     });
 

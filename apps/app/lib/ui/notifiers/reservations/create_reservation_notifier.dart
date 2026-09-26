@@ -39,9 +39,4 @@ class CreateReservationNotifier extends Notifier<CreateReservationState> {
       ),
     };
   }
-
-  void reset() {
-    _operationGuard.cancel();
-    state = const CreateReservationInitialState();
-  }
 }
