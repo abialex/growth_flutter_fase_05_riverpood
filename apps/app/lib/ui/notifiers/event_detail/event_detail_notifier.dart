@@ -43,7 +43,7 @@ class EventDetailNotifier extends Notifier<EventDetailState> {
           event: data.event,
           reservationEligibility: evaluateReservationEligibility(
             event: data.event,
-            isReserved: data.isReserved,
+            reservationDetails: data.reservationDetails,
             seatCount: 1,
           ),
         );

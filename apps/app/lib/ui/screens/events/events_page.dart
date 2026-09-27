@@ -4,6 +4,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_reservation_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_initial_state.dart';
@@ -206,12 +207,16 @@ class _EventsPageState extends ConsumerState<EventsPage> {
                     itemCount: filteredEvents.length,
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: AppSpacing.md),
-                    itemBuilder: (context, index) => EventCard(
-                      event: filteredEvents[index],
-                      isReserved: eventsState.reservedEventIds.contains(
-                        filteredEvents[index].id,
-                      ),
-                    ),
+                    itemBuilder: (context, index) {
+                      final event = filteredEvents[index];
+                      final reservationStatus =
+                          eventsState.eventReservationStatuses[event.id] ??
+                          EventReservationStatus.none;
+                      return EventCard(
+                        event: event,
+                        reservationStatus: reservationStatus,
+                      );
+                    },
                   ),
           ),
         ],

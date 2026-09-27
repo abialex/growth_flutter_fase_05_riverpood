@@ -1,5 +1,6 @@
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_eligibility.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_eligibility_status.dart';
 
@@ -11,7 +12,7 @@ final class EvaluateReservationEligibilityUseCase {
   /// Evaluates the reservation request for [event] and [seatCount].
   ReservationEligibility call({
     required Event event,
-    required bool isReserved,
+    required ReservationWithDetails? reservationDetails,
     required int seatCount,
   }) {
     // Reject requests that do not include a positive number of seats.
@@ -21,8 +22,15 @@ final class EvaluateReservationEligibilityUseCase {
       );
     }
 
+    // Prevent a second purchase when the reservation already has a ticket.
+    if (reservationDetails?.ticket != null) {
+      return const ReservationEligibility(
+        status: ReservationEligibilityStatus.ticketPurchased,
+      );
+    }
+
     // Prevent the user from creating a second reservation for the same event.
-    if (isReserved) {
+    if (reservationDetails != null) {
       return const ReservationEligibility(
         status: ReservationEligibilityStatus.alreadyReserved,
       );

@@ -6,6 +6,9 @@ enum ReservationEligibilityStatus {
   /// The current user already has an active reservation for the event.
   alreadyReserved,
 
+  /// The current user already purchased a ticket for the event.
+  ticketPurchased,
+
   /// The requested seat count is invalid.
   invalidSeatCount,
 

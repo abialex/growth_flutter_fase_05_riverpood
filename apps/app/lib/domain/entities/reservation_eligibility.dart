@@ -20,11 +20,18 @@ final class ReservationEligibility {
     return status == ReservationEligibilityStatus.alreadyReserved;
   }
 
+  /// Whether the current user already purchased a ticket for this event.
+  bool get isTicketPurchased {
+    return status == ReservationEligibilityStatus.ticketPurchased;
+  }
+
   /// Returns the action label or blocking message for the reservation area.
   String get actionLabel => switch (status) {
     ReservationEligibilityStatus.available => 'Reservar cupo',
     ReservationEligibilityStatus.alreadyReserved =>
       'Ya tienes una reserva para este evento.',
+    ReservationEligibilityStatus.ticketPurchased =>
+      'Ya compraste un ticket para este evento.',
     ReservationEligibilityStatus.invalidSeatCount => 'Cantidad no válida',
     ReservationEligibilityStatus.unknownEventStatus => 'Estado desconocido',
     ReservationEligibilityStatus.noAvailableSlots => 'Sin cupos disponibles',

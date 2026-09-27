@@ -38,7 +38,7 @@ class EventsNotifier extends Notifier<EventsState> {
             events: eventsData.events,
             filters: _activeFilters,
           ),
-          reservedEventIds: eventsData.reservedEventIds,
+          eventReservationStatuses: eventsData.eventReservationStatuses,
         );
       case Failure(failure: final appFailure):
         state = EventsErrorState(appFailure);
@@ -58,7 +58,7 @@ class EventsNotifier extends Notifier<EventsState> {
         events: currentState.events,
         filters: _activeFilters,
       ),
-      reservedEventIds: currentState.reservedEventIds,
+      eventReservationStatuses: currentState.eventReservationStatuses,
     );
   }
 }

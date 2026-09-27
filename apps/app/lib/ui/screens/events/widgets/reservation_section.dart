@@ -47,7 +47,7 @@ class ReservationSection extends ConsumerWidget {
         ],
         if (isLoading)
           const Center(child: AppLoader(message: 'Procesando reserva...'))
-        else if (eligibility.isAlreadyReserved)
+        else if (eligibility.isAlreadyReserved || eligibility.isTicketPurchased)
           AppBanner(
             message: eligibility.actionLabel,
           )

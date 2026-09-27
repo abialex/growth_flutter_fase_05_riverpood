@@ -1,7 +1,8 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_reservation_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/events_data.dart';
@@ -18,7 +19,7 @@ final class LoadEventsWithReservationMarkersUseCase {
   final EventsRepository _eventsRepository;
   final ReservationsRepository _reservationsRepository;
 
-  /// Loads events and marks those already reserved by the current user.
+  /// Loads events and marks the current user's reservation or purchase status.
   Future<Result<EventsData, AppFailure>> call() async {
     final eventsResult = await _eventsRepository.getEvents();
     return switch (eventsResult) {
@@ -31,19 +32,31 @@ final class LoadEventsWithReservationMarkersUseCase {
     List<Event> events,
   ) async {
     final reservationsResult = await _reservationsRepository
-        .getMyReservations();
+        .getMyReservationsWithDetails();
     return switch (reservationsResult) {
       Failure(failure: final failure) => Failure(failure),
       Success(value: final reservations) => Success(
         EventsData(
           events: events,
-          reservedEventIds: _getReservedEventIds(reservations),
+          eventReservationStatuses: _getEventReservationStatuses(reservations),
         ),
       ),
     };
   }
 
-  Set<String> _getReservedEventIds(List<Reservation> reservations) {
-    return reservations.map((reservation) => reservation.eventId).toSet();
+  Map<String, EventReservationStatus> _getEventReservationStatuses(
+    List<ReservationWithDetails> reservations,
+  ) {
+    final statuses = <String, EventReservationStatus>{};
+    for (final reservationDetails in reservations) {
+      final eventId = reservationDetails.reservation.eventId;
+      final currentStatus = statuses[eventId];
+      if (currentStatus == EventReservationStatus.purchased) continue;
+
+      statuses[eventId] = reservationDetails.ticket == null
+          ? EventReservationStatus.reserved
+          : EventReservationStatus.purchased;
+    }
+    return statuses;
   }
 }
