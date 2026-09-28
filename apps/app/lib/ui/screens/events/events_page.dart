@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_reservation_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_initial_state.dart';
@@ -13,7 +15,6 @@ import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logo
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/logout/states/logout_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/event_card.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/widgets/events_filter_bar.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/widgets/theme_mode_button.dart';
@@ -47,8 +48,8 @@ class _EventsPageState extends ConsumerState<EventsPage> {
   }
 
   void _onToggleSport(String sport, {required bool isSelected}) {
-    setState(
-      () => _filters = _filters.toggleSport(
+    _onFiltersChanged(
+      _filters.toggleSport(
         sport,
         isSelected: isSelected,
       ),
@@ -56,7 +57,7 @@ class _EventsPageState extends ConsumerState<EventsPage> {
   }
 
   void _onChangeCity(String? city) {
-    setState(() => _filters = _filters.selectCity(city));
+    _onFiltersChanged(_filters.selectCity(city));
   }
 
   Future<void> _onPickDate() async {
@@ -68,16 +69,21 @@ class _EventsPageState extends ConsumerState<EventsPage> {
       lastDate: DateTime(now.year + 2),
     );
     if (picked != null) {
-      setState(() => _filters = _filters.selectFromDate(picked));
+      _onFiltersChanged(_filters.selectFromDate(picked));
     }
   }
 
   void _onClearDate() {
-    setState(() => _filters = _filters.selectFromDate(null));
+    _onFiltersChanged(_filters.selectFromDate(null));
   }
 
   void _onClearFilters() {
-    setState(() => _filters = _filters.clear());
+    _onFiltersChanged(_filters.clear());
+  }
+
+  void _onFiltersChanged(EventFilters filters) {
+    setState(() => _filters = filters);
+    ref.read(eventsNotifierProvider.notifier).onApplyFilters(filters);
   }
 
   @override
@@ -167,9 +173,7 @@ class _EventsPageState extends ConsumerState<EventsPage> {
       final availableCities =
           eventsState.events.map((event) => event.city).toSet().toList()
             ..sort();
-      final filteredEvents = eventsState.events
-          .where(_filters.matches)
-          .toList();
+      final filteredEvents = eventsState.filteredEvents;
 
       return Column(
         children: [
@@ -203,12 +207,16 @@ class _EventsPageState extends ConsumerState<EventsPage> {
                     itemCount: filteredEvents.length,
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: AppSpacing.md),
-                    itemBuilder: (context, index) => EventCard(
-                      event: filteredEvents[index],
-                      isReserved: eventsState.reservedEventIds.contains(
-                        filteredEvents[index].id,
-                      ),
-                    ),
+                    itemBuilder: (context, index) {
+                      final event = filteredEvents[index];
+                      final reservationStatus =
+                          eventsState.eventReservationStatuses[event.id] ??
+                          EventReservationStatus.none;
+                      return EventCard(
+                        event: event,
+                        reservationStatus: reservationStatus,
+                      );
+                    },
                   ),
           ),
         ],

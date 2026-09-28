@@ -14,11 +14,19 @@ final class TicketModel {
 
   /// Creates a model from a Supabase row without assuming JSON types.
   factory TicketModel.fromJson(Map<String, dynamic> json) => TicketModel(
-    id: parseStringSafe(json['id']),
-    reservationId: parseStringSafe(json['reserva_id']),
-    code: parseStringSafe(json['codigo']),
-    status: _parseTicketStatus(json['estado']),
-    createdAt: parseDateTimeSafe(json['created_at']),
+    id: parseRequiredString(json['id'], field: 'id'),
+    reservationId: parseRequiredString(
+      json['reserva_id'],
+      field: 'reserva_id',
+    ),
+    code: parseRequiredString(json['codigo'], field: 'codigo'),
+    status: _parseTicketStatus(
+      parseRequiredString(json['estado'], field: 'estado'),
+    ),
+    createdAt: parseRequiredDateTime(
+      json['created_at'],
+      field: 'created_at',
+    ),
   );
 
   final String id;
@@ -37,9 +45,8 @@ final class TicketModel {
   );
 }
 
-TicketStatus _parseTicketStatus(dynamic value) =>
-    switch (parseStringSafe(value)) {
-      'valido' => TicketStatus.valid,
-      'usado' => TicketStatus.used,
-      _ => TicketStatus.valid,
-    };
+TicketStatus _parseTicketStatus(String value) => switch (value) {
+  'valido' => TicketStatus.valid,
+  'usado' => TicketStatus.used,
+  _ => TicketStatus.valid,
+};

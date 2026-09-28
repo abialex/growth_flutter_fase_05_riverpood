@@ -18,19 +18,42 @@ class MyReservationsNotifier extends Notifier<MyReservationsState> {
   }
 
   Future<void> loadMyReservations() async {
+    final previousState = state;
+    final previousLoadedState = previousState is MyReservationsLoadedState
+        ? previousState
+        : null;
     final operationId = _operationGuard.start();
-    state = const MyReservationsLoadingState();
+    if (previousLoadedState == null) {
+      state = const MyReservationsLoadingState();
+    } else {
+      state = MyReservationsLoadedState(
+        reservations: previousLoadedState.reservations,
+        isRefreshing: true,
+      );
+    }
+
     final loadMyReservations = ref.read(loadMyReservationsUseCaseProvider);
     final result = await loadMyReservations();
     if (!_operationGuard.isCurrent(operationId)) return;
 
+    if (previousLoadedState == null) {
+      state = switch (result) {
+        Success(value: final reservations) => MyReservationsLoadedState(
+          reservations: reservations,
+        ),
+        Failure(failure: final failure) => MyReservationsErrorState(failure),
+      };
+      return;
+    }
+
     state = switch (result) {
-      Success(value: final data) => MyReservationsLoadedState(
-        reservations: data.reservations,
-        eventsById: data.eventsById,
-        ticketsByReservationId: data.ticketsByReservationId,
+      Success(value: final reservations) => MyReservationsLoadedState(
+        reservations: reservations,
       ),
-      Failure(failure: final failure) => MyReservationsErrorState(failure),
+      Failure(failure: final failure) => MyReservationsLoadedState(
+        reservations: previousLoadedState.reservations,
+        refreshFailure: failure,
+      ),
     };
   }
 }

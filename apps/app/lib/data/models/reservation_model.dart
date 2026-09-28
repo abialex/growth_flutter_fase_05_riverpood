@@ -16,12 +16,21 @@ final class ReservationModel {
   /// Creates a model from a Supabase row without assuming JSON types.
   factory ReservationModel.fromJson(Map<String, dynamic> json) =>
       ReservationModel(
-        id: parseStringSafe(json['id']),
-        userId: parseStringSafe(json['usuario_id']),
-        eventId: parseStringSafe(json['evento_id']),
-        seatCount: parseIntSafe(json['cantidad_cupos']),
-        status: _parseReservationStatus(json['estado']),
-        reservedAt: parseDateTimeSafe(json['fecha_reserva']),
+        id: parseRequiredString(json['id'], field: 'id'),
+        userId: parseRequiredString(json['usuario_id'], field: 'usuario_id'),
+        eventId: parseRequiredString(json['evento_id'], field: 'evento_id'),
+        seatCount: parseRequiredInt(
+          json['cantidad_cupos'],
+          field: 'cantidad_cupos',
+          minimum: 1,
+        ),
+        status: _parseReservationStatus(
+          parseRequiredString(json['estado'], field: 'estado'),
+        ),
+        reservedAt: parseRequiredDateTime(
+          json['fecha_reserva'],
+          field: 'fecha_reserva',
+        ),
       );
 
   final String id;
@@ -42,10 +51,9 @@ final class ReservationModel {
   );
 }
 
-ReservationStatus _parseReservationStatus(dynamic value) =>
-    switch (parseStringSafe(value)) {
-      'pendiente' => ReservationStatus.pending,
-      'confirmada' => ReservationStatus.confirmed,
-      'cancelada' => ReservationStatus.cancelled,
-      _ => ReservationStatus.pending,
-    };
+ReservationStatus _parseReservationStatus(String value) => switch (value) {
+  'pendiente' => ReservationStatus.pending,
+  'confirmada' => ReservationStatus.confirmed,
+  'cancelada' => ReservationStatus.cancelled,
+  _ => ReservationStatus.pending,
+};

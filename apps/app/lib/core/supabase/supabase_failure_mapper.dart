@@ -1,6 +1,7 @@
 import 'package:growth_flutter_fase_05_riverpood/core/enums/app_failure_type.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/parsing_failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Converts Supabase exceptions into safe application failures.
@@ -15,6 +16,9 @@ final class SupabaseFailureMapper implements FailureMapper {
     }
     if (error is AuthException) {
       return _fromAuthException(error);
+    }
+    if (error is ParsingFailure) {
+      return _fromParsingFailure(error);
     }
     return _fromUnexpectedError();
   }
@@ -32,6 +36,13 @@ final class SupabaseFailureMapper implements FailureMapper {
           ? AppFailureType.network
           : AppFailureType.unauthorized,
       message: _messageFromAuthException(exception),
+    );
+  }
+
+  AppFailure _fromParsingFailure(ParsingFailure failure) {
+    return const AppFailure(
+      failureType: AppFailureType.server,
+      message: 'Los datos recibidos no son válidos. Inténtalo nuevamente.',
     );
   }
 

@@ -1,28 +1,22 @@
-import 'dart:async';
-
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_status.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/confirm_purchase_error_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/reservations/states/confirm_purchase_loading_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 
-class ReservationCard extends ConsumerWidget {
+class ReservationCard extends StatelessWidget {
   const ReservationCard({
-    required this.reservation,
-    required this.event,
-    required this.ticket,
+    required this.reservationDetails,
+    required this.purchaseErrorMessage,
+    required this.onConfirmPurchase,
+    required this.isLoading,
     super.key,
   });
 
-  final Reservation reservation;
-  final Event? event;
-  final Ticket? ticket;
+  final ReservationWithDetails reservationDetails;
+  final String? purchaseErrorMessage;
+  final VoidCallback onConfirmPurchase;
+  final bool isLoading;
 
   String _formattedDate(DateTime date) {
     final day = date.day.toString().padLeft(2, '0');
@@ -30,28 +24,12 @@ class ReservationCard extends ConsumerWidget {
     return '$day/$month/${date.year}';
   }
 
-  void _onConfirmPurchase(WidgetRef ref) {
-    unawaited(
-      ref
-          .read(confirmPurchaseNotifierProvider.notifier)
-          .onConfirmPurchase(reservation.id),
-    );
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final event = this.event;
-    final ticket = this.ticket;
-    final confirmPurchaseState = ref.watch(confirmPurchaseNotifierProvider);
-
-    final isConfirmingReservation =
-        confirmPurchaseState is ConfirmPurchaseLoadingState &&
-        confirmPurchaseState.reservationId == reservation.id;
-    final reservationError =
-        confirmPurchaseState is ConfirmPurchaseErrorState &&
-            confirmPurchaseState.reservationId == reservation.id
-        ? confirmPurchaseState
-        : null;
+  Widget build(BuildContext context) {
+    final reservation = reservationDetails.reservation;
+    final event = reservationDetails.event;
+    final ticket = reservationDetails.ticket;
+    final purchaseErrorMessage = this.purchaseErrorMessage;
 
     return AppCard(
       child: Column(
@@ -62,17 +40,13 @@ class ReservationCard extends ConsumerWidget {
             children: [
               Expanded(
                 child: Text(
-                  event?.name ?? 'Evento no encontrado',
+                  event.name,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
               AppChip(
-                label: switch (reservation.status) {
-                  ReservationStatus.pending => 'pendiente',
-                  ReservationStatus.confirmed => 'confirmada',
-                  ReservationStatus.cancelled => 'cancelada',
-                },
+                label: reservation.statusDisplay,
                 emphasis: switch (reservation.status) {
                   ReservationStatus.pending => AppEmphasis.outline,
                   ReservationStatus.confirmed => AppEmphasis.solid,
@@ -82,19 +56,17 @@ class ReservationCard extends ConsumerWidget {
               ),
             ],
           ),
-          if (event != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              '${_formattedDate(event.date)} · '
-              '${event.venue}, ${event.city}',
-            ),
-          ],
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            '${_formattedDate(event.date)} · '
+            '${event.venue}, ${event.city}',
+          ),
           const SizedBox(height: AppSpacing.xs),
           Text('Cupos reservados: ${reservation.seatCount}'),
-          if (reservationError != null) ...[
+          if (purchaseErrorMessage != null) ...[
             const SizedBox(height: AppSpacing.sm),
             AppBanner(
-              message: reservationError.failure.message,
+              message: purchaseErrorMessage,
               variant: AppBannerVariant.error,
             ),
           ],
@@ -104,15 +76,15 @@ class ReservationCard extends ConsumerWidget {
               'Código de ticket: ${ticket.code}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
-          ] else if (reservation.status != ReservationStatus.cancelled) ...[
+          ] else if (reservationDetails.canConfirmPurchase) ...[
             const SizedBox(height: AppSpacing.sm),
-            AppButton(
-              label: 'Confirmar compra',
-              isLoading: isConfirmingReservation,
-              onPressed: isConfirmingReservation
-                  ? null
-                  : () => _onConfirmPurchase(ref),
-            ),
+            if (isLoading)
+              const Center(child: AppLoader(message: 'Confirmando compra...'))
+            else
+              AppButton(
+                label: 'Confirmar compra',
+                onPressed: onConfirmPurchase,
+              ),
           ],
         ],
       ),

@@ -37,4 +37,10 @@ class LoginNotifier extends Notifier<LoginState> {
       Failure(failure: final appFailure) => LoginErrorState(appFailure),
     };
   }
+
+  /// Resets the transient login result after it is consumed by the UI.
+  void reset() {
+    _operationGuard.cancel();
+    state = const LoginInitialState();
+  }
 }
