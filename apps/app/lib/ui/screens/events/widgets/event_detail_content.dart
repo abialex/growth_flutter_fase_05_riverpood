@@ -2,7 +2,6 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
-import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 
 class EventDetailContent extends StatelessWidget {
   const EventDetailContent({required this.event, super.key});
@@ -17,7 +16,10 @@ class EventDetailContent extends StatelessWidget {
   }
 
   String get _formattedTime {
-    return event.time.length >= 5 ? event.time.substring(0, 5) : event.time;
+    if (event.time.length < 5) {
+      return event.time;
+    }
+    return event.time.substring(0, 5);
   }
 
   @override
@@ -54,13 +56,7 @@ class EventDetailContent extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text('Estado', style: Theme.of(context).textTheme.labelLarge),
-          Text(
-            switch (event.status) {
-              EventStatus.open => 'abierto',
-              EventStatus.closed => 'cerrado',
-              EventStatus.finished => 'finalizado',
-            },
-          ),
+          Text(event.statusDisplay),
           if (description != null && description.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.md),
             Text('Descripción', style: Theme.of(context).textTheme.labelLarge),

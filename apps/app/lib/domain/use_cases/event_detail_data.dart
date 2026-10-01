@@ -1,13 +1,14 @@
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
 
-/// Contains an event and its reservation status for the current user.
+/// Contains an event and its reservation details for the current user.
 final class EventDetailData {
   /// Creates event detail data.
-  const EventDetailData({required this.event, required this.isReserved});
+  const EventDetailData({required this.event, this.reservationDetails});
 
   /// The requested event.
   final Event event;
 
-  /// Whether the current user has already reserved the event.
-  final bool isReserved;
+  /// The current user's reservation for the event, when one exists.
+  final ReservationWithDetails? reservationDetails;
 }

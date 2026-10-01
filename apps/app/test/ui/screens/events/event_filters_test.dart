@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/event_filters.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
 
 void main() {
   test('matches an event when all selected filters match', () {

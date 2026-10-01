@@ -27,9 +27,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _cityController = TextEditingController();
+  Timer? _navigationTimer;
+  bool _showSuccessBanner = false;
 
   @override
   void dispose() {
+    _navigationTimer?.cancel();
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -55,11 +58,21 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 
+  void _onNavigateToLogin() {
+    _navigationTimer?.cancel();
+    _navigationTimer = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      context.go(AppRoute.login.path);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<RegisterState>(registerNotifierProvider, (previous, next) {
-      if (next is RegisterSuccessState && context.mounted) {
-        context.go(AppRoute.login.path);
+      if (next is RegisterSuccessState && mounted) {
+        setState(() => _showSuccessBanner = true);
+        ref.read(registerNotifierProvider.notifier).reset();
+        _onNavigateToLogin();
       }
     });
 
@@ -90,13 +103,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             AppBanner(
                               message: registerState.failure.message,
                               variant: AppBannerVariant.error,
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                          ],
-                          if (registerState is RegisterSuccessState) ...[
-                            const AppBanner(
-                              message: 'Registro exitoso',
-                              variant: AppBannerVariant.success,
                             ),
                             const SizedBox(height: AppSpacing.md),
                           ],
@@ -157,6 +163,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           if (isLoading)
                             const Center(
                               child: AppLoader(message: 'Creando tu cuenta...'),
+                            )
+                          else if (_showSuccessBanner)
+                            const Center(
+                              child: AppBanner(
+                                message: 'Registro exitoso',
+                                variant: AppBannerVariant.success,
+                              ),
                             )
                           else
                             AppButton(

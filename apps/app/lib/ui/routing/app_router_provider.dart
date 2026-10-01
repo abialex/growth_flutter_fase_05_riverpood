@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/auth_state_refresh_notifier.dart';
@@ -13,11 +13,12 @@ import 'package:growth_flutter_fase_05_riverpood/ui/screens/register/register_ro
 import 'package:router_core/router_core.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  final authStateRefreshNotifier = AuthStateRefreshNotifier(
-    authRepository.authStatusChanges,
-  );
-  ref.onDispose(authStateRefreshNotifier.dispose);
+  final authStateRefreshNotifier = AuthStateRefreshNotifier();
+  ref
+    ..onDispose(authStateRefreshNotifier.dispose)
+    ..listen<AuthStatus>(authNotifierProvider, (_, _) {
+      authStateRefreshNotifier.refresh();
+    });
 
   final appGoRouter = AppGoRouter<AppRoute>(
     mainWrapperBuilder: (navigationShell) => navigationShell,
@@ -31,7 +32,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     updateCurrentRouteEvent: (route) {},
     refreshListenable: authStateRefreshNotifier,
     routeGuard: (context, state) =>
-        _redirectForAuthentication(authRepository, state),
+        _redirectForAuthentication(ref.read(authNotifierProvider), state),
     pageSplashBuilder: () => const SplashPage(),
     initialLocation: AppRoute.splash.path,
     getRouteEnumFromPath: AppRoute.fromPath,
@@ -40,19 +41,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 });
 
 String? _redirectForAuthentication(
-  AuthRepository authRepository,
+  AuthStatus authStatus,
   GoRouterState state,
 ) {
   final location = state.matchedLocation;
   final isPublicRoute =
       location == AppRoute.login.path || location == AppRoute.register.path;
-  final isAuthenticated = authRepository.isAuthenticated;
 
-  if (!isAuthenticated && !isPublicRoute) {
+  if (authStatus == AuthStatus.loading) {
+    return location == AppRoute.splash.path ? null : AppRoute.splash.path;
+  }
+
+  if (authStatus == AuthStatus.unauthenticated && !isPublicRoute) {
     return AppRoute.login.path;
   }
 
-  if (isAuthenticated && (isPublicRoute || location == AppRoute.splash.path)) {
+  if (authStatus == AuthStatus.authenticated &&
+      (isPublicRoute || location == AppRoute.splash.path)) {
     return AppRoute.events.path;
   }
 

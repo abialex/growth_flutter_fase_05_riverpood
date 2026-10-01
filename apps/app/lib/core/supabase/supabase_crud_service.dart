@@ -1,5 +1,7 @@
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/errors/failure_mapper.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/errors/parsing_failure.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/parsing/json_parsing.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/supabase/supabase_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -130,6 +132,29 @@ class SupabaseCrudService<ModelType> {
     );
   }
 
+  /// Executes an RPC that returns a list of rows and maps each row.
+  Future<Result<List<ResultModelType>, AppFailure>>
+  callRpcList<ResultModelType>({
+    required String functionName,
+    required Map<String, dynamic> parameters,
+    required ResultModelType Function(Map<String, dynamic> jsonRow) fromJson,
+  }) {
+    return _run(
+      operation: 'rpc:$functionName',
+      action: () async {
+        final response = await _supabaseClient.rpc<dynamic>(
+          functionName,
+          params: parameters,
+        );
+        return parseRequiredObjectList(
+          response,
+          field: functionName,
+          fromJson: fromJson,
+        );
+      },
+    );
+  }
+
   Future<Result<ModelType, AppFailure>> insertRecord(
     Map<String, dynamic> payload,
   ) {
@@ -184,6 +209,14 @@ class SupabaseCrudService<ModelType> {
     try {
       final value = await action();
       return Success(value);
+    } on ParsingFailure catch (failure, stackTrace) {
+      _logger.logParsingError(
+        operation: operation,
+        resource: _tableName,
+        failure: failure,
+        stackTrace: stackTrace,
+      );
+      return Failure(_failureMapper.map(failure));
     } on PostgrestException catch (exception, stackTrace) {
       _logger.logPostgrestError(
         operation: operation,

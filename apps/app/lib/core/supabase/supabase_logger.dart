@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 
+import 'package:growth_flutter_fase_05_riverpood/core/errors/parsing_failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Writes safe Supabase diagnostics to the Dart developer log.
@@ -66,6 +67,25 @@ class SupabaseLogger {
           'Unexpected Supabase error. '
           'operation=$operation$resourceDescription.',
       error: error,
+      stackTrace: stackTrace,
+    );
+  }
+
+  /// Logs a safe data parsing failure without retaining the payload.
+  void logParsingError({
+    required String operation,
+    required String resource,
+    required ParsingFailure failure,
+    required StackTrace stackTrace,
+  }) {
+    _log(
+      message:
+          'Supabase parsing failed. '
+          'operation=$operation, resource=$resource, '
+          'field=${failure.field}, reason=${failure.reason.name}, '
+          'expectedType=${failure.expectedType}, '
+          'actualType=${failure.actualType ?? 'null'}.',
+      error: failure,
       stackTrace: stackTrace,
     );
   }

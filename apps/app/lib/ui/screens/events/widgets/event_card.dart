@@ -3,18 +3,25 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_reservation_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/routing/app_route.dart';
 import 'package:router_core/router_core.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
     required this.event,
-    required this.isReserved,
+    required this.reservationStatus,
     super.key,
   });
 
   final Event event;
-  final bool isReserved;
+  final EventReservationStatus reservationStatus;
+
+  String? get _reservationLabel => switch (reservationStatus) {
+    EventReservationStatus.none => null,
+    EventReservationStatus.reserved => 'Reservado',
+    EventReservationStatus.purchased => 'Comprado',
+  };
 
   String get _formattedDate {
     final date = event.date;
@@ -24,7 +31,10 @@ class EventCard extends StatelessWidget {
   }
 
   String get _formattedTime {
-    return event.time.length >= 5 ? event.time.substring(0, 5) : event.time;
+    if (event.time.length < 5) {
+      return event.time;
+    }
+    return event.time.substring(0, 5);
   }
 
   void _onTap(BuildContext context) {
@@ -38,13 +48,14 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reservationLabel = _reservationLabel;
     final semanticLabel = [
       'Evento ${event.name}',
       'Deporte ${event.sport}',
       'Fecha $_formattedDate a las $_formattedTime',
       'Lugar ${event.venue}, ${event.city}',
       'Cupos disponibles ${event.availableSlots} de ${event.totalSlots}',
-      if (isReserved) 'Ya tienes una reserva',
+      ?reservationLabel,
     ].join('. ');
 
     return AppCard(
@@ -67,9 +78,12 @@ class EventCard extends StatelessWidget {
               AppChip(label: event.sport, emphasis: AppEmphasis.outline),
             ],
           ),
-          if (isReserved) ...[
+          if (reservationLabel != null) ...[
             const SizedBox(height: AppSpacing.sm),
-            const AppChip(label: 'Ya reservado', emphasis: AppEmphasis.solid),
+            AppChip(
+              label: reservationLabel,
+              emphasis: AppEmphasis.solid,
+            ),
           ],
           const SizedBox(height: AppSpacing.sm),
           Text('$_formattedDate · $_formattedTime'),

@@ -25,23 +25,9 @@ class EventDetailPage extends ConsumerStatefulWidget {
 }
 
 class _EventDetailPageState extends ConsumerState<EventDetailPage> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      ref.read(createReservationNotifierProvider.notifier).reset();
-      unawaited(
-        ref
-            .read(eventDetailNotifierProvider.notifier)
-            .loadEvent(widget.eventId),
-      );
-    });
-  }
-
   void _onRetryEvent() {
     unawaited(
-      ref.read(eventDetailNotifierProvider.notifier).loadEvent(widget.eventId),
+      ref.read(eventDetailNotifierProvider(widget.eventId).notifier).onRetry(),
     );
   }
 
@@ -52,16 +38,23 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
       next,
     ) {
       if (next is CreateReservationSuccessState) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Reserva creada correctamente')),
+          );
+        }
         unawaited(
           ref
-              .read(eventDetailNotifierProvider.notifier)
-              .loadEvent(widget.eventId),
+              .read(eventDetailNotifierProvider(widget.eventId).notifier)
+              .onRetry(),
         );
         unawaited(ref.read(eventsNotifierProvider.notifier).loadEvents());
       }
     });
 
-    final eventDetailState = ref.watch(eventDetailNotifierProvider);
+    final eventDetailState = ref.watch(
+      eventDetailNotifierProvider(widget.eventId),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detalle del evento')),
@@ -111,8 +104,8 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
             EventDetailContent(event: eventDetailState.event),
             const SizedBox(height: AppSpacing.lg),
             ReservationSection(
-              event: eventDetailState.event,
-              isReserved: eventDetailState.isReserved,
+              eventId: eventDetailState.event.id,
+              eligibility: eventDetailState.reservationEligibility,
             ),
           ],
         ),
