@@ -24,6 +24,7 @@ migrate_working_dir/
 #.vscode/
 
 # Flutter/Dart/Pub related
+.fvm/
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -58,4 +59,3 @@ packages/**/.env
 # Claude Code
 .claude/
 CLAUDE.md
-
