@@ -18,6 +18,9 @@ enum ReservationEligibilityStatus {
   /// The event has no available seats.
   noAvailableSlots,
 
+  /// The event has fewer available seats than the requested seat count.
+  insufficientAvailableSlots,
+
   /// The event is not open for reservations.
   eventClosed,
 }

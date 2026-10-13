@@ -26,6 +26,17 @@ void main() {
     },
   );
 
+  test('allows a reservation when exactly one slot remains', () {
+    final result = useCase(
+      event: _createEvent(availableSlots: 1),
+      reservationDetails: null,
+      seatCount: 1,
+    );
+
+    expect(result.status, ReservationEligibilityStatus.available);
+    expect(result.canReserve, isTrue);
+  });
+
   test('rejects zero or negative seat counts', () {
     for (final seatCount in [0, -1]) {
       final result = useCase(
@@ -76,6 +87,42 @@ void main() {
     );
 
     expect(result.status, ReservationEligibilityStatus.noAvailableSlots);
+  });
+
+  test('rejects a seat count greater than the available slots', () {
+    final result = useCase(
+      event: _createEvent(availableSlots: 1),
+      reservationDetails: null,
+      seatCount: 2,
+    );
+
+    expect(
+      result.status,
+      ReservationEligibilityStatus.insufficientAvailableSlots,
+    );
+    expect(result.canReserve, isFalse);
+  });
+
+  test('allows a seat count equal to the available slots', () {
+    final result = useCase(
+      event: _createEvent(availableSlots: 2),
+      reservationDetails: null,
+      seatCount: 2,
+    );
+
+    expect(result.status, ReservationEligibilityStatus.available);
+    expect(result.canReserve, isTrue);
+  });
+
+  test('rejects an event with a negative available slot count', () {
+    final result = useCase(
+      event: _createEvent(availableSlots: -1),
+      reservationDetails: null,
+      seatCount: 1,
+    );
+
+    expect(result.status, ReservationEligibilityStatus.noAvailableSlots);
+    expect(result.canReserve, isFalse);
   });
 
   test('rejects an event that is closed or finished', () {
