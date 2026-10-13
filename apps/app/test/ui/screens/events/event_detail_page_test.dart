@@ -50,6 +50,29 @@ void main() {
     expect(find.text('Reservar cupo'), findsOneWidget);
   });
 
+  testWidgets('blocks reservation when the user already has a ticket', (
+    tester,
+  ) async {
+    final event = _createEvent();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          eventDetailNotifierProvider(event.id).overrideWith(
+            () => _EventDetailPagePurchasedTicketTestNotifier(event),
+          ),
+        ],
+        child: MaterialApp(home: EventDetailPage(eventId: event.id)),
+      ),
+    );
+
+    expect(
+      find.text('Ya compraste un ticket para este evento.'),
+      findsOneWidget,
+    );
+    expect(find.text('Reservar cupo'), findsNothing);
+  });
+
   testWidgets('shows a loader while creating a reservation', (tester) async {
     final event = _createEvent();
 
@@ -175,6 +198,23 @@ final class _EventDetailPageLoadedTestNotifier extends EventDetailNotifier {
       event: event,
       reservationEligibility: const ReservationEligibility(
         status: ReservationEligibilityStatus.available,
+      ),
+    );
+  }
+}
+
+final class _EventDetailPagePurchasedTicketTestNotifier
+    extends EventDetailNotifier {
+  _EventDetailPagePurchasedTicketTestNotifier(this.event) : super(event.id);
+
+  final Event event;
+
+  @override
+  EventDetailState build() {
+    return EventDetailLoadedState(
+      event: event,
+      reservationEligibility: const ReservationEligibility(
+        status: ReservationEligibilityStatus.ticketPurchased,
       ),
     );
   }
