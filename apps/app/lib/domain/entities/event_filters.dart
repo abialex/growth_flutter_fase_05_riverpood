@@ -1,3 +1,4 @@
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:meta/meta.dart';
 
 /// Describes the filters applied to the events list.
@@ -7,8 +8,9 @@ final class EventFilters {
   EventFilters({
     Iterable<String> selectedSports = const <String>[],
     this.selectedCity,
-    this.fromDate,
-  }) : selectedSports = Set.unmodifiable(selectedSports);
+    DateTime? fromDate,
+  }) : selectedSports = Set.unmodifiable(selectedSports),
+       fromDate = fromDate == null ? null : _dateOnly(fromDate);
 
   /// Sports that an event must match. An empty set matches every sport.
   final Set<String> selectedSports;
@@ -61,4 +63,25 @@ final class EventFilters {
 
   /// Returns an empty filter set.
   EventFilters clear() => EventFilters();
+  /// Whether [event] satisfies every active filter.
+  bool matches(Event event) {
+    if (selectedSports.isNotEmpty && !selectedSports.contains(event.sport)) {
+      return false;
+    }
+    if (selectedCity != null && event.city != selectedCity) {
+      return false;
+    }
+    final selectedFromDate = fromDate;
+    if (selectedFromDate != null &&
+        _dateOnly(event.date).isBefore(selectedFromDate)) {
+      return false;
+    }
+    return true;
+  }
+}
+
+/// Returns a copy of [value] with the time set to midnight.
+/// This is used to compare dates without considering the time of day.
+DateTime _dateOnly(DateTime value) {
+  return DateTime(value.year, value.month, value.day);
 }

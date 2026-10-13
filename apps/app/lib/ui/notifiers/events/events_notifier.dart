@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/async/async_operation_guard.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/use_case.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/events_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_initial_state.dart';
@@ -26,7 +27,9 @@ class EventsNotifier extends Notifier<EventsState> {
     final loadEventsWithReservationMarkersUseCase = ref.read(
       loadEventsWithReservationMarkersUseCaseProvider,
     );
-    final result = await loadEventsWithReservationMarkersUseCase();
+    final result = await loadEventsWithReservationMarkersUseCase(
+      const NoParams(),
+    );
     if (!_operationGuard.isCurrent(operationId)) return;
 
     switch (result) {
