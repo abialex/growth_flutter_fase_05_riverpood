@@ -183,4 +183,34 @@ void main() {
       ).called(1);
     },
   );
+
+  test(
+    'keeps a purchased marker when a later reservation has no ticket',
+    () async {
+      final events = [_createEvent(id: 'event-1')];
+      final reservations = [
+        _createReservationDetails(eventId: 'event-1', withTicket: true),
+        _createReservationDetails(eventId: 'event-1'),
+      ];
+      final eventsRepository = _MockEventsRepository();
+      final reservationsRepository = _MockReservationsRepository();
+      when(eventsRepository.getEvents).thenAnswer((_) async => Success(events));
+      when(
+        reservationsRepository.getMyReservationsWithDetails,
+      ).thenAnswer((_) async => Success(reservations));
+      final useCase = LoadEventsWithReservationMarkersUseCase(
+        eventsRepository: eventsRepository,
+        reservationsRepository: reservationsRepository,
+      );
+
+      final result = await useCase(const NoParams());
+
+      expect(result, isA<Success<EventsData, AppFailure>>());
+      final data = (result as Success<EventsData, AppFailure>).value;
+      expect(
+        data.eventReservationStatuses['event-1'],
+        EventReservationStatus.purchased,
+      );
+    },
+  );
 }
