@@ -58,6 +58,21 @@ void main() {
     expect(result.map((event) => event.id), ['match']);
   });
 
+  test('includes events matching any selected sport', () {
+    final events = [
+      _createEvent(id: 'football', city: 'Lima'),
+      _createEvent(id: 'basketball', city: 'Lima', sport: 'basketball'),
+      _createEvent(id: 'tennis', city: 'Lima', sport: 'tennis'),
+    ];
+
+    final result = useCase(
+      events: events,
+      filters: EventFilters(selectedSports: const ['football', 'basketball']),
+    );
+
+    expect(result.map((event) => event.id), ['football', 'basketball']);
+  });
+
   test('returns an empty list when no event matches', () {
     final events = [_createEvent(id: 'event-1', city: 'Lima')];
 
