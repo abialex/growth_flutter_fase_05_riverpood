@@ -5,11 +5,14 @@ import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_with_details.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/entities/ticket.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/auth_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/reservation_status.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/enums/ticket_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/auth_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/repositories/purchase_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 
 Event buildSampleEvent() {
@@ -77,8 +80,7 @@ final class FakeAuthRepository implements AuthRepository {
     required String password,
     required String name,
     String? city,
-  }) async =>
-      throw UnimplementedError();
+  }) async => throw UnimplementedError();
 }
 
 final class FakeEventsRepository implements EventsRepository {
@@ -135,6 +137,33 @@ final class FakeReservationsRepository implements ReservationsRepository {
     _finishReservation.complete();
   }
 
+  void confirmReservation({
+    required String reservationId,
+    required Ticket ticket,
+  }) {
+    final index = _reservations.indexWhere(
+      (details) => details.reservation.id == reservationId,
+    );
+    if (index < 0) {
+      throw StateError('Reservation $reservationId was not found.');
+    }
+
+    final details = _reservations[index];
+    final reservation = details.reservation;
+    _reservations[index] = ReservationWithDetails(
+      reservation: Reservation(
+        id: reservation.id,
+        userId: reservation.userId,
+        eventId: reservation.eventId,
+        seatCount: reservation.seatCount,
+        status: ReservationStatus.confirmed,
+        reservedAt: reservation.reservedAt,
+      ),
+      event: details.event,
+      ticket: ticket,
+    );
+  }
+
   @override
   Future<Result<List<Reservation>, AppFailure>> getMyReservations() async =>
       Success<List<Reservation>, AppFailure>(
@@ -145,4 +174,41 @@ final class FakeReservationsRepository implements ReservationsRepository {
   Future<Result<List<ReservationWithDetails>, AppFailure>>
   getMyReservationsWithDetails() async =>
       Success<List<ReservationWithDetails>, AppFailure>(_reservations);
+}
+
+final class FakePurchaseRepository implements PurchaseRepository {
+  FakePurchaseRepository({required this.reservationsRepository});
+
+  final FakeReservationsRepository reservationsRepository;
+  final Completer<void> _purchaseStarted = Completer<void>();
+  final Completer<void> _finishPurchase = Completer<void>();
+
+  String? lastReservationId;
+
+  @override
+  Future<Result<Ticket, AppFailure>> confirmPurchase(
+    String reservationId,
+  ) async {
+    lastReservationId = reservationId;
+    _purchaseStarted.complete();
+    await _finishPurchase.future;
+
+    final ticket = Ticket(
+      id: 'ticket-1',
+      reservationId: reservationId,
+      code: 'TICKET-TEST-001',
+      status: TicketStatus.valid,
+      createdAt: DateTime(2026, 10, 13),
+    );
+    reservationsRepository.confirmReservation(
+      reservationId: reservationId,
+      ticket: ticket,
+    );
+    return Success<Ticket, AppFailure>(ticket);
+  }
+
+  Future<void> finishConfirmPurchase() async {
+    await _purchaseStarted.future;
+    _finishPurchase.complete();
+  }
 }
