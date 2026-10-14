@@ -9,9 +9,9 @@ import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_reservation_
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/events_notifier.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/events_state.dart';
+import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_initial_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loaded_state.dart';
-import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_error_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/notifiers/events/states/events_loading_state.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/providers/container.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/screens/events/events_page.dart';

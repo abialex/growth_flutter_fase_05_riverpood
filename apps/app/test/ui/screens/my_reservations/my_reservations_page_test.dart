@@ -245,7 +245,7 @@ Reservation _createPendingReservation(String eventId) {
     eventId: eventId,
     seatCount: 1,
     status: ReservationStatus.pending,
-    reservedAt: DateTime(2026, 11, 1),
+    reservedAt: DateTime(2026, 11),
   );
 }
 
@@ -266,7 +266,7 @@ final class _MyReservationsPageLoadedTestNotifier
 
 final class _MyReservationsPageRetryTestNotifier
     extends MyReservationsNotifier {
-  var loadCalls = 0;
+  int loadCalls = 0;
 
   @override
   MyReservationsState build() {

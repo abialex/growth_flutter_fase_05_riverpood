@@ -36,7 +36,7 @@ ReservationWithDetails _createReservationDetails({required String eventId}) {
       eventId: eventId,
       seatCount: 1,
       status: ReservationStatus.pending,
-      reservedAt: DateTime(2026, 9, 1),
+      reservedAt: DateTime(2026, 9),
     ),
     event: _createEvent(id: eventId),
   );

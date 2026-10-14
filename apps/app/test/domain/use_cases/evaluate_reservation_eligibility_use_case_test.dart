@@ -163,7 +163,7 @@ ReservationWithDetails _createReservationDetails({bool withTicket = false}) {
     eventId: 'event-1',
     seatCount: 1,
     status: ReservationStatus.pending,
-    reservedAt: DateTime(2026, 9, 1),
+    reservedAt: DateTime(2026, 9),
   );
   final ticket = withTicket
       ? Ticket(
@@ -171,7 +171,7 @@ ReservationWithDetails _createReservationDetails({bool withTicket = false}) {
           reservationId: 'reservation-1',
           code: 'TICKET-001',
           status: TicketStatus.valid,
-          createdAt: DateTime(2026, 9, 1),
+          createdAt: DateTime(2026, 9),
         )
       : null;
 
