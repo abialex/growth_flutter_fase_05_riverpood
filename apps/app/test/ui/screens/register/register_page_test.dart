@@ -326,13 +326,12 @@ final class _RegisterPageErrorTestNotifier extends RegisterNotifier {
     required String name,
     String? city,
   }) async {
-    state =
-        const RegisterErrorState(
-          AppFailure(
-            failureType: AppFailureType.unauthorized,
-            message: 'El correo ya está registrado.',
-          ),
-        );
+    state = const RegisterErrorState(
+      AppFailure(
+        failureType: AppFailureType.unauthorized,
+        message: 'El correo ya está registrado.',
+      ),
+    );
   }
 }
 

@@ -63,6 +63,7 @@ final class EventFilters {
 
   /// Returns an empty filter set.
   EventFilters clear() => EventFilters();
+
   /// Whether [event] satisfies every active filter.
   bool matches(Event event) {
     if (selectedSports.isNotEmpty && !selectedSports.contains(event.sport)) {
