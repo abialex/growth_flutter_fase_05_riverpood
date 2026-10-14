@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Resumen de cobertura de líneas de los tests unitarios y widget de Growth Flutter Fase 05."
+    />
+    <title>Cobertura de pruebas · Growth Flutter</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #202338;
+        --muted: #62687c;
+        --line: #e5e7ef;
+        --paper: #fff;
+        --canvas: #f6f7fb;
+        --accent: #535d9a;
+        --accent-soft: #e9ebf8;
+        --core: #db9b39;
+        --data: #6686b8;
+        --domain: #48a38a;
+        --ui: #6b70bc;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        line-height: 1.55;
+      }
+
+      main {
+        width: min(100%, 980px);
+        margin: 0 auto;
+      }
+
+      header { margin-bottom: 24px; }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        letter-spacing: -0.04em;
+      }
+
+      .subtitle {
+        max-width: 700px;
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .panel {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+        box-shadow: 0 12px 35px rgb(32 35 56 / 7%);
+      }
+
+      .chart-wrap { padding: 18px; }
+
+      .chart {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+      }
+
+      .stat { padding: 18px 22px; }
+      .stat + .stat { border-left: 1px solid var(--line); }
+      .stat-value { display: block; font-size: 1.25rem; font-weight: 750; }
+      .stat-label { color: var(--muted); font-size: 0.88rem; }
+
+      .notes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .note {
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--paper);
+      }
+
+      .note h2 { margin: 0 0 6px; font-size: 1rem; }
+      .note p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+      code { color: var(--ink); font-size: 0.9em; }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      a { color: var(--accent); }
+
+      @media (max-width: 620px) {
+        body { padding: 24px 14px; }
+        .chart-wrap { padding: 8px; }
+        .stats { grid-template-columns: 1fr; }
+        .stat + .stat { border-top: 1px solid var(--line); border-left: 0; }
+        .notes { grid-template-columns: 1fr; }
+        footer { flex-direction: column; gap: 4px; }
+      }
+
+      @media print {
+        body { padding: 0; background: white; }
+        .panel, .note { box-shadow: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Growth Flutter · Fase 05</p>
+        <h1>Cobertura de pruebas</h1>
+        <p class="subtitle">
+          Resumen de líneas ejecutadas por los tests unitarios y de widget.
+          La cobertura ayuda a encontrar zonas sin pruebas; no mide por sí sola
+          la calidad ni el valor de cada test.
+        </p>
+      </header>
+
+      <section class="panel" aria-label="Resumen visual de cobertura">
+        <div class="chart-wrap">
+          <svg
+            class="chart"
+            viewBox="0 0 900 300"
+            role="img"
+            aria-labelledby="chart-title chart-description"
+          >
+            <title id="chart-title">Cobertura total y por capa</title>
+            <desc id="chart-description">
+              Cobertura total de 61,2 por ciento. Core 24 por ciento, datos
+              48,4 por ciento, dominio 70,1 por ciento y UI 72,5 por ciento.
+            </desc>
+            <rect width="900" height="300" rx="16" fill="#fff" />
+
+            <circle cx="150" cy="145" r="83" fill="none" stroke="#edf0f6" stroke-width="20" />
+            <circle
+              cx="150"
+              cy="145"
+              r="83"
+              fill="none"
+              stroke="#535d9a"
+              stroke-width="20"
+              stroke-linecap="round"
+              stroke-dasharray="319.2 521.5"
+              transform="rotate(-90 150 145)"
+            />
+            <text x="150" y="143" text-anchor="middle" fill="#202338" font-size="38" font-weight="750">61,2%</text>
+            <text x="150" y="171" text-anchor="middle" fill="#62687c" font-size="14">líneas cubiertas</text>
+            <text x="150" y="263" text-anchor="middle" fill="#62687c" font-size="14">975 de 1.593 líneas</text>
+
+            <text x="330" y="49" fill="#202338" font-size="17" font-weight="700">Cobertura por capa</text>
+            <text x="330" y="85" fill="#62687c" font-size="14">Core</text>
+            <rect x="440" y="68" width="340" height="20" rx="10" fill="#edf0f6" />
+            <rect x="440" y="68" width="81.6" height="20" rx="10" fill="#db9b39" />
+            <text x="805" y="85" fill="#202338" font-size="14" font-weight="700">24,0%</text>
+
+            <text x="330" y="133" fill="#62687c" font-size="14">Datos</text>
+            <rect x="440" y="116" width="340" height="20" rx="10" fill="#edf0f6" />
+            <rect x="440" y="116" width="164.56" height="20" rx="10" fill="#6686b8" />
+            <text x="805" y="133" fill="#202338" font-size="14" font-weight="700">48,4%</text>
+
+            <text x="330" y="181" fill="#62687c" font-size="14">Dominio</text>
+            <rect x="440" y="164" width="340" height="20" rx="10" fill="#edf0f6" />
+            <rect x="440" y="164" width="238.34" height="20" rx="10" fill="#48a38a" />
+            <text x="805" y="181" fill="#202338" font-size="14" font-weight="700">70,1%</text>
+
+            <text x="330" y="229" fill="#62687c" font-size="14">UI</text>
+            <rect x="440" y="212" width="340" height="20" rx="10" fill="#edf0f6" />
+            <rect x="440" y="212" width="246.5" height="20" rx="10" fill="#6b70bc" />
+            <text x="805" y="229" fill="#202338" font-size="14" font-weight="700">72,5%</text>
+          </svg>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">90 / 90</span>
+            <span class="stat-label">tests unitarios y widget pasaron</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">8 / 8</span>
+            <span class="stat-label">tests de integración pasaron por separado</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">113</span>
+            <span class="stat-label">archivos de Dart incluidos en LCOV</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="notes" aria-label="Alcance y lectura del reporte">
+        <article class="note">
+          <h2>Qué incluye</h2>
+          <p>
+            Se generó con <code>flutter test --coverage test</code> desde
+            <code>apps/app</code>. El reporte LCOV mide cobertura de líneas en
+            los tests unitarios y de widget.
+          </p>
+        </article>
+        <article class="note">
+          <h2>Cómo interpretarlo</h2>
+          <p>
+            Core y datos incluyen integración con Supabase que los tests
+            actuales reemplazan por fakes. No se recomienda agregar pruebas
+            solo para subir el porcentaje: prioriza reglas de negocio y flujos
+            importantes.
+          </p>
+        </article>
+      </section>
+
+      <footer>
+        <span>Snapshot generado el 13 de octubre de 2026.</span>
+        <span>
+          Criterio alineado con la
+          <a href="https://docs.flutter.dev/testing/overview">guía de testing de Flutter</a>.
+        </span>
+      </footer>
+    </main>
+  </body>
+</html>
