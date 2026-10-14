@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:growth_flutter_fase_05_riverpood/core/enums/app_failure_type.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/errors/app_failure.dart';
 import 'package:growth_flutter_fase_05_riverpood/core/result/result.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event.dart';
@@ -137,6 +138,23 @@ final class FakeReservationsRepository implements ReservationsRepository {
     _finishReservation.complete();
   }
 
+  void seedPendingReservation({
+    required String reservationId,
+    required int seatCount,
+  }) {
+    final reservation = Reservation(
+      id: reservationId,
+      userId: 'user-1',
+      eventId: event.id,
+      seatCount: seatCount,
+      status: ReservationStatus.pending,
+      reservedAt: DateTime(2026, 10, 13),
+    );
+    _reservations.add(
+      ReservationWithDetails(reservation: reservation, event: event),
+    );
+  }
+
   void confirmReservation({
     required String reservationId,
     required Ticket ticket,
@@ -177,19 +195,34 @@ final class FakeReservationsRepository implements ReservationsRepository {
 }
 
 final class FakePurchaseRepository implements PurchaseRepository {
-  FakePurchaseRepository({required this.reservationsRepository});
+  FakePurchaseRepository({
+    required this.reservationsRepository,
+    this.failFirstAttempt = false,
+  });
 
   final FakeReservationsRepository reservationsRepository;
+  final bool failFirstAttempt;
   final Completer<void> _purchaseStarted = Completer<void>();
   final Completer<void> _finishPurchase = Completer<void>();
 
   String? lastReservationId;
+  int confirmCalls = 0;
 
   @override
   Future<Result<Ticket, AppFailure>> confirmPurchase(
     String reservationId,
   ) async {
     lastReservationId = reservationId;
+    confirmCalls++;
+    if (failFirstAttempt && confirmCalls == 1) {
+      return const Failure<Ticket, AppFailure>(
+        AppFailure(
+          failureType: AppFailureType.network,
+          message: 'No se pudo confirmar la compra. Inténtalo nuevamente.',
+        ),
+      );
+    }
+
     _purchaseStarted.complete();
     await _finishPurchase.future;
 
