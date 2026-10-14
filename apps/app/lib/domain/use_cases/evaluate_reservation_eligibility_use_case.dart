@@ -50,6 +50,13 @@ final class EvaluateReservationEligibilityUseCase {
       );
     }
 
+    // Reject requests that exceed the number of remaining event slots.
+    if (seatCount > event.availableSlots) {
+      return const ReservationEligibility(
+        status: ReservationEligibilityStatus.insufficientAvailableSlots,
+      );
+    }
+
     // Reject events that are closed or otherwise not accepting reservations.
     if (!event.canAcceptReservations) {
       return const ReservationEligibility(

@@ -141,6 +141,22 @@ release de Android; el APK se publica como artefacto temporal durante siete
 días. No ejecuta `build_runner` porque esta fase no utiliza generación de
 código.
 
-El alcance actual prioriza análisis estático, formato, arquitectura y
-seguridad del flujo. No se agrega una suite de pruebas en esta fase porque no
-forma parte de los requisitos actuales.
+### Pruebas y cobertura
+
+Los tests unitarios y de widgets se ejecutan desde `apps/app`:
+
+~~~powershell
+Set-Location apps/app
+flutter test test
+flutter test --coverage test
+~~~
+
+La cobertura es una referencia para localizar áreas que podrían necesitar más
+pruebas; no mide por sí sola la calidad de los tests. En la medición inicial,
+90 tests unitarios y de widgets pasaron y la cobertura de líneas fue 61,2 %
+(975 de 1.593 líneas). Los 8 tests de integración pasaron por separado y no
+forman parte de ese porcentaje.
+
+![Resumen visual de cobertura de pruebas: 61,2 % total y cobertura por capa](apps/app/reports/coverage-summary.svg)
+
+[Abrir el reporte detallado de cobertura](apps/app/reports/coverage-summary.html).

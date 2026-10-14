@@ -35,6 +35,8 @@ final class ReservationEligibility {
     ReservationEligibilityStatus.invalidSeatCount => 'Cantidad no válida',
     ReservationEligibilityStatus.unknownEventStatus => 'Estado desconocido',
     ReservationEligibilityStatus.noAvailableSlots => 'Sin cupos disponibles',
+    ReservationEligibilityStatus.insufficientAvailableSlots =>
+      'No hay suficientes cupos disponibles',
     ReservationEligibilityStatus.eventClosed => 'Reservas cerradas',
   };
 }

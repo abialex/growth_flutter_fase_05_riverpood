@@ -5,9 +5,11 @@ import 'package:growth_flutter_fase_05_riverpood/domain/entities/reservation_wit
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/events_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/repositories/reservations_repository.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/event_detail_data.dart';
+import 'package:growth_flutter_fase_05_riverpood/domain/use_cases/use_case.dart';
 
 /// Loads an event and its reservation details for the current user.
-final class LoadEventDetailUseCase {
+final class LoadEventDetailUseCase
+    implements UseCase<String, Future<Result<EventDetailData, AppFailure>>> {
   /// Creates a use case with the repositories required by the flow.
   const LoadEventDetailUseCase({
     required EventsRepository eventsRepository,
@@ -19,6 +21,7 @@ final class LoadEventDetailUseCase {
   final ReservationsRepository _reservationsRepository;
 
   /// Loads detail data for [eventId].
+  @override
   Future<Result<EventDetailData, AppFailure>> call(String eventId) async {
     final eventResult = await _eventsRepository.getEventById(eventId);
     return switch (eventResult) {
