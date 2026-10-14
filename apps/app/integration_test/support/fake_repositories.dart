@@ -39,10 +39,16 @@ final class FakeAuthRepository implements AuthRepository {
       StreamController<AuthStatus>.broadcast();
   final Completer<void> _signInStarted = Completer<void>();
   final Completer<void> _finishSignIn = Completer<void>();
+  final Completer<void> _signUpStarted = Completer<void>();
+  final Completer<void> _finishSignUp = Completer<void>();
 
   bool _isAuthenticated;
   String? lastEmail;
   String? lastPassword;
+  String? lastSignUpEmail;
+  String? lastSignUpPassword;
+  String? lastSignUpName;
+  String? lastSignUpCity;
 
   @override
   bool get isAuthenticated => _isAuthenticated;
@@ -81,7 +87,20 @@ final class FakeAuthRepository implements AuthRepository {
     required String password,
     required String name,
     String? city,
-  }) async => throw UnimplementedError();
+  }) async {
+    lastSignUpEmail = email;
+    lastSignUpPassword = password;
+    lastSignUpName = name;
+    lastSignUpCity = city;
+    _signUpStarted.complete();
+    await _finishSignUp.future;
+    return const Success<void, AppFailure>(null);
+  }
+
+  Future<void> finishSignUp() async {
+    await _signUpStarted.future;
+    _finishSignUp.complete();
+  }
 }
 
 final class FakeEventsRepository implements EventsRepository {
