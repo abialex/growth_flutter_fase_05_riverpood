@@ -49,6 +49,7 @@ final class FakeAuthRepository implements AuthRepository {
   String? lastSignUpPassword;
   String? lastSignUpName;
   String? lastSignUpCity;
+  int signOutCalls = 0;
 
   @override
   bool get isAuthenticated => _isAuthenticated;
@@ -78,8 +79,12 @@ final class FakeAuthRepository implements AuthRepository {
   Future<void> dispose() => _authStatusController.close();
 
   @override
-  Future<Result<void, AppFailure>> signOut() async =>
-      throw UnimplementedError();
+  Future<Result<void, AppFailure>> signOut() async {
+    signOutCalls++;
+    _isAuthenticated = false;
+    _authStatusController.add(AuthStatus.unauthenticated);
+    return const Success<void, AppFailure>(null);
+  }
 
   @override
   Future<Result<void, AppFailure>> signUp({
