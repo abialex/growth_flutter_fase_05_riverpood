@@ -65,6 +65,28 @@ int parseRequiredInt(
   return value;
 }
 
+/// Parses a required JSON boolean without coercing another type.
+bool parseRequiredBool(dynamic value, {required String field}) {
+  if (value == null) {
+    throw ParsingFailure(
+      field: field,
+      reason: ParsingFailureReason.missing,
+      expectedType: 'bool',
+    );
+  }
+
+  if (value is! bool) {
+    throw ParsingFailure(
+      field: field,
+      reason: ParsingFailureReason.invalidType,
+      expectedType: 'bool',
+      actualType: value.runtimeType.toString(),
+    );
+  }
+
+  return value;
+}
+
 /// Parses a required JSON date-time string.
 DateTime parseRequiredDateTime(dynamic value, {required String field}) {
   if (value == null) {
@@ -134,7 +156,7 @@ List<ModelType> parseRequiredObjectList<ModelType>(
 
   for (var index = 0; index < values.length; index++) {
     final itemField = '$field[$index]';
-    final json = _parseJsonObject(values[index], field: itemField);
+    final json = parseRequiredMap(values[index], field: itemField);
     models.add(fromJson(json));
   }
 
@@ -179,7 +201,8 @@ List<dynamic> _parseRequiredList(
   return value;
 }
 
-Map<String, dynamic> _parseJsonObject(
+/// Parses a required JSON object with string keys.
+Map<String, dynamic> parseRequiredMap(
   dynamic value, {
   required String field,
 }) {
@@ -202,15 +225,16 @@ Map<String, dynamic> _parseJsonObject(
 
   final json = <String, dynamic>{};
   for (final entry in value.entries) {
-    if (entry.key is! String) {
+    final key = entry.key;
+    if (key is! String) {
       throw ParsingFailure(
         field: field,
         reason: ParsingFailureReason.invalidType,
         expectedType: 'JSON object with String keys',
-        actualType: entry.key.runtimeType.toString(),
+        actualType: key.runtimeType.toString(),
       );
     }
-    json[entry.key as String] = entry.value;
+    json[key] = entry.value;
   }
   return json;
 }

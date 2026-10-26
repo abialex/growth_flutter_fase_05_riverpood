@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/config/models/app_config_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/enums/event_reservation_status.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
@@ -99,10 +100,11 @@ class _EventsPageState extends ConsumerState<EventsPage> {
     final isLoggingOut =
         ref.watch(logoutNotifierProvider) is LogoutLoadingState;
     final eventsState = ref.watch(eventsNotifierProvider);
+    final appConfig = ref.watch(appConfigProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Eventos'),
+        title: Text(appConfig.events.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.confirmation_number_outlined),
@@ -125,17 +127,23 @@ class _EventsPageState extends ConsumerState<EventsPage> {
           ),
           child: SizedBox(
             width: double.infinity,
-            child: _buildBody(context, eventsState),
+            child: _buildBody(context, eventsState, appConfig),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context, Object eventsState) {
+  Widget _buildBody(
+    BuildContext context,
+    Object eventsState,
+    AppConfigModel appConfig,
+  ) {
     if (eventsState is EventsInitialState ||
         eventsState is EventsLoadingState) {
-      return const Center(child: AppLoader(message: 'Cargando eventos...'));
+      return Center(
+        child: AppLoader(message: appConfig.events.loadingMessage),
+      );
     }
 
     if (eventsState is EventsErrorState) {
@@ -155,12 +163,12 @@ class _EventsPageState extends ConsumerState<EventsPage> {
 
     if (eventsState is EventsLoadedState) {
       if (eventsState.events.isEmpty) {
-        return const Center(
+        return Center(
           child: Padding(
-            padding: EdgeInsets.all(AppSpacing.md),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: AppEmptyState(
-              title: 'No hay eventos disponibles',
-              description: 'Todavía no hay eventos publicados. Vuelve pronto.',
+              title: appConfig.events.emptyTitle,
+              description: appConfig.events.emptyDescription,
               icon: Icons.event_busy_outlined,
             ),
           ),
@@ -177,10 +185,33 @@ class _EventsPageState extends ConsumerState<EventsPage> {
 
       return Column(
         children: [
+          if (appConfig.events.banner.enabled)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.md,
+                AppSpacing.md,
+                0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                    child: Text(
+                      appConfig.events.banner.title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  AppBanner(message: appConfig.events.banner.message),
+                ],
+              ),
+            ),
           EventsFilterBar(
             availableSports: availableSports,
             availableCities: availableCities,
             filters: _filters,
+            config: appConfig.filters,
             onToggleSport: _onToggleSport,
             onChangeCity: _onChangeCity,
             onPickDate: _onPickDate,
@@ -193,11 +224,10 @@ class _EventsPageState extends ConsumerState<EventsPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(AppSpacing.md),
                       child: AppEmptyState(
-                        title: 'No hay eventos que coincidan con los filtros',
-                        description:
-                            'Prueba ajustando o limpiando los filtros.',
+                        title: appConfig.events.filteredEmptyTitle,
+                        description: appConfig.events.filteredEmptyDescription,
                         icon: Icons.filter_alt_off_outlined,
-                        actionLabel: 'Limpiar filtros',
+                        actionLabel: appConfig.filters.clearLabel,
                         onAction: _onClearFilters,
                       ),
                     ),

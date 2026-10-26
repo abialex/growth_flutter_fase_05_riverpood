@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:growth_flutter_fase_05_riverpood/core/config/models/filters_config_model.dart';
 import 'package:growth_flutter_fase_05_riverpood/domain/entities/event_filters.dart';
 import 'package:growth_flutter_fase_05_riverpood/ui/layout/app_layout_tokens.dart';
 
@@ -10,6 +11,7 @@ class EventsFilterBar extends StatefulWidget {
     required this.availableSports,
     required this.availableCities,
     required this.filters,
+    required this.config,
     required this.onToggleSport,
     required this.onChangeCity,
     required this.onPickDate,
@@ -21,6 +23,7 @@ class EventsFilterBar extends StatefulWidget {
   final List<String> availableSports;
   final List<String> availableCities;
   final EventFilters filters;
+  final FiltersConfigModel config;
   final void Function(String sport, {required bool isSelected}) onToggleSport;
   final ValueChanged<String?> onChangeCity;
   final VoidCallback onPickDate;
@@ -107,7 +110,7 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
             Align(
               alignment: Alignment.centerLeft,
               child: AppButton(
-                label: 'Limpiar filtros',
+                label: widget.config.clearLabel,
                 size: AppButtonSize.small,
                 onPressed: widget.onClearFilters,
               ),
@@ -152,8 +155,8 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
   Widget _buildCityField() {
     return AppDropdownField<String>(
       key: ValueKey(widget.filters.selectedCity),
-      label: 'Ciudad',
-      hint: 'Todas',
+      label: widget.config.cityLabel,
+      hint: widget.config.allCitiesHint,
       initialValue: widget.filters.selectedCity,
       items: widget.availableCities
           .map((city) => AppDropdownItem(value: city, label: city))
@@ -164,9 +167,9 @@ class _EventsFilterBarState extends State<EventsFilterBar> {
 
   Widget _buildDateField() {
     return AppTextField(
-      label: 'Desde',
+      label: widget.config.dateLabel,
       readOnly: true,
-      hint: 'Cualquiera',
+      hint: widget.config.anyDateHint,
       controller: _dateController,
       onTap: widget.onPickDate,
       suffixIcon: widget.filters.fromDate == null
