@@ -8,3 +8,5 @@ linter:
     # App-internal widgets and states are not a consumer-facing package API.
     # Reusable package APIs, such as router_core, keep this rule enabled.
     public_member_api_docs: false
+    # Existing TODO comments are intentionally preserved as requested.
+    flutter_style_todos: false
