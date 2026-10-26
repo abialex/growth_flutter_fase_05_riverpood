@@ -152,11 +152,11 @@ flutter test --coverage test
 ~~~
 
 La cobertura es una referencia para localizar áreas que podrían necesitar más
-pruebas; no mide por sí sola la calidad de los tests. En la medición inicial,
-90 tests unitarios y de widgets pasaron y la cobertura de líneas fue 61,2 %
-(975 de 1.593 líneas). Los 8 tests de integración pasaron por separado y no
-forman parte de ese porcentaje.
+pruebas; no mide por sí sola la calidad de los tests. En la medición más
+reciente, 140 tests unitarios y de widgets pasaron y la cobertura de líneas fue
+80,9 % (1.289 de 1.593 líneas). Los 8 tests de integración no forman parte de
+ese porcentaje.
 
-![Resumen visual de cobertura de pruebas: 61,2 % total y cobertura por capa](apps/app/reports/coverage-summary.svg)
+![Resumen visual de cobertura de pruebas: 80,9 % total y cobertura por capa](apps/app/reports/coverage-summary.svg)
 
 [Abrir el reporte detallado de cobertura](apps/app/reports/coverage-summary.html).

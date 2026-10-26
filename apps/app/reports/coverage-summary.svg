@@ -1,32 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" role="img" aria-labelledby="title description">
   <title id="title">Cobertura de pruebas por capa</title>
-  <desc id="description">Cobertura total de 61,2 por ciento, equivalente a 975 de 1.593 líneas. Core 24 por ciento, datos 48,4 por ciento, dominio 70,1 por ciento y UI 72,5 por ciento.</desc>
+  <desc id="description">Cobertura total de 80,9 por ciento, equivalente a 1.289 de 1.593 líneas. Core 68,9 por ciento, datos 80,6 por ciento, dominio 79,9 por ciento y UI 84,5 por ciento.</desc>
   <rect width="900" height="300" rx="16" fill="#fff" />
 
   <circle cx="150" cy="145" r="83" fill="none" stroke="#edf0f6" stroke-width="20" />
-  <circle cx="150" cy="145" r="83" fill="none" stroke="#535d9a" stroke-width="20" stroke-linecap="round" stroke-dasharray="319.2 521.5" transform="rotate(-90 150 145)" />
-  <text x="150" y="143" text-anchor="middle" fill="#202338" font-family="Arial, sans-serif" font-size="38" font-weight="700">61,2%</text>
+  <circle cx="150" cy="145" r="83" fill="none" stroke="#535d9a" stroke-width="20" stroke-linecap="round" stroke-dasharray="421.9 521.5" transform="rotate(-90 150 145)" />
+  <text x="150" y="143" text-anchor="middle" fill="#202338" font-family="Arial, sans-serif" font-size="38" font-weight="700">80,9%</text>
   <text x="150" y="171" text-anchor="middle" fill="#62687c" font-family="Arial, sans-serif" font-size="14">líneas cubiertas</text>
-  <text x="150" y="263" text-anchor="middle" fill="#62687c" font-family="Arial, sans-serif" font-size="14">975 de 1.593 líneas</text>
+  <text x="150" y="263" text-anchor="middle" fill="#62687c" font-family="Arial, sans-serif" font-size="14">1.289 de 1.593 líneas</text>
 
   <text x="330" y="49" fill="#202338" font-family="Arial, sans-serif" font-size="17" font-weight="700">Cobertura por capa</text>
   <text x="330" y="85" fill="#62687c" font-family="Arial, sans-serif" font-size="14">Core</text>
   <rect x="440" y="68" width="340" height="20" rx="10" fill="#edf0f6" />
-  <rect x="440" y="68" width="81.6" height="20" rx="10" fill="#db9b39" />
-  <text x="805" y="85" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">24,0%</text>
+  <rect x="440" y="68" width="234.3" height="20" rx="10" fill="#db9b39" />
+  <text x="805" y="85" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">68,9%</text>
 
   <text x="330" y="133" fill="#62687c" font-family="Arial, sans-serif" font-size="14">Datos</text>
   <rect x="440" y="116" width="340" height="20" rx="10" fill="#edf0f6" />
-  <rect x="440" y="116" width="164.56" height="20" rx="10" fill="#6686b8" />
-  <text x="805" y="133" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">48,4%</text>
+  <rect x="440" y="116" width="274.2" height="20" rx="10" fill="#6686b8" />
+  <text x="805" y="133" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">80,6%</text>
 
   <text x="330" y="181" fill="#62687c" font-family="Arial, sans-serif" font-size="14">Dominio</text>
   <rect x="440" y="164" width="340" height="20" rx="10" fill="#edf0f6" />
-  <rect x="440" y="164" width="238.34" height="20" rx="10" fill="#48a38a" />
-  <text x="805" y="181" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">70,1%</text>
+  <rect x="440" y="164" width="271.7" height="20" rx="10" fill="#48a38a" />
+  <text x="805" y="181" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">79,9%</text>
 
   <text x="330" y="229" fill="#62687c" font-family="Arial, sans-serif" font-size="14">UI</text>
   <rect x="440" y="212" width="340" height="20" rx="10" fill="#edf0f6" />
-  <rect x="440" y="212" width="246.5" height="20" rx="10" fill="#6b70bc" />
-  <text x="805" y="229" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">72,5%</text>
+  <rect x="440" y="212" width="287.2" height="20" rx="10" fill="#6b70bc" />
+  <text x="805" y="229" fill="#202338" font-family="Arial, sans-serif" font-size="14" font-weight="700">84,5%</text>
 </svg>
