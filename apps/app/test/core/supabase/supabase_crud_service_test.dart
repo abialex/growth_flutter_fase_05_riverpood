@@ -13,7 +13,6 @@ import 'package:growth_flutter_fase_05_riverpood/data/models/reservation_with_de
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-// todo
 class _MockSupabaseClient extends Mock implements SupabaseClient {}
 
 class _MockSupabaseQueryBuilder extends Mock implements SupabaseQueryBuilder {}
