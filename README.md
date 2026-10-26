@@ -45,6 +45,35 @@ SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_ANON_KEY=your-publishable-key
 ~~~
 
+## Configuración de la app por JSON
+
+La app carga `apps/app/assets/config/app_config.json` al iniciar. Este archivo
+permite cambiar textos de acceso, eventos y filtros sin modificar las
+pantallas. Sus valores se interpretan mediante modelos tipados y se exponen en
+las pantallas mediante `appConfigProvider` de Riverpod.
+
+Se pueden ajustar estos campos:
+
+| Sección | Campos | Uso |
+| --- | --- | --- |
+| `welcome` | `title` | Título de la pantalla de acceso. |
+| `events` | `title`, `loadingMessage`, `emptyTitle`, `emptyDescription`, `filteredEmptyTitle`, `filteredEmptyDescription`, `banner` | Textos, estados vacíos y banner de eventos. `banner` incluye `enabled`, `title` y `message`. |
+| `filters` | `cityLabel`, `allCitiesHint`, `dateLabel`, `anyDateHint`, `clearLabel` | Etiquetas y ayudas de los filtros. |
+| `theme` | `seedColor` | Color semilla hexadecimal (`#RRGGBB`) para generar las paletas clara y oscura. |
+
+Por ejemplo, cambiar `welcome.title` de `"Iniciar sesión"` a `"Bienvenido"`
+actualiza el título que se muestra al abrir la pantalla de acceso. Cambiar
+`theme.seedColor` actualiza los colores principales de ambos temas. Guarda el
+JSON y reinicia la app para cargar el asset actualizado. Conserva la estructura
+de objetos y usa valores de texto para estos campos.
+
+Los modelos de configuración están separados por tipo dentro de
+`apps/app/lib/core/config/models/`,
+la lectura del asset en `apps/app/lib/data/services/app_config_service.dart`
+y su acceso desde widgets en `apps/app/lib/ui/providers/app_config_provider.dart`.
+La app carga el asset antes de montarse y lo entrega al provider raíz. Los deportes y las
+ciudades disponibles siguen viniendo de los eventos de Supabase.
+
 ## Configuración de Supabase
 
 En el SQL Editor de Supabase, ejecuta los scripts en este orden:

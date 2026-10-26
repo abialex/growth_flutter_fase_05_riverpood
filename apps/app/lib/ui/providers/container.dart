@@ -1,3 +1,4 @@
+export 'app_config_provider.dart';
 export 'auth_providers.dart';
 export 'core_providers.dart';
 export 'event_providers.dart';

@@ -62,6 +62,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     final loginState = ref.watch(loginNotifierProvider);
     final isLoading = loginState is LoginLoadingState;
+    final welcomeConfig = ref.watch(appConfigProvider).welcome;
 
     return Scaffold(
       appBar: AppBar(
@@ -88,7 +89,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'Iniciar sesión',
+                            welcomeConfig.title,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           const SizedBox(height: AppSpacing.lg),

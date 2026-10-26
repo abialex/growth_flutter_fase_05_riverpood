@@ -1,0 +1,28 @@
+{
+  "welcome": {
+    "title": "Iniciar sesión"
+  },
+  "events": {
+    "title": "Eventos",
+    "loadingMessage": "Cargando eventos...",
+    "emptyTitle": "No hay eventos disponibles",
+    "emptyDescription": "Todavía no hay eventos publicados. Vuelve pronto.",
+    "filteredEmptyTitle": "No hay eventos que coincidan con los filtros",
+    "filteredEmptyDescription": "Prueba ajustando o limpiando los filtros.",
+    "banner": {
+      "enabled": true,
+      "title": "Vive la emoción del deporte",
+      "message": "Explora los próximos eventos y reserva tu lugar."
+    }
+  },
+  "filters": {
+    "cityLabel": "Ciudad",
+    "allCitiesHint": "Todas",
+    "dateLabel": "Desde",
+    "anyDateHint": "Cualquiera",
+    "clearLabel": "Limpiar filtros"
+  },
+  "theme": {
+    "seedColor": "#3D5AFE"
+  }
+}
